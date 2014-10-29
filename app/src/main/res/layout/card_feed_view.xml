@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#e5e5e5" >
+
+    <LinearLayout
+        android:id="@id/feed_item_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#e5e5e5"
+        android:orientation="vertical"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="5dip"
+        android:tag="feed_item_holder" >
+
+        <LinearLayout
+            android:id="@id/feed_item_holder_background"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_view_background"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@id/bloodGroup_holder"
+                android:layout_width="105dip"
+                android:layout_height="105dip"
+                android:background="@drawable/emergency_textview_background"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <com.widget.CustomTextView
+                    android:id="@id/bloodGroupID_text_view"
+                    style="@style/MuseoSansRounded_700_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/dummy_blood_group_ID"
+                    android:textColor="@color/holo_gray_dark"
+                    android:textSize="50sp" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/bloodAmountID_text_view"
+                    style="@style/MuseoSansRounded_700_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/dummy_blood_amount_ID"
+                    android:textColor="@color/holo_gray_dark"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/transparent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@id/info_holder"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginStart="10dip"
+                    android:background="@android:color/transparent" >
+
+                    <RelativeLayout
+                        android:id="@id/info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|top"
+                        android:background="@android:color/transparent"
+                        android:orientation="vertical" >
+
+                        <com.widget.CustomTextView
+                            android:id="@id/emergency_text_view"
+                            style="@style/MuseoSansRounded_700_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="5dip"
+                            android:gravity="center|start"
+                            android:text="@string/emergency_text"
+                            android:textColor="#ff3333"
+                            android:textSize="16sp" />
+
+                        <ImageButton
+                            android:id="@id/option_button_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:background="#00000000"
+                            android:contentDescription="@null"
+                            android:src="@drawable/feed_item_popup" />
+
+                        <com.widget.CustomTextView
+                            android:id="@id/timeStamp_text_view"
+                            style="@style/MuseoSansRounded_300_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@id/emergency_text_view"
+                            android:layout_marginTop="5dip"
+                            android:gravity="center|start"
+                            android:text="@string/dummy_time"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/info_holder"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginStart="10dip"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@id/hospital_name_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="center|start"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dip" >
+
+                        <com.widget.CustomTextView
+                            android:id="@id/hospitalNameID_text_view"
+                            style="@style/MuseoSansRounded_300_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="marquee"
+                            android:fadingEdge="horizontal"
+                            android:lines="1"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
+                            android:text="@string/dummy_hospital_name_ID"
+                            android:textColor="#222222"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@id/mobile_number_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@android:color/transparent"
+                        android:gravity="center|start"
+                        android:orientation="horizontal" >
+
+                        <com.widget.CustomTextView
+                            android:id="@id/mobileNumberID_text_view"
+                            style="@style/MuseoSansRounded_300_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_toLeftOf="@id/areaNameID_text_view"
+                            android:layout_toStartOf="@id/areaNameID_text_view"
+                            android:ellipsize="marquee"
+                            android:fadingEdge="horizontal"
+                            android:gravity="center|start"
+                            android:lines="1"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:paddingBottom="5dip"
+                            android:paddingTop="5dip"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
+                            android:text="@string/dummy_mobile_number_ID"
+                            android:textColor="#222222"
+                            android:textSize="14sp" />
+
+                        <com.widget.CustomTextView
+                            android:id="@id/areaNameID_text_view"
+                            style="@style/MuseoSansRounded_300_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/area_textview_background"
+                            android:gravity="center"
+                            android:paddingBottom="5dip"
+                            android:paddingEnd="10dip"
+                            android:paddingLeft="10dip"
+                            android:paddingRight="10dip"
+                            android:paddingStart="10dip"
+                            android:paddingTop="5dip"
+                            android:text="@string/dummy_area_name_ID"
+                            android:textColor="#222222"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

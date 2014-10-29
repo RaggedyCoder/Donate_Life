@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--  -->
+    <string name="app_name">Donate Life</string>
+    <!--  -->
+    <string name="emergency_text">EMERGENCY</string>
+    <!--  -->
+    <string name="non_emergency_text"></string>
+    <string name="emergency_char">E</string>
+    <!--  -->
+    <string name="emergency_request">EMERGENCY REQUEST</string>
+    <!--  -->
+    <string name="dummy_name">System</string>
+    <!--  -->
+    <string name="dummy_blood_group">Required:</string>
+    <!--  -->
+    <string name="blood_group">Blood group</string>
+    <!--  -->
+    <string name="Ok">OK</string>
+    <!--  -->
+    <string name="refresh">refresh</string>
+
+    <!--  -->
+    <string name="refresh_notice">Pull Down to Refresh</string>
+
+    <!--  -->
+    <string name="request">Request for Blood</string>
+
+    <!--  -->
+    <string name="profile_details">Profile Details</string>
+    <!--  -->
+    <string name="profile_edit">Edit</string>
+
+    <!--  -->
+    <string name="password_field">Pass</string>
+    <!--  -->
+    <string name="plus">+</string>
+
+    <!--  -->
+    <string name="Warning_no_number">You Must Enter a mobile number</string>
+    <!--  -->
+    <string name="Warning_number_short">You Must Enter a valid number</string>
+    <!--  -->
+    <string name="Warning_select_a_country">You Must select a country</string>
+    <!--  -->
+    <string name="Warning_enter_a_password">Registered Phone.Enter Password.</string>
+    <!--  -->
+    <string name="Warning_must_enter_a_password">You must Enter Password.</string>
+    <!--  -->
+    <string name="Warning_must_enter_a_first_name">You must Enter your First Name.</string>
+    <!--  -->
+    <string name="Warning_must_enter_a_last_name">You must Enter your Last Name.</string>
+
+    <!--  -->
+    <string name="Warning_password_not_matched">Password Didn\'t Matched.</string>
+    <!--  -->
+    <string name="Warning_wrong_password">Enter the right Password.</string>
+
+    <!--  -->
+    <string name="Warning_remove_the_password">Remove the password for registration</string>
+    <!--  -->
+    <string name="register_name_info">First Last</string>
+    <!--  -->
+    <string name="register_name_last">Last Name</string>
+    <!--  -->
+    <string name="register_password">Password</string>
+    <!--  -->
+    <string name="confirm_password">Confirm Password</string>
+    <!--  -->
+    <string name="register_name_first">First Name</string>
+    <!--  -->
+    <string name="spinner_prompt">Select A Country</string>
+    <!--  -->
+    <string name="dummy_blood_group_ID">A+</string>
+    <!--  -->
+    <string name="dummy_hospital_name_ID">Dhaka Medical College</string>
+    <!--  -->
+    <string name="dummy_blood_amount">Amount:</string>
+    <!--  -->
+    <string name="dummy_blood_amount_ID">(2 Bags)</string>
+    <!--  -->
+    <string name="dummy_area_name_ID">Dhaka</string>
+    <!--  -->
+    <string name="select_area">Blood Required Area:</string>
+    <!--  -->
+    <string name="select_hospital">Select Your Hospital Name:</string>
+
+    <!--  -->
+    <string name="select_blood_group">Blood group:</string>
+    <!--  -->
+    <string name="select_amount">Amount:</string>
+
+    <!--  -->
+    <string name="area_name">District</string>
+    <!--  -->
+    <string name="mobile_number">Mobile Number</string>
+    <!--  -->
+    <string name="full_name">Full Name</string>
+    <!--  -->
+    <string name="dummy_full_name">Android System</string>
+    <!--  -->
+    <string name="dummy_mobile_number_ID">1*********</string>
+    <!--  -->
+
+    <string name="dummy_time">16 January 1993</string>
+    <!--  -->
+    <string name="hello_world">Hello world!</string>
+    <!--  -->
+    <string name="action_settings">Settings</string>
+    <!--  -->
+    <string name="action_delete">Delete</string>
+    <!--  -->
+    <string name="action_delete_own">Delete the request</string>
+    <!--  -->
+    <string name="action_call">Call:</string>
+    <!--  -->
+    <string name="action_sms">Send SMS:</string>
+
+    <!--  -->
+    <string name="action_logout">Log Out</string>
+
+    <!--  -->
+    <string name="sample_news_feed">Sample News Feed</string>
+    <!--  -->
+    <string name="sample_slide_menu">Sample Slide menu</string>
+    <!--  -->
+    <string name="sample_slide_menu_land">Sample Slide Menu Land</string>
+    <!--  -->
+    <string name="sample_news_feed_land">Sample News Feed land</string>
+    <!--  -->
+    <string name="register_sms_one_time">Donate Life checks your mobile number to verify your registration.</string>
+    <!--  -->
+    <string name="register_phone_number_code_confirm">Please confirm your country code and enter your phone number.If you are not registered put the password field blank</string>
+    <string name="blood_feed">Blood Feed</string>
+    <string name="blood_request">Request Blood</string>
+    <string name="profile">Profile</string>
+    <string name="hospital">Hospital</string>
+    <string name="loading">Loading\.\.\.</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="progressing">Progressing\.\.\.</string>
+
+</resources>

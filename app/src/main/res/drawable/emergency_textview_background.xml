@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item>
+        <shape
+            android:dither="true"
+            android:shape="rectangle" >
+            <corners
+                android:bottomLeftRadius="2dip"
+                android:topLeftRadius="2.0dip" />
+
+            <solid android:color="@color/holo_red_light" />
+        </shape>
+    </item>
+
+</layer-list>

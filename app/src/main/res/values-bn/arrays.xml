@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="nav_drawer_items">
+        <item>ব্লাড ফিড</item>
+        <item>রক্তের জন্যে আবেদন</item>
+        <item>প্রোফাইল</item>
+        <item>হাসপাতাল</item>
+        <item>সেটিংস</item>
+        <item>মতামত</item>
+        <item>আমাদের সম্পর্কে</item>
+    </string-array>
+
+</resources>

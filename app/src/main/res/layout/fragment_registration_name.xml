@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/registration_step_scroll_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dip" >
+
+    <LinearLayout
+        android:id="@id/registration_step_holder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dip"
+        android:background="@drawable/panel"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@id/registration_step_details_1_holder"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="16.0dip"
+            android:paddingRight="16.0dip"
+            android:paddingTop="16.0dip" >
+
+            <FrameLayout
+                android:id="@+id/image_frame_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/avatar_btn"
+                    android:layout_width="96dip"
+                    android:layout_height="96dip"
+                    android:background="@drawable/blood_avatar"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:textColor="#0096c9"
+                    android:textSize="48sp" />
+            </FrameLayout>
+
+            <Spinner
+                android:id="@+id/bloodGroupSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/image_frame_layout" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16.0dip"
+            android:background="#00000000"
+            android:paddingLeft="16.0dip"
+            android:paddingRight="8.0dip" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:orientation="vertical"
+                android:paddingRight="4.0dip" >
+
+                <com.widget.CustomEditText
+                    android:id="@+id/registration_first_name"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:hint="@string/register_name_first"
+                    android:imeOptions="actionDone"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingRight="32.0sp"
+                    android:singleLine="true"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ff888888" />
+
+                <com.widget.CustomTextView
+                    android:id="@+id/must_first_name_warning"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/Warning_must_enter_a_first_name"
+                    android:textColor="#ff880000"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <com.widget.CustomEditText
+                    android:id="@+id/registration_last_name"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:ellipsize="end"
+                    android:hint="@string/register_name_last"
+                    android:imeOptions="actionDone"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingRight="32.0sp"
+                    android:singleLine="true"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ff888888" />
+
+                <com.widget.CustomTextView
+                    android:id="@+id/must_last_name_warning"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/Warning_must_enter_a_last_name"
+                    android:textColor="#ff880000"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <com.widget.CustomEditText
+                    android:id="@+id/registration_password"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                    android:ellipsize="end"
+                    android:hint="@string/register_password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textWebPassword"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingRight="32.0sp"
+                    android:singleLine="true"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ff888888" />
+
+                <com.widget.CustomTextView
+                    android:id="@+id/must_password_warning"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/Warning_must_enter_a_password"
+                    android:textColor="#ff880000"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <com.widget.CustomEditText
+                    android:id="@+id/registration_password_recheck"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                    android:ellipsize="end"
+                    android:hint="@string/confirm_password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textWebPassword"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingRight="32.0sp"
+                    android:singleLine="true"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ff888888" />
+
+                <com.widget.CustomTextView
+                    android:id="@+id/wrong_password"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/Warning_password_not_matched"
+                    android:textColor="#ff880000"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginTop="16.0dip"
+                    android:background="#31313131" >
+                </LinearLayout>
+
+                <com.widget.CustomTextView
+                    android:id="@+id/mobile_number_reg"
+                    style="@style/MuseoSansRounded_300_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:hint="@string/dummy_mobile_number_ID"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingRight="32.0sp"
+                    android:singleLine="true"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ff888888"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15.0dip"
+                    android:background="#00000000"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1.0dip"
+                        android:background="#31313131" >
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/district"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16.0dip"
+                        android:layout_marginLeft="12.0dip"
+                        android:layout_marginRight="12.0dip"
+                        android:layout_marginTop="15dip"
+                        android:ellipsize="end"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:prompt="@string/spinner_prompt"
+                        android:singleLine="true" />
+
+                    <com.widget.CustomButton
+                        android:id="@+id/registration_submit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dip"
+                        android:background="@drawable/btn_blue"
+                        android:minHeight="0.0dip"
+                        android:text="@string/Ok"
+                        android:textSize="17.0sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

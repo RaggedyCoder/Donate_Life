@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/background"
+    android:layout_width="90dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dip"
+        android:layout_marginStart="10dip"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_account_circle_white_18dp" />
+
+    <com.widget.CustomTextView
+        android:id="@+id/slideMenu"
+        style="@style/MuseoSansRounded_300_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|start"
+        android:layout_marginBottom="20dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginStart="15dip"
+        android:layout_marginTop="20dip"
+        android:gravity="center|start"
+        android:text="@string/dummy_name"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:textStyle="normal" />
+
+</LinearLayout>
