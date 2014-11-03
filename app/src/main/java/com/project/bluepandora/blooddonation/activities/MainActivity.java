@@ -31,7 +31,7 @@ import com.project.bluepandora.blooddonation.data.Item;
 import com.project.bluepandora.blooddonation.data.SlideItem;
 import com.project.bluepandora.blooddonation.data.UserInfoItem;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
-import com.project.bluepandora.blooddonation.fragments.PlaceholderFragment;
+import com.project.bluepandora.blooddonation.fragments.FeedFragment;
 import com.project.bluepandora.blooddonation.fragments.ProfileFragment;
 import com.project.bluepandora.blooddonation.fragments.RequestFragment;
 import com.project.bluepandora.blooddonation.helpers.URL;
@@ -139,7 +139,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if (mContent == null) {
             fragments = new ArrayList<Fragment>();
-            fragments.add(new PlaceholderFragment());
+            fragments.add(new FeedFragment());
             fragments.add(new RequestFragment());
             fragments.add(new ProfileFragment());
             mContent = fragments.get(0);
@@ -198,7 +198,7 @@ public class MainActivity extends ActionBarActivity {
         listAdapter.notifyDataSetInvalidated();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_container, mContent).commit();
-        if (mContent instanceof PlaceholderFragment) {
+        if (mContent instanceof FeedFragment) {
             listAdapter.setSelected(0);
             prevpos = 0;
         } else if (mContent instanceof RequestFragment) {
@@ -319,7 +319,7 @@ public class MainActivity extends ActionBarActivity {
             MainActivity.this.overridePendingTransition(R.anim.slide_in_left,
                     R.anim.slide_out_right);
             backPressed = false;
-            PlaceholderFragment.firstTime = true;
+            FeedFragment.firstTime = true;
             finish();
             super.onBackPressed();
         } else {
@@ -381,8 +381,8 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
-        } else if ((mContent instanceof PlaceholderFragment)
-                && (fragments.get(pos) instanceof PlaceholderFragment)) {
+        } else if ((mContent instanceof FeedFragment)
+                && (fragments.get(pos) instanceof FeedFragment)) {
             Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
@@ -392,7 +392,7 @@ public class MainActivity extends ActionBarActivity {
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
         }
-        PlaceholderFragment.slideChange = true;
+        FeedFragment.slideChange = true;
         if (pos == 1) {
             mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
         }

@@ -1,5 +1,21 @@
 package com.project.bluepandora.blooddonation.fragments;
 
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -67,17 +83,23 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This fragment displays a list of Bloodfeed stored in the server database.
+ * Each item in the list shows the group name of the blood which they needed.
+ * Along with the contact number who made the request,in which hospital
+ * the blood is needed and also the amount.
+ *
+ * From this Fragment user can delete his own entry.And also the entry which he doesn't
+ * wanted to see.
  */
 @SuppressLint({"InflateParams", "NewApi"})
-public class PlaceholderFragment extends Fragment {
+public class FeedFragment extends Fragment {
 
     private ListView listView;
     private FeedListAdapter listAdapter;
     private List<Item> feedItems;
     private ImageButton actionButton;
 
-    public static final String TAG = PlaceholderFragment.class.getSimpleName();
+    public static final String TAG = FeedFragment.class.getSimpleName();
     private Drawable mActionBarBackgroundDrawable;
 
     private ProgressBar progress;
@@ -91,7 +113,7 @@ public class PlaceholderFragment extends Fragment {
 
     private OnRefreshListener mOnFeedRefresh;
 
-    public PlaceholderFragment() {
+    public FeedFragment() {
 
     }
 
