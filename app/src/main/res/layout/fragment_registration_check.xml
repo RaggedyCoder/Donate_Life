@@ -21,33 +21,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
+            android:layout_marginBottom="16.0dip"
             android:src="@drawable/log_in_screen_logo" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="#55ffffff"
+            android:orientation="vertical">
 
         <Spinner
             android:id="@+id/registration_country"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16.0dip"
-            android:layout_marginTop="16.0dip"
             android:ellipsize="end"
             android:focusableInTouchMode="false"
-            android:background="@color/holo_gray_light"
             android:gravity="center"
             android:inputType="none"
             android:prompt="@string/spinner_prompt"
             android:singleLine="true" />
-
-        <com.widget.CustomTextView
-            android:id="@+id/register_phone_country_code"
-            style="@style/MuseoSansRounded_300_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:visibility="gone" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/registration_fields"
             android:layout_width="fill_parent"
+            android:layout_marginTop="16.0dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16.0dip"
             android:layout_marginLeft="12.0dip"
