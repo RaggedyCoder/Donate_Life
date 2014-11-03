@@ -1,9 +1,30 @@
 package com.project.bluepandora.blooddonation.activities;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.project.blupandora.donatelife.R;
+import com.google.android.gcm.GCMRegistrar;
 import com.project.bluepandora.blooddonation.adapter.SlideMenuAdapter;
 import com.project.bluepandora.blooddonation.application.AppController;
 import com.project.bluepandora.blooddonation.data.Item;
@@ -14,292 +35,379 @@ import com.project.bluepandora.blooddonation.fragments.PlaceholderFragment;
 import com.project.bluepandora.blooddonation.fragments.ProfileFragment;
 import com.project.bluepandora.blooddonation.fragments.RequestFragment;
 import com.project.bluepandora.blooddonation.helpers.URL;
+import com.project.bluepandora.blooddonation.services.ServerUtilities;
+import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.util.CommonUtilities;
+import com.project.bluepandora.util.ConnectionManager;
+import com.project.bluepandora.util.WakeLocker;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.project.bluepandora.util.CommonUtilities.EXTRA_MESSAGE;
+import static com.project.bluepandora.util.CommonUtilities.SENDER_ID;
 
 @SuppressLint("NewApi")
 public class MainActivity extends ActionBarActivity {
 
-	private static final String TAG = MainActivity.class.getSimpleName();
-	public static boolean backPressed = false;
-	public ActionBar act;
-	public Fragment mContent;
-	public static ArrayList<Fragment> fragments;
-	public static boolean sliding = false;
-	DrawerLayout mDrawerLayout;
-	protected DrawerSlideListners mDrawerSlideListners;
-	ListView mDrawerListView;
-	ActionBarDrawerToggle mActionBarDrawerToggle;
-	private SlideMenuAdapter listAdapter;
-	private List<Item> slideItems;
-	public int prevpos = 0;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    public static boolean backPressed = false;
+    public ActionBar act;
+    public Fragment mContent;
+    public static ArrayList<Fragment> fragments;
+    public static boolean sliding = false;
+    DrawerLayout mDrawerLayout;
+    protected DrawerSlideListners mDrawerSlideListners;
+    ListView mDrawerListView;
+    ActionBarDrawerToggle mActionBarDrawerToggle;
+    private SlideMenuAdapter listAdapter;
+    private List<Item> slideItems;
+    public int prevpos = 0;
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+            /**
+             * Take appropriate action on this message
+             * depending upon your app requirement
+             * For now i am just displaying it on the screen
+             * */
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		act = getSupportActionBar();
-		if (savedInstanceState != null) {
-			mContent = getSupportFragmentManager().getFragment(
-					savedInstanceState, "mContent");
-		}
-		if (mContent == null) {
-			fragments = new ArrayList<Fragment>();
-			fragments.add(new PlaceholderFragment());
-			fragments.add(new RequestFragment());
-			fragments.add(new ProfileFragment());
-			mContent = fragments.get(0);
-		}
-		mDrawerListView = (ListView) findViewById(R.id.list_slidermenu);
+            Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
 
-		slideItems = new ArrayList<Item>();
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
+    AsyncTask<Void, Void, Void> mRegisterTask;
 
-		listAdapter = new SlideMenuAdapter(this, slideItems);
-		mDrawerListView.setAdapter(listAdapter);
-		if (mContent instanceof RequestFragment) {
-			mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
-		}
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.string.app_name, R.string.app_name) {
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				invalidateOptionsMenu();
-			}
 
-			@Override
-			public void onDrawerClosed(View drawerView) {
-				invalidateOptionsMenu();
-			}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-			@Override
-			public void onDrawerSlide(View drawerView, float slideOffset) {
-				super.onDrawerSlide(drawerView, slideOffset);
-				if (mContent instanceof RequestFragment) {
-					((DrawerSlideListners) mContent).onDrawerslide(slideOffset);
-				}
-				Log.d(TAG, "" + slideOffset);
-			}
-		};
-		String[] names = getResources()
-				.getStringArray(R.array.nav_drawer_items);
-		TypedArray icons = getResources().obtainTypedArray(
-				R.array.nav_drawer_icons);
-		TypedArray backgrounds = getResources().obtainTypedArray(
-				R.array.nav_drawer_backgrounds);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        act = getSupportActionBar();
+        if (savedInstanceState != null) {
+            mContent = getSupportFragmentManager().getFragment(
+                    savedInstanceState, "mContent");
+        }
+        GCMRegistrar.checkDevice(this);
+        GCMRegistrar.checkManifest(this);
+        registerReceiver(mHandleMessageReceiver, new IntentFilter(
+                CommonUtilities.DISPLAY_MESSAGE_ACTION));
+        final String regId = GCMRegistrar.getRegistrationId(this);
+        Log.e(TAG, regId + " here");
+        if (regId.equals("")) {
+            // Registration is not present, register now with GCM
+            GCMRegistrar.register(this, SENDER_ID);
+            Toast.makeText(this, "" + GCMRegistrar.getRegistrationId(this), Toast.LENGTH_LONG).show();
+        } else {
+            if (GCMRegistrar.isRegisteredOnServer(this)) {
+                // Skips registration.
+                Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
+            } else {
+                // Try to register again, but not in the UI thread.
+                // It's also necessary to cancel the thread onDestroy(),
+                // hence the use of AsyncTask instead of a raw thread.
+                final Context context = this;
+                mRegisterTask = new AsyncTask<Void, Void, Void>() {
 
-		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        // Register on our server
+                        // On server creates a new user
+                        UserDataSource database = new UserDataSource(context);
+                        database.open();
+                        UserInfoItem userInfoItem = database.getAllUserItem().get(0);
+                        database.close();
+                        ServerUtilities.register(context, userInfoItem.getMobileNumber(), regId);
+                        return null;
+                    }
 
-		SlideItem item = null;
-		for (int i = 0; i < names.length; i++) {
-			item = new SlideItem();
-			item.setSlideItem(names[i]);
-			item.setIcons(icons.getResourceId(i, -1));
-			item.setBackground(backgrounds.getResourceId(i, -1));
-			slideItems.add(item);
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        mRegisterTask = null;
+                    }
 
-		}
-		icons.recycle();
-		backgrounds.recycle();
-		mDrawerListView.setOnItemClickListener(new ListItemListner());
-		listAdapter.notifyDataSetInvalidated();
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.frame_container, mContent).commit();
-		if (mContent instanceof PlaceholderFragment) {
-			listAdapter.setSelected(0);
-			prevpos = 0;
-		} else if (mContent instanceof RequestFragment) {
-			mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
-			listAdapter.setSelected(1);
-			prevpos = 1;
-		} else if (mContent instanceof ProfileFragment) {
-			listAdapter.setSelected(2);
-			prevpos = 2;
-		}
-	}
+                };
+                mRegisterTask.execute(null, null, null);
+            }
+        }
+        if (mContent == null) {
+            fragments = new ArrayList<Fragment>();
+            fragments.add(new PlaceholderFragment());
+            fragments.add(new RequestFragment());
+            fragments.add(new ProfileFragment());
+            mContent = fragments.get(0);
+        }
+        mDrawerListView = (ListView) findViewById(R.id.list_slidermenu);
+        slideItems = new ArrayList<Item>();
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+        listAdapter = new SlideMenuAdapter(this, slideItems);
+        mDrawerListView.setAdapter(listAdapter);
+        if (mContent instanceof RequestFragment) {
+            mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+        }
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.app_name, R.string.app_name) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+            }
 
-		super.onConfigurationChanged(newConfig);
-		mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                invalidateOptionsMenu();
+            }
 
-	}
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if (mContent instanceof RequestFragment) {
+                    ((DrawerSlideListners) mContent).onDrawerslide(slideOffset);
+                }
+                Log.d(TAG, "" + slideOffset);
+            }
+        };
+        String[] names = getResources()
+                .getStringArray(R.array.nav_drawer_items);
+        TypedArray icons = getResources().obtainTypedArray(
+                R.array.nav_drawer_icons);
+        TypedArray backgrounds = getResources().obtainTypedArray(
+                R.array.nav_drawer_backgrounds);
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
+        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-		super.onPostCreate(savedInstanceState);
-		mActionBarDrawerToggle.syncState();
-	}
+        SlideItem item = null;
+        for (int i = 0; i < names.length; i++) {
+            item = new SlideItem();
+            item.setSlideItem(names[i]);
+            item.setIcons(icons.getResourceId(i, -1));
+            item.setBackground(backgrounds.getResourceId(i, -1));
+            slideItems.add(item);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return false;
-	}
+        }
+        icons.recycle();
+        backgrounds.recycle();
+        mDrawerListView.setOnItemClickListener(new ListItemListner());
+        listAdapter.notifyDataSetInvalidated();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, mContent).commit();
+        if (mContent instanceof PlaceholderFragment) {
+            listAdapter.setSelected(0);
+            prevpos = 0;
+        } else if (mContent instanceof RequestFragment) {
+            mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+            listAdapter.setSelected(1);
+            prevpos = 1;
+        } else if (mContent instanceof ProfileFragment) {
+            listAdapter.setSelected(2);
+            prevpos = 2;
+        }
+    }
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		return super.onPrepareOptionsMenu(menu);
-	}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		if (id == R.id.action_logout) {
-			ProgressDialog pd = new ProgressDialog(this);
-			pd.setCancelable(true);
-			pd.setTitle("Logging out.");
-			pd.show();
-			deleteFile("feed.json");
-			UserDataSource userDatabase = new UserDataSource(this);
-			userDatabase.open();
-			ArrayList<UserInfoItem> items = new ArrayList<UserInfoItem>();
-			items = userDatabase.getAllUserItem();
-			for (UserInfoItem i : items) {
-				userDatabase.deleteUserInfoitem(i);
-			}
-			pd.dismiss();
-			Intent intent = new Intent(this, RegistrationActivity.class);
-			startActivity(intent);
-			finish();
-		}
-		return super.onOptionsItemSelected(item);
-	}
+        super.onConfigurationChanged(newConfig);
+        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		getSupportFragmentManager().putFragment(outState, "mContent", mContent);
+    }
 
-	}
+    @Override
+    protected void onDestroy() {
+        try {
+            unregisterReceiver(mHandleMessageReceiver);
+            GCMRegistrar.onDestroy(this);
+        } catch (Exception e) {
+            Log.e("UnRegister Receiver Error", "> " + e.getMessage());
+        }
+        super.onDestroy();
+    }
 
-	@Override
-	public void onBackPressed() {
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
 
-		if (backPressed) {
-			finish();
-			AppController.getInstance().getRequestQueue().getCache()
-					.remove(URL.URL);
-			MainActivity.this.overridePendingTransition(R.anim.slide_in_left,
-					R.anim.slide_out_right);
-			backPressed = false;
-			PlaceholderFragment.firstTime = true;
-			finish();
-			super.onBackPressed();
-		} else {
+        super.onPostCreate(savedInstanceState);
+        mActionBarDrawerToggle.syncState();
+    }
 
-			Toast.makeText(this, "Press Back again to Exit", Toast.LENGTH_SHORT)
-					.show();
-			backPressed = true;
-			Handler h = new Handler();
-			h.postDelayed(new Runnable() {
-				public void run() {
-					backPressed = false;
-				}
-			}, 2000);
-		}
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return false;
+    }
 
-	public void switchContent() {
-		prevpos = 1;
-		listAdapter.setSelected(1);
-		mContent = fragments.get(1);
-		mDrawerListView.setItemChecked(1, true);
-		mDrawerListView.setSelection(1);
-		mDrawerLayout.closeDrawer(mDrawerListView);
-		mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
-		getSupportFragmentManager().beginTransaction()
-				.setCustomAnimations(R.anim.grow, R.anim.dim)
-				.replace(R.id.frame_container, mContent).commit();
-	}
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
 
-	private class ListItemListner implements ListView.OnItemClickListener {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        if (id == R.id.action_logout) {
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setCancelable(true);
+            pd.setTitle("Logging out.");
+            pd.show();
+            deleteFile("feed.json");
+            final ConnectionManager con = new ConnectionManager(this);
+            final UserDataSource userDatabase = new UserDataSource(this);
+            userDatabase.open();
+            final ArrayList<UserInfoItem> items = userDatabase.getAllUserItem();
+            mRegisterTask = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    if (con.isConnectingToInternet()) {
+                        ServerUtilities.unregister(MainActivity.this, items.get(0).getMobileNumber());
+                    } else {
+                        return null;
+                    }
+                    return null;
+                }
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			listAdapter.setSelected(position);
-			if (position > 3) {
-				mDrawerLayout.closeDrawer(mDrawerListView);
-				return;
-			}
-			if (prevpos != position) {
-				switchContent(position);
-				prevpos = position;
-			} else {
-				mDrawerLayout.closeDrawer(mDrawerListView);
-			}
-		}
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    if (!con.isConnectingToInternet()) {
+                        Toast.makeText(MainActivity.this, "Check Your internet Connection", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    for (UserInfoItem i : items) {
+                        userDatabase.deleteUserInfoitem(i);
+                    }
+                    userDatabase.close();
+                    pd.dismiss();
+                    Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
+                    startActivity(intent);
+                    finish();
+                    mRegisterTask = null;
+                }
 
-	}
+            };
+            mRegisterTask.execute(null, null, null);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	public void switchContent(int pos) {
-		AppController.getInstance().cancelPendingRequests();
-		backPressed = false;
-		if (pos == 3) {
-			mDrawerLayout.closeDrawer(mDrawerListView);
-			return;
-		}
-		if ((mContent instanceof RequestFragment)
-				&& (fragments.get(pos) instanceof RequestFragment)) {
-			Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
-			mDrawerLayout.closeDrawer(mDrawerListView);
-			return;
-		} else if ((mContent instanceof PlaceholderFragment)
-				&& (fragments.get(pos) instanceof PlaceholderFragment)) {
-			Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
-			mDrawerLayout.closeDrawer(mDrawerListView);
-			return;
-		} else if ((mContent instanceof ProfileFragment)
-				&& (fragments.get(pos) instanceof ProfileFragment)) {
-			Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
-			mDrawerLayout.closeDrawer(mDrawerListView);
-			return;
-		}
-		PlaceholderFragment.slideChange = true;
-		if (pos == 1) {
-			mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
-		}
-		getSupportFragmentManager()
-				.beginTransaction()
-				.setCustomAnimations(R.anim.slide_in_left,
-						R.anim.slide_out_right)
-				.replace(R.id.frame_container, fragments.get(pos)).commit();
-		mDrawerListView.setItemChecked(pos, true);
-		mDrawerListView.setSelection(pos);
-		mDrawerLayout.closeDrawer(mDrawerListView);
-		mContent = fragments.get(pos);
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "mContent", mContent);
 
-	public interface DrawerSlideListners {
-		public void onDrawerslide(float offset);
-	}
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (backPressed) {
+            finish();
+            AppController.getInstance().getRequestQueue().getCache()
+                    .remove(URL.URL);
+            MainActivity.this.overridePendingTransition(R.anim.slide_in_left,
+                    R.anim.slide_out_right);
+            backPressed = false;
+            PlaceholderFragment.firstTime = true;
+            finish();
+            super.onBackPressed();
+        } else {
+
+            Toast.makeText(this, "Press Back again to Exit", Toast.LENGTH_SHORT)
+                    .show();
+            backPressed = true;
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                public void run() {
+                    backPressed = false;
+                }
+            }, 2000);
+        }
+    }
+
+    public void switchContent() {
+        prevpos = 1;
+        listAdapter.setSelected(1);
+        mContent = fragments.get(1);
+        mDrawerListView.setItemChecked(1, true);
+        mDrawerListView.setSelection(1);
+        mDrawerLayout.closeDrawer(mDrawerListView);
+        mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.grow, R.anim.dim)
+                .replace(R.id.frame_container, mContent).commit();
+    }
+
+    private class ListItemListner implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            listAdapter.setSelected(position);
+            if (position > 3) {
+                mDrawerLayout.closeDrawer(mDrawerListView);
+                return;
+            }
+            if (prevpos != position) {
+                switchContent(position);
+                prevpos = position;
+            } else {
+                mDrawerLayout.closeDrawer(mDrawerListView);
+            }
+        }
+
+    }
+
+    public void switchContent(int pos) {
+        AppController.getInstance().cancelPendingRequests();
+        backPressed = false;
+        if (pos == 3) {
+            mDrawerLayout.closeDrawer(mDrawerListView);
+            return;
+        }
+        if ((mContent instanceof RequestFragment)
+                && (fragments.get(pos) instanceof RequestFragment)) {
+            Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
+            mDrawerLayout.closeDrawer(mDrawerListView);
+            return;
+        } else if ((mContent instanceof PlaceholderFragment)
+                && (fragments.get(pos) instanceof PlaceholderFragment)) {
+            Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
+            mDrawerLayout.closeDrawer(mDrawerListView);
+            return;
+        } else if ((mContent instanceof ProfileFragment)
+                && (fragments.get(pos) instanceof ProfileFragment)) {
+            Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
+            mDrawerLayout.closeDrawer(mDrawerListView);
+            return;
+        }
+        PlaceholderFragment.slideChange = true;
+        if (pos == 1) {
+            mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left,
+                        R.anim.slide_out_right)
+                .replace(R.id.frame_container, fragments.get(pos)).commit();
+        mDrawerListView.setItemChecked(pos, true);
+        mDrawerListView.setSelection(pos);
+        mDrawerLayout.closeDrawer(mDrawerListView);
+        mContent = fragments.get(pos);
+    }
+
+    public interface DrawerSlideListners {
+        public void onDrawerslide(float offset);
+    }
 }

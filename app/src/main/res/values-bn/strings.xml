@@ -17,6 +17,9 @@
     <!--  -->
     <string name="Ok">ঠিক আছে</string>
     <!--  -->
+    <string name="log_in">লগ ইন</string>
+
+    <!--  -->
     <string name="refresh_notice">নিচের দিকে টেনে রিফ্রেশ করুন</string>
     <!--  -->
     <string name="request">রক্তের জন্যে আবেদন</string>

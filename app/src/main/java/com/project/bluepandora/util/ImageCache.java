@@ -24,8 +24,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
-import com.project.blupandora.donatelife.BuildConfig;
 
+import com.project.bluepandora.donatelife.BuildConfig;
 
 
 /**
@@ -48,7 +48,7 @@ public class ImageCache {
      * Find and return an existing ImageCache stored in a {@link com.project.bluepandora.util.ImageCache.RetainFragment}, if not found a new
      * one is created using the supplied params and saved to a {@link com.project.bluepandora.util.ImageCache.RetainFragment}.
      *
-     * @param fragmentManager The fragment manager to use when dealing with the retained fragment.
+     * @param fragmentManager     The fragment manager to use when dealing with the retained fragment.
      * @param memCacheSizePercent The cache size as a percent of available app memory.
      * @return An existing retained ImageCache object or a new one if one did not exist
      */
@@ -97,7 +97,8 @@ public class ImageCache {
 
     /**
      * Adds a bitmap to both memory and disk cache.
-     * @param data Unique identifier for the bitmap to store
+     *
+     * @param data   Unique identifier for the bitmap to store
      * @param bitmap The bitmap to store
      */
     public void addBitmapToCache(String data, Bitmap bitmap) {
@@ -151,7 +152,7 @@ public class ImageCache {
      * memory. Throws {@link IllegalArgumentException} if percent is < 0.05 or > .8.
      * memCacheSize is stored in kilobytes instead of bytes as this will eventually be passed
      * to construct a LruCache which takes an int in its constructor.
-     *
+     * <p/>
      * This value should be chosen carefully based on a number of factors
      * Refer to the corresponding Android Training class for more discussion:
      * http://developer.android.com/training/displaying-bitmaps/
@@ -172,7 +173,7 @@ public class ImageCache {
      *
      * @param fm The FragmentManager manager to use.
      * @return The existing instance of the Fragment or the new instance if just
-     *         created.
+     * created.
      */
     public static RetainFragment findOrCreateRetainFragment(FragmentManager fm) {
         // Check to see if we have retained the worker fragment.
@@ -197,7 +198,8 @@ public class ImageCache {
         /**
          * Empty constructor as per the Fragment documentation
          */
-        public RetainFragment() {}
+        public RetainFragment() {
+        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

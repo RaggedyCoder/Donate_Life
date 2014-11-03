@@ -1,4 +1,4 @@
-package com.project.blupandora.donatelife;
+package com.project.bluepandora.donatelife;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

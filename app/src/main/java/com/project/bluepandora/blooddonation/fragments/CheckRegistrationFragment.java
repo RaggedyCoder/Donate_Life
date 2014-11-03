@@ -1,16 +1,28 @@
 package com.project.bluepandora.blooddonation.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.android.volley.*;
 import com.android.volley.Request.Method;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.project.bluepandora.blooddonation.activities.MainActivity;
 import com.project.bluepandora.blooddonation.activities.RegistrationActivity;
 import com.project.bluepandora.blooddonation.adapter.CountryListAdapter;
@@ -20,23 +32,16 @@ import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.blooddonation.helpers.URL;
 import com.project.bluepandora.blooddonation.jsonperser.JSONParser;
 import com.project.bluepandora.blooddonation.volley.CustomRequest;
-import com.project.blupandora.donatelife.R;
+import com.project.bluepandora.donatelife.R;
 import com.widget.CustomEditText;
 import com.widget.CustomTextView;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.TypedValue;
-import android.view.*;
-import android.view.View.OnClickListener;
-import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CheckRegistrationFragment extends Fragment {
 
@@ -49,7 +54,6 @@ public class CheckRegistrationFragment extends Fragment {
 	public ArrayList<String> countryCodes;
 	public CustomEditText mobileNumber;
 	public CustomEditText password;
-	public CustomTextView warningText;
 	public JSONObject jsonObject;
 	private Drawable mActionBarBackgroundDrawable;
 	public HashMap<String, String> params = new HashMap<String, String>();
@@ -77,16 +81,16 @@ public class CheckRegistrationFragment extends Fragment {
 
 		password = (CustomEditText) rootView.findViewById(R.id.check_reg_pass);
 		countryCodes.add("880");
-		warningText = (CustomTextView) rootView.findViewById(R.id.warningText);
 		contryCode = (CustomTextView) rootView
 				.findViewById(R.id.registration_cc);
-		warningText.setVisibility(View.GONE);
 		mActionBarBackgroundDrawable = getResources().getDrawable(
 				R.drawable.actionbar_background);
 		mActionBarBackgroundDrawable.setAlpha(255);
 		((ActionBarActivity) getActivity()).getSupportActionBar()
 				.setBackgroundDrawable(mActionBarBackgroundDrawable);
-		CountryListAdapter dataAdapter = new CountryListAdapter(getActivity(),
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .hide();
+        CountryListAdapter dataAdapter = new CountryListAdapter(getActivity(),
 				categories);
 		spinner.setAdapter(dataAdapter);
 		return rootView;
@@ -103,9 +107,6 @@ public class CheckRegistrationFragment extends Fragment {
 				if (count > 0 && (s.charAt(0) != '1')) {
 					mobileNumber.setText("");
 				}
-				if (warningText.getVisibility() == View.VISIBLE) {
-					warningText.setVisibility(View.GONE);
-				}
 			}
 
 			@Override
@@ -117,28 +118,6 @@ public class CheckRegistrationFragment extends Fragment {
 			public void afterTextChanged(Editable s) {
 			}
 
-		});
-		password.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-
-				if (warningText.getVisibility() == View.VISIBLE) {
-					warningText.setVisibility(View.GONE);
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
 		});
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -162,29 +141,18 @@ public class CheckRegistrationFragment extends Fragment {
 				mobileNumber.clearFocus();
 				password.clearFocus();
 				if (mobileNumber.getText().length() == 0) {
-					warningText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 					mobileNumber.setError(getActivity().getResources()
 							.getString(R.string.Warning_no_number));
-					warningText.setText(R.string.Warning_no_number);
-					warningText.setVisibility(View.VISIBLE);
 					return;
 				} else if (mobileNumber.getText().length() < 10) {
-					warningText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 					mobileNumber.setError(getActivity().getResources()
 							.getString(R.string.Warning_number_short));
-					warningText.setText(R.string.Warning_number_short);
-					warningText.setVisibility(View.VISIBLE);
 					return;
 				}
 				if (contryCode.getText().length() == 0) {
-					warningText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-					warningText.setText(R.string.Warning_select_a_country);
 					contryCode.setError(getActivity().getResources().getString(
 							R.string.Warning_select_a_country));
-					warningText.setVisibility(View.VISIBLE);
 					return;
-				} else if (warningText.getVisibility() == View.VISIBLE) {
-					warningText.setVisibility(View.GONE);
 				}
 
 				pd = new ProgressDialog(CheckRegistrationFragment.this
@@ -216,11 +184,8 @@ public class CheckRegistrationFragment extends Fragment {
 			boolean data = response.getBoolean("reg");
 			if (data) {
 				if (password.getText().length() == 0) {
-					warningText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-					warningText.setText(R.string.Warning_enter_a_password);
 					password.setError(getActivity().getResources().getString(
 							R.string.Warning_enter_a_password));
-					warningText.setVisibility(View.VISIBLE);
 					pd.dismiss();
 					return;
 				}
@@ -232,11 +197,8 @@ public class CheckRegistrationFragment extends Fragment {
 
 			} else {
 				if (password.getText().length() != 0) {
-					warningText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-					warningText.setText(R.string.Warning_remove_the_password);
 					password.setError(getActivity().getResources().getString(
 							R.string.Warning_remove_the_password));
-					warningText.setVisibility(View.VISIBLE);
 					pd.dismiss();
 				} else {
 					pd.dismiss();
@@ -262,8 +224,6 @@ public class CheckRegistrationFragment extends Fragment {
 		}
 
 		if (data == 0) {
-			warningText.setText(R.string.Warning_wrong_password);
-			warningText.setVisibility(View.VISIBLE);
 			pd.dismiss();
 			return;
 		} else if (data == 1) {
@@ -349,7 +309,8 @@ public class CheckRegistrationFragment extends Fragment {
 								 * .getActivity(), response.toString() + ":/",
 								 * Toast.LENGTH_LONG).show();
 								 */
-								parseJsonUserInfo(response);
+                                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
+                                parseJsonUserInfo(response);
 							} else if (params.containsValue("" + 0
 									+ mobileNumber.getText())) {
 								/*
