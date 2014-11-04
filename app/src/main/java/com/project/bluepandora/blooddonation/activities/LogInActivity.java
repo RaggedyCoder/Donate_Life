@@ -16,32 +16,31 @@ package com.project.bluepandora.blooddonation.activities;
  */
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
-import com.project.bluepandora.blooddonation.fragments.CheckRegistrationFragment;
-import com.project.bluepandora.blooddonation.fragments.RegistrationStepFragment;
+import com.project.bluepandora.blooddonation.fragments.LogInFragment;
 import com.project.bluepandora.donatelife.R;
 
-public class RegistrationActivity extends ActionBarActivity {
-    public Fragment mContent;
+public class LogInActivity extends ActionBarActivity {
     public static boolean backPressed = false;
+    private Fragment mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.login);
         if (savedInstanceState != null) {
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "regContent");
         }
         if (mContent == null) {
-            mContent = new CheckRegistrationFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.reg_container, mContent).commit();
+            mContent = new LogInFragment();
         }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.login_container, mContent).commit();
     }
 
     @Override
@@ -56,7 +55,7 @@ public class RegistrationActivity extends ActionBarActivity {
 
         if (backPressed) {
             finish();
-            RegistrationActivity.this.overridePendingTransition(
+            LogInActivity.this.overridePendingTransition(
                     R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
             super.onBackPressed();
@@ -64,11 +63,11 @@ public class RegistrationActivity extends ActionBarActivity {
             Toast.makeText(this, "Press Back again to Exit", Toast.LENGTH_SHORT)
                     .show();
         backPressed = true;
-    }
-
-    public void changeFragement(String mobileNumber) {
-        mContent = new RegistrationStepFragment(mobileNumber);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.reg_container, mContent).commit();
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            public void run() {
+                backPressed = false;
+            }
+        }, 2000);
     }
 }

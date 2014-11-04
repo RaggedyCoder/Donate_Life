@@ -63,12 +63,17 @@
                 android:value="AIzaSyBZ5kDCzgQOSJd4ZcHNRt_HOLsPa6aZcw8" />
         </activity>
         <activity
-            android:name="com.project.bluepandora.blooddonation.activities.RegistrationActivity"
+            android:name="com.project.bluepandora.blooddonation.activities.LogInActivity"
             android:configChanges="keyboardHidden"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFeed" />
+            android:theme="@style/ThemeReg" />
+        <activity
+            android:name="com.project.bluepandora.blooddonation.activities.SignUpActivity"
+            android:icon="@null"
+            android:theme="@style/ThemeReg" />
+
         <activity
             android:name="com.project.bluepandora.blooddonation.activities.MainActivity"
             android:icon="@null"

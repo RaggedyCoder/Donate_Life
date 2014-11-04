@@ -40,7 +40,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.project.bluepandora.blooddonation.activities.MainActivity;
-import com.project.bluepandora.blooddonation.activities.RegistrationActivity;
+import com.project.bluepandora.blooddonation.activities.SignUpActivity;
 import com.project.bluepandora.blooddonation.adapter.CountryListAdapter;
 import com.project.bluepandora.blooddonation.application.AppController;
 import com.project.bluepandora.blooddonation.data.UserInfoItem;
@@ -61,19 +61,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This fragment displays a list of Bloodfeed stored in the server database.
- * Each item in the list shows the group name of the blood which they needed.
- * Along with the contact number who made the request,in which hospital
- * the blood is needed and also the amount.
  * <p/>
- * From this Fragment user can delete his own entry.And also the entry which he doesn't
- * wanted to see.
+ * This fragment is for the user to log in to the Main Activity.
+ * Which is for the blood feed,request profile and other main operation.
  * <p/>
  */
-public class CheckRegistrationFragment extends Fragment {
+public class LogInFragment extends Fragment {
 
     // Defines a tag for identifying log entries
-    private final String TAG = RegistrationActivity.class.getSimpleName();
+    private final String TAG = LogInFragment.class.getSimpleName();
     /**
      * A {@link View} for the whole fragment view.
      */
@@ -92,10 +88,14 @@ public class CheckRegistrationFragment extends Fragment {
      */
     private CountryListAdapter countryListAdapter;
     /**
-     * A Button{@link CustomButton} for sending the username and pasword to the server
+     * A Button{@link CustomButton} for sending the username and password to the server
      * to check the user is valid or not.
      */
-    private CustomButton nextActivityButton;
+    private CustomButton signInButton;
+    /**
+     * A Button {@link CustomButton} for the un registered user to sign up.
+     */
+    private CustomButton signUpButton;
     /**
      * A {@link ProgressDialog} for showing the user background work is going on.
      */
@@ -129,23 +129,24 @@ public class CheckRegistrationFragment extends Fragment {
      * A {@link TextWatcher} for the mobileNumber EditTextField.
      */
     private TextWatcher mobileTextWatcher;
-
     /**
      * An item selection listener for the countryNameSpinner.
      */
-
     private OnItemSelectedListener mOnItemSelectedListener;
-
+    /**
+     * A click detection listener for the SignIn Button.
+     */
+    private OnClickListener mSignInListener;
 
     /**
-     * A click detection listener for the nextActivity Button.
+     * A click detection listener for the SignUp Button.
      */
-    private OnClickListener mOnClickListener;
+    private OnClickListener mSignUpListener;
 
     /**
      * Fragments require an empty constructor.
      */
-    public CheckRegistrationFragment() {
+    public LogInFragment() {
 
     }
 
@@ -165,10 +166,11 @@ public class CheckRegistrationFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        rootView = inflater.inflate(R.layout.fragment_registration_check, container, false);
+        rootView = inflater.inflate(R.layout.fragment_signin, container, false);
         mobileNumber = (CustomEditText) rootView.findViewById(R.id.registration_phone);
         password = (CustomEditText) rootView.findViewById(R.id.check_reg_pass);
-        nextActivityButton = (CustomButton) rootView.findViewById(R.id.registration_submit);
+        signInButton = (CustomButton) rootView.findViewById(R.id.registration_submit);
+        signUpButton = (CustomButton) rootView.findViewById(R.id.signup);
         countryNameSpinner = (Spinner) rootView.findViewById(R.id.registration_country);
         contryCode = (CustomTextView) rootView.findViewById(R.id.registration_cc);
         return rootView;
@@ -192,7 +194,8 @@ public class CheckRegistrationFragment extends Fragment {
         mobileNumber.addTextChangedListener(mobileTextWatcher);
         countryNameSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
 
-        nextActivityButton.setOnClickListener(mOnClickListener);
+        signInButton.setOnClickListener(mSignInListener);
+        signUpButton.setOnClickListener(mSignUpListener);
     }
 
     @Override
@@ -229,8 +232,7 @@ public class CheckRegistrationFragment extends Fragment {
 
             }
         };
-
-        mOnClickListener = new OnClickListener() {
+        mSignInListener = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -263,10 +265,17 @@ public class CheckRegistrationFragment extends Fragment {
                 getJsonData(params);
             }
         };
+        mSignUpListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
+                startActivity(signUpIntent);
+            }
+        };
     }
 
     private void createProgressDialog() {
-        pd = new ProgressDialog(CheckRegistrationFragment.this
+        pd = new ProgressDialog(LogInFragment.this
                 .getActivity());
         pd.setMessage(getActivity().getResources().getString(
                 R.string.loading));
@@ -303,11 +312,6 @@ public class CheckRegistrationFragment extends Fragment {
                     password.setError(getActivity().getResources().getString(
                             R.string.Warning_remove_the_password));
                     pd.dismiss();
-                } else {
-                    pd.dismiss();
-                    RegistrationActivity ra = (RegistrationActivity) getActivity();
-                    ra.changeFragement("" + mobileNumber.getText());
-
                 }
             }
 
@@ -419,7 +423,7 @@ public class CheckRegistrationFragment extends Fragment {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 pd.dismiss();
                 Toast.makeText(
-                        CheckRegistrationFragment.this.getActivity(),
+                        LogInFragment.this.getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
 
             }

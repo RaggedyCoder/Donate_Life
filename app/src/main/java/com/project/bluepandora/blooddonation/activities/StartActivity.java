@@ -28,35 +28,35 @@ import java.util.ArrayList;
 
 public class StartActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		UserDataSource userDatabase = new UserDataSource(this);
-		ArrayList<UserInfoItem> items = null;
-		userDatabase.open();
-		try {
-			items = userDatabase.getAllUserItem();
-			// Toast.makeText(this, items.size() + "",
-			// Toast.LENGTH_SHORT).show();
-		} catch (Exception e) {
-			// Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-		}
-		if (items != null) {
-			if (items.size() == 1) {
-				Intent intent = new Intent(this, MainActivity.class);
-				startActivity(intent);
-				finish();
-			} else {
-				Intent intent = new Intent(this, RegistrationActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		} else {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        UserDataSource userDatabase = new UserDataSource(this);
+        ArrayList<UserInfoItem> items = null;
+        userDatabase.open();
+        try {
+            items = userDatabase.getAllUserItem();
+            // Toast.makeText(this, items.size() + "",
+            // Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            // Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        if (items != null) {
+            if (items.size() == 1) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else {
 
-			Intent intent = new Intent(this, RegistrationActivity.class);
-			startActivity(intent);
-			finish();
-		}
-	}
+            Intent intent = new Intent(this, LogInActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
 }

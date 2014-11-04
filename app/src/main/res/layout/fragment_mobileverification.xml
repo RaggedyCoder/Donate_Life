@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:background="@color/holo_gray_dark"
     android:orientation="vertical"
     android:padding="10.0dip">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="6.0dip"
         android:background="@android:color/transparent"
@@ -27,6 +27,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="#111111"
                 android:text="@string/register_phone_number_code_confirm"
                 android:textSize="20sp" />
 
@@ -101,23 +102,23 @@
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
                     android:textColor="#ff000000"
-                    android:textColorHint="#dd888888"
+                    android:textColorHint="#dd333333"
                     android:textSize="20.0sp"
                     app:font="MuseoSansRounded-300.otf" />
             </RelativeLayout>
-        </LinearLayout>
 
-        <com.widget.CustomButton
-            android:id="@+id/registration_submit"
-            style="@style/MuseoSansRounded_700_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dip"
-            android:layout_marginRight="50dip"
-            android:layout_marginTop="20dip"
-            android:background="@drawable/btn_blue"
-            android:minHeight="0.0dip"
-            android:text="@string/Ok"
-            android:textSize="20.0sp" />
+            <com.widget.CustomButton
+                android:id="@+id/registration_submit"
+                style="@style/MuseoSansRounded_700_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dip"
+                android:layout_marginRight="50dip"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/btn_blue"
+                android:minHeight="0.0dip"
+                android:text="@string/Ok"
+                android:textSize="20.0sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

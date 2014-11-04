@@ -302,7 +302,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                     userDatabase.close();
                     pd.dismiss();
-                    Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
+                    Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                     startActivity(intent);
                     finish();
                     mRegisterTask = null;

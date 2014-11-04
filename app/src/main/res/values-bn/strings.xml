@@ -18,6 +18,8 @@
     <string name="Ok">ঠিক আছে</string>
     <!--  -->
     <string name="log_in">লগ ইন</string>
+    <!--  -->
+    <string name="sign_up">সাইন আপ</string>
 
     <!--  -->
     <string name="refresh_notice">নিচের দিকে টেনে রিফ্রেশ করুন</string>

@@ -32,16 +32,16 @@
             android:background="#55ffffff"
             android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/registration_country"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:inputType="none"
-            android:prompt="@string/spinner_prompt"
-            android:singleLine="true" />
+            <Spinner
+                android:id="@+id/registration_country"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="none"
+                android:prompt="@string/spinner_prompt"
+                android:singleLine="true" />
         </LinearLayout>
 
         <RelativeLayout
@@ -154,14 +154,17 @@
             android:text="@string/log_in"
             android:textSize="20.0sp" />
 
-        <com.widget.CustomTextView
-            android:layout_width="fill_parent"
+        <com.widget.CustomButton
+            android:id="@+id/signup"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dip"
             android:gravity="center"
-            android:text="Sign up"
-            android:textColor="#ffffff"
-            android:textSize="20dip" />
+            app:font="MuseoSansRounded-700.otf"
+            android:text="@string/sign_up"
+            android:textColor="@drawable/text_color"
+            android:background="@android:color/transparent"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>
