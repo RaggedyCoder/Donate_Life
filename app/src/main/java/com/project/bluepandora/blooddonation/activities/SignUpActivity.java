@@ -18,9 +18,14 @@ package com.project.bluepandora.blooddonation.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
 import com.project.bluepandora.blooddonation.fragments.MobileVerificationFragment;
+import com.project.bluepandora.blooddonation.fragments.NameVerificationFragment;
+import com.project.bluepandora.blooddonation.fragments.PasswordVerificationFragment;
 import com.project.bluepandora.donatelife.R;
+
+import java.util.ArrayList;
 
 public class SignUpActivity extends ActionBarActivity {
 
@@ -28,8 +33,9 @@ public class SignUpActivity extends ActionBarActivity {
      * Defines a tag for identifying log entries
      */
     private static final String TAG = SignUpActivity.class.getSimpleName();
-
+    private static int currentFragmentTrackNumber;
     private Fragment mContent;
+    private ArrayList<Fragment> fragments;
 
     public SignUpActivity() {
 
@@ -43,11 +49,16 @@ public class SignUpActivity extends ActionBarActivity {
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "regContent");
         }
+        if (fragments == null) {
+            fragments = new ArrayList<Fragment>();
+        }
         if (mContent == null) {
             mContent = new MobileVerificationFragment();
+            fragments.add(mContent);
+            currentFragmentTrackNumber = 0;
         }
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.signup_container, mContent).commit();
+                .replace(R.id.signup_container, mContent).commit();
 
     }
 
@@ -58,10 +69,39 @@ public class SignUpActivity extends ActionBarActivity {
                 mContent);
     }
 
+    public void changeFragment(Bundle bundle, int number) {
+        if (number == 1) {
+            if (fragments.size() == 1) {
+                fragments.add(1, PasswordVerificationFragment.newInstance(bundle));
+
+            } else {
+                fragments.set(1, PasswordVerificationFragment.newInstance(bundle));
+            }
+        }
+        if (number == 2) {
+            if (fragments.size() == 2) {
+                fragments.add(2, NameVerificationFragment.newInstance(bundle));
+            } else {
+                fragments.set(2, NameVerificationFragment.newInstance(bundle));
+            }
+        }
+        Toast.makeText(this, fragments.size() + "", Toast.LENGTH_SHORT).show();
+        currentFragmentTrackNumber = number;
+        mContent = fragments.get(number);
+        getSupportFragmentManager().beginTransaction().
+                setCustomAnimations(R.anim.to_left, R.anim.out_right).
+                replace(R.id.signup_container, mContent).commit();
+    }
     @Override
     public void onBackPressed() {
-        finish();
-        super.onBackPressed();
+        if (mContent instanceof MobileVerificationFragment) {
+            finish();
+            super.onBackPressed();
+        } else {
+            mContent = fragments.get(--currentFragmentTrackNumber);
+            getSupportFragmentManager().beginTransaction().
+                    setCustomAnimations(R.anim.to_right, R.anim.out_left).
+                    replace(R.id.signup_container, mContent).commit();
+        }
     }
-
 }

@@ -62,6 +62,9 @@
     <!--  -->
     <string name="confirm_password">নিশ্চিত সংকেত</string>
     <!--  -->
+    <string name="confirm">নিশ্চিত করুন</string>
+
+    <!--  -->
     <string name="register_name_first">প্রথম নাম</string>
     <!--  -->
     <string name="spinner_prompt">দেশ নির্বাচিত করুন</string>
@@ -124,6 +127,9 @@
     <string name="register_sms_one_time">ডোনেট লাইফ আপনার মোবাইল আপনার পরীক্ষা করে কেবল নিবন্ধন হয়েছে কিনা দেখতে।</string>
     <!--  -->
     <string name="register_phone_number_code_confirm">অনুগ্রহ করে আপনার দেশের কোড নিশ্চিত করুন এবং আপনার মোবাইল নম্বর দিন।</string>
+    <!--  -->
+    <string name="register_password_confirm">আপনার আইডিটির জন্যে সংকেতটি দিন.</string>
+
     <string name="blood_feed">ব্লাড ফিড</string>
     <string name="blood_request">রক্তের জন্যে আবেদন</string>
     <string name="profile">প্রোফাইল</string>

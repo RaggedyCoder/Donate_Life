@@ -1,4 +1,19 @@
 package com.project.bluepandora.blooddonation.fragments;
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +37,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.project.bluepandora.blooddonation.activities.SignUpActivity;
 import com.project.bluepandora.blooddonation.adapter.CountryListAdapter;
 import com.project.bluepandora.blooddonation.application.AppController;
 import com.project.bluepandora.blooddonation.helpers.URL;
@@ -30,6 +47,7 @@ import com.widget.CustomButton;
 import com.widget.CustomEditText;
 import com.widget.CustomTextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -37,8 +55,7 @@ import java.util.HashMap;
 
 /**
  * <p/>
- * This fragment is for the user to sign up.
- * They can sign up by their mobile number.
+ * This fragment is for the user to veryfing the mobile number.
  * <p/>
  */
 public class MobileVerificationFragment extends Fragment {
@@ -113,7 +130,6 @@ public class MobileVerificationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_mobileverification, container, false);
         countryNameSpinner = (Spinner) rootView.findViewById(R.id.country_spinner);
@@ -213,10 +229,9 @@ public class MobileVerificationFragment extends Fragment {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle("Alert");
         alertDialog.setMessage(message);
+        alertDialog.setNeutralButton("Ok", null);
         alertDialog.show();
     }
-
-
     private void getJsonData(final HashMap<String, String> params) {
 
         CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,
@@ -226,6 +241,18 @@ public class MobileVerificationFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         VolleyLog.d(TAG, "Response: " + response.toString());
                         pd.dismiss();
+                        try {
+                            if (response.getBoolean("reg")) {
+                                createAlertDialog("This Mobile is already Registered");
+                            } else {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("mobileNumber", 0 + mobileNumber.getText().toString());
+                                SignUpActivity signUpActivity = (SignUpActivity) getActivity();
+                                signUpActivity.changeFragment(bundle, 1);
+                            }
+                        } catch (JSONException e) {
+                            Log.e(TAG, e.getMessage());
+                        }
                         Toast.makeText(MobileVerificationFragment.this.getActivity(), response.toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -235,6 +262,7 @@ public class MobileVerificationFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
 
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+
                 pd.dismiss();
                 Toast.makeText(
                         MobileVerificationFragment.this.getActivity(),

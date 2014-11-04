@@ -72,6 +72,7 @@
         <activity
             android:name="com.project.bluepandora.blooddonation.activities.SignUpActivity"
             android:icon="@null"
+            android:screenOrientation="portrait"
             android:theme="@style/ThemeReg" />
 
         <activity

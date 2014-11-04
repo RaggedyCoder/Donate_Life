@@ -73,6 +73,9 @@
     <!--  -->
     <string name="confirm_password">Confirm Password</string>
     <!--  -->
+    <string name="confirm">Confirm</string>
+
+    <!--  -->
     <string name="register_name_first">First Name</string>
     <!--  -->
     <string name="spinner_prompt">Select A Country</string>
@@ -137,6 +140,8 @@
     <string name="register_sms_one_time">Donate Life checks your mobile number to verify your registration.</string>
     <!--  -->
     <string name="register_phone_number_code_confirm">Please confirm your country code and enter your phone number</string>
+    <!--  -->
+    <string name="register_password_confirm">Enter the password for your id.</string>
     <string name="blood_feed">Blood Feed</string>
     <string name="blood_request">Request Blood</string>
     <string name="profile">Profile</string>
