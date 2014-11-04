@@ -142,6 +142,7 @@
     <string name="profile">Profile</string>
     <string name="hospital">Hospital</string>
     <string name="loading">Loading\.\.\.</string>
+    <string name="availability">Checking Availability\.\.\.</string>
     <string name="delete_request">Delete Request</string>
     <string name="progressing">Progressing\.\.\.</string>
 

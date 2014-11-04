@@ -77,7 +77,7 @@ public class LogInFragment extends Fragment {
     /**
      * A TextField{@link CustomTextView} for showing the country code of the user
      */
-    private CustomTextView contryCode;
+    private CustomTextView countryCode;
     /**
      * A {@link Spinner} for showing the country's list
      */
@@ -172,7 +172,7 @@ public class LogInFragment extends Fragment {
         signInButton = (CustomButton) rootView.findViewById(R.id.registration_submit);
         signUpButton = (CustomButton) rootView.findViewById(R.id.signup);
         countryNameSpinner = (Spinner) rootView.findViewById(R.id.registration_country);
-        contryCode = (CustomTextView) rootView.findViewById(R.id.registration_cc);
+        countryCode = (CustomTextView) rootView.findViewById(R.id.registration_cc);
         return rootView;
     }
 
@@ -204,13 +204,13 @@ public class LogInFragment extends Fragment {
         mobileTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (count > 0 && (s.charAt(0) != '1')) {
-                    mobileNumber.setText("");
-                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count > 0 && (s.charAt(0) != '1')) {
+                    mobileNumber.setText("");
+                }
 
             }
 
@@ -223,8 +223,8 @@ public class LogInFragment extends Fragment {
         mOnItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                contryCode.setText(countryCodes.get(position));
-                contryCode.setError(null);
+                countryCode.setText(countryCodes.get(position));
+                countryCode.setError(null);
             }
 
             @Override
@@ -245,7 +245,7 @@ public class LogInFragment extends Fragment {
                     createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
                     return;
                 }
-                if (contryCode.getText().length() == 0) {
+                if (countryCode.getText().length() == 0) {
                     createAlertDialog(getActivity().getResources().getString(R.string.Warning_select_a_country));
                     return;
                 }

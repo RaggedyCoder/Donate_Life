@@ -42,7 +42,7 @@
                 android:orientation="vertical">
 
                 <Spinner
-                    android:id="@+id/registration_country"
+                    android:id="@+id/country_spinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -75,7 +75,7 @@
                     android:textSize="20.0sp" />
 
                 <com.widget.CustomTextView
-                    android:id="@+id/registration_cc"
+                    android:id="@+id/country_code"
                     style="@style/MuseoSansRounded_300_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                     android:textSize="20sp" />
 
                 <com.widget.CustomEditText
-                    android:id="@+id/registration_phone"
+                    android:id="@+id/signup_phone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -108,7 +108,7 @@
             </RelativeLayout>
 
             <com.widget.CustomButton
-                android:id="@+id/registration_submit"
+                android:id="@+id/mobile_verification"
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
