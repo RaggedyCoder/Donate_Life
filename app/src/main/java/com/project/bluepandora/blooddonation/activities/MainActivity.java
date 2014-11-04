@@ -1,5 +1,21 @@
 package com.project.bluepandora.blooddonation.activities;
 
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -55,7 +71,6 @@ public class MainActivity extends ActionBarActivity {
     public ActionBar act;
     public Fragment mContent;
     public static ArrayList<Fragment> fragments;
-    public static boolean sliding = false;
     DrawerLayout mDrawerLayout;
     protected DrawerSlideListners mDrawerSlideListners;
     ListView mDrawerListView;
@@ -69,15 +84,12 @@ public class MainActivity extends ActionBarActivity {
             String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
-
             /**
              * Take appropriate action on this message
              * depending upon your app requirement
              * For now i am just displaying it on the screen
              * */
-
             Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
-
             // Releasing wake lock
             WakeLocker.release();
         }
@@ -183,7 +195,7 @@ public class MainActivity extends ActionBarActivity {
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        SlideItem item = null;
+        SlideItem item;
         for (int i = 0; i < names.length; i++) {
             item = new SlideItem();
             item.setSlideItem(names[i]);

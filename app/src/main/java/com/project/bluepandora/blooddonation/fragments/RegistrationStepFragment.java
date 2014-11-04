@@ -1,4 +1,19 @@
 package com.project.bluepandora.blooddonation.fragments;
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request.Method;
@@ -29,6 +43,7 @@ import com.project.bluepandora.blooddonation.volley.CustomRequest;
 import com.project.bluepandora.donatelife.R;
 import com.widget.CustomButton;
 import com.widget.CustomEditText;
+import com.widget.CustomTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,17 +51,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//import com.widget.CustomEditText;
-
 public class RegistrationStepFragment extends Fragment {
-    public Spinner spinnerBlood;
-    public Spinner spinnerDistrict;
 
-    private String TAG = RegistrationStepFragment.class.getSimpleName();
+    private static final String TAG = RegistrationStepFragment.class.getSimpleName();
+    private Spinner spinnerBlood;
+    private Spinner spinnerDistrict;
     private ArrayList<DistrictItem> dist;
     private String mobileNumber;
     private Button avatar;
-    private TextView mobileNumberView;
+    private CustomTextView mobileNumberView;
     private BloodSpinnerAdapter bloodAdapter;
     private DistrictSpinnerAdapter districtAdapter;
     private BloodDataSource bloodDatabase;
@@ -74,7 +87,7 @@ public class RegistrationStepFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_registration_name,
                 container, false);
-        mobileNumberView = (TextView) rootView
+        mobileNumberView = (CustomTextView) rootView
                 .findViewById(R.id.mobile_number_reg);
         mobileNumberView.setText("+880" + mobileNumber);
         spinnerBlood = (Spinner) rootView.findViewById(R.id.bloodGroupSpinner);
@@ -106,13 +119,16 @@ public class RegistrationStepFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                // requestName="register"
-                // firstName
-                // lastName
-                // distId
-                // groupId
-                // mobileNumber
-                // keyWord
+                /**
+                 * Tags and Value for Registration Request
+                 * static final TAG->requestName.  static final Value->register
+                 * static final TAG->firstName.    Value will be determined by the user.
+                 * static final TAG->lastName.     Value will be determined by the user.
+                 * static final TAG->groupId.      Value will be determined by the user.
+                 * static final TAG->mobileNumber. Value will be determined by the user.
+                 * static final TAG->keyWord.      Value will be determined by the user
+                 */
+
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put(URL.REQUEST_NAME, URL.REGISTERREQUEST_PARAM);
                 params.put(URL.FIRST_NAME_KEY, firstName.getText().toString());
@@ -127,6 +143,25 @@ public class RegistrationStepFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        spinnerBlood.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                avatar.setText(bitems.get(position).getBloodName());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void getRequest(HashMap<String, String> params) {
@@ -159,21 +194,4 @@ public class RegistrationStepFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(jsonReq);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        spinnerBlood.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                avatar.setText(bitems.get(position).getBloodName());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
 }

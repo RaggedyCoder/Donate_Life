@@ -83,11 +83,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * This fragment displays a list of Bloodfeed stored in the server database.
+ * This fragment displays a list of Blood Feed stored in the server database.
  * Each item in the list shows the group name of the blood which they needed.
  * Along with the contact number who made the request,in which hospital
  * the blood is needed and also the amount.
- *
+ * <p/>
  * From this Fragment user can delete his own entry.And also the entry which he doesn't
  * wanted to see.
  */

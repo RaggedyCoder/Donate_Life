@@ -16,6 +16,7 @@ package com.project.bluepandora.blooddonation.fragments;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,96 +73,153 @@ import java.util.HashMap;
 public class CheckRegistrationFragment extends Fragment {
 
     // Defines a tag for identifying log entries
-    public final String TAG = RegistrationActivity.class.getSimpleName();
+    private final String TAG = RegistrationActivity.class.getSimpleName();
     /**
-     * A {@link CustomTextView} for showing the country code of the user
+     * A {@link View} for the whole fragment view.
      */
-    public CustomTextView contryCode;
+    protected View rootView;
+    /**
+     * A TextField{@link CustomTextView} for showing the country code of the user
+     */
+    private CustomTextView contryCode;
     /**
      * A {@link Spinner} for showing the country's list
      */
-    public Spinner spinner;
+    private Spinner countryNameSpinner;
+
     /**
-     * A {@link CustomButton} for sending the username and pasword to the server
+     * A Custom BaseAdapter{@link CountryListAdapter} for the countryNameSpinner
+     */
+    private CountryListAdapter countryListAdapter;
+    /**
+     * A Button{@link CustomButton} for sending the username and pasword to the server
      * to check the user is valid or not.
      */
-    public CustomButton nextActivity;
+    private CustomButton nextActivityButton;
     /**
      * A {@link ProgressDialog} for showing the user background work is going on.
      */
-    public ProgressDialog pd;
-    public ArrayList<String> countryCodes;
-    public CustomEditText mobileNumber;
-    public CustomEditText password;
-    public HashMap<String, String> params = new HashMap<String, String>();
-    public String MOBILE_CHECK = "mobileNumber";
-    public View rootView;
+    private ProgressDialog pd;
+    /**
+     * An {@link ArrayList} for storing the country codes only for this Fragment.
+     */
+    private ArrayList<String> countryCodes;
+
+    /**
+     * An {@link ArrayList} for storing the Name of the Country only for this Fragment.
+     */
+    private ArrayList<String> categories;
+    /**
+     * A EditTextField{@link CustomEditText} for the registered user to enter their mobile number.
+     */
+    private CustomEditText mobileNumber;
+    /**
+     * A EditTextField{@link CustomEditText} for the registered user to enter their password.
+     */
+    private CustomEditText password;
+    /**
+     * A {@link HashMap} for the post request parameter.
+     */
+    private HashMap<String, String> params = new HashMap<String, String>();
+    /**
+     * A {@link JSONParser} for parsing the data.
+     */
     private JSONParser parse;
+    /**
+     * A {@link TextWatcher} for the mobileNumber EditTextField.
+     */
+    private TextWatcher mobileTextWatcher;
+
+    /**
+     * An item selection listener for the countryNameSpinner.
+     */
+
+    private OnItemSelectedListener mOnItemSelectedListener;
+
+
+    /**
+     * A click detection listener for the nextActivity Button.
+     */
+    private OnClickListener mOnClickListener;
+
+    /**
+     * Fragments require an empty constructor.
+     */
+    public CheckRegistrationFragment() {
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        parse = new JSONParser(getActivity());
+        countryCodes = new ArrayList<String>();
+        categories = new ArrayList<String>();
+        countryListAdapter = new CountryListAdapter(getActivity(),
+                categories);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_registration_check,
-                container, false);
-        nextActivity = (CustomButton) rootView.findViewById(R.id.registration_submit);
-        spinner = (Spinner) rootView.findViewById(R.id.registration_country);
 
-        parse = new JSONParser(getActivity());
-        ArrayList<String> categories = new ArrayList<String>();
-        categories.add("Select a Country");
-        categories.add("Bangladesh");
-
-        countryCodes = new ArrayList<String>();
-        countryCodes.add("");
-        mobileNumber = (CustomEditText) rootView
-                .findViewById(R.id.registration_phone);
-
+        rootView = inflater.inflate(R.layout.fragment_registration_check, container, false);
+        mobileNumber = (CustomEditText) rootView.findViewById(R.id.registration_phone);
         password = (CustomEditText) rootView.findViewById(R.id.check_reg_pass);
-        countryCodes.add("880");
-        contryCode = (CustomTextView) rootView
-                .findViewById(R.id.registration_cc);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .hide();
-        CountryListAdapter dataAdapter = new CountryListAdapter(getActivity(),
-                categories);
-        spinner.setAdapter(dataAdapter);
+        nextActivityButton = (CustomButton) rootView.findViewById(R.id.registration_submit);
+        countryNameSpinner = (Spinner) rootView.findViewById(R.id.registration_country);
+        contryCode = (CustomTextView) rootView.findViewById(R.id.registration_cc);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mobileNumber.addTextChangedListener(new TextWatcher() {
+        categories.add("Select a Country");
+        categories.add("Bangladesh");
 
+        countryCodes.add("");
+        countryCodes.add("880");
+
+        countryNameSpinner.setAdapter(countryListAdapter);
+        countryListAdapter.notifyDataSetChanged();
+
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .hide();
+
+        mobileNumber.addTextChangedListener(mobileTextWatcher);
+        countryNameSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
+
+        nextActivityButton.setOnClickListener(mOnClickListener);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mobileTextWatcher = new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (count > 0 && (s.charAt(0) != '1')) {
                     mobileNumber.setText("");
                 }
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
             }
+        };
 
-        });
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+        mOnItemSelectedListener = new OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 contryCode.setText(countryCodes.get(position));
                 contryCode.setError(null);
             }
@@ -169,36 +228,26 @@ public class CheckRegistrationFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        };
 
-        nextActivity.setOnClickListener(new OnClickListener() {
+        mOnClickListener = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 mobileNumber.clearFocus();
                 password.clearFocus();
                 if (mobileNumber.getText().length() == 0) {
-                    mobileNumber.setError(getActivity().getResources()
-                            .getString(R.string.Warning_no_number));
+                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
                     return;
                 } else if (mobileNumber.getText().length() < 10) {
-                    mobileNumber.setError(getActivity().getResources()
-                            .getString(R.string.Warning_number_short));
+                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
                     return;
                 }
                 if (contryCode.getText().length() == 0) {
-                    contryCode.setError(getActivity().getResources().getString(
-                            R.string.Warning_select_a_country));
+                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_select_a_country));
                     return;
                 }
-
-                pd = new ProgressDialog(CheckRegistrationFragment.this
-                        .getActivity());
-                pd.setMessage(getActivity().getResources().getString(
-                        R.string.loading));
-                pd.setIndeterminate(false);
-                pd.setCancelable(false);
-                pd.show();
+                createProgressDialog();
                 params = new HashMap<String, String>();
                 params.put(URL.REQUEST_NAME, URL.BLOODLIST_PARAM);
                 getJsonData(params);
@@ -210,15 +259,27 @@ public class CheckRegistrationFragment extends Fragment {
                 getJsonData(params);
                 params = new HashMap<String, String>();
                 params.put(URL.REQUEST_NAME, URL.REGISTER_CHECK);
-                params.put(MOBILE_CHECK, "0" + mobileNumber.getText());
+                params.put(URL.MOBILE_TAG, "0" + mobileNumber.getText());
                 getJsonData(params);
             }
-        });
+        };
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    private void createProgressDialog() {
+        pd = new ProgressDialog(CheckRegistrationFragment.this
+                .getActivity());
+        pd.setMessage(getActivity().getResources().getString(
+                R.string.loading));
+        pd.setIndeterminate(false);
+        pd.setCancelable(false);
+        pd.show();
+    }
+
+    private void createAlertDialog(String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage(message);
+        alertDialog.show();
     }
 
     private void parseJsonregdata(JSONObject response) {
@@ -233,7 +294,7 @@ public class CheckRegistrationFragment extends Fragment {
                 }
                 params = new HashMap<String, String>();
                 params.put(URL.REQUEST_NAME, URL.USER_INFO);
-                params.put(MOBILE_CHECK, "" + 0 + mobileNumber.getText());
+                params.put(URL.MOBILE_TAG, "" + 0 + mobileNumber.getText());
                 params.put(URL.PASSWORD_TAG, "" + password.getText());
                 getJsonData(params);
 
@@ -257,7 +318,7 @@ public class CheckRegistrationFragment extends Fragment {
 
     private void parseJsonUserInfo(JSONObject response) {
 
-        int data = -1;
+        int data;
         try {
             data = response.getInt("done");
         } catch (JSONException e) {
@@ -267,7 +328,6 @@ public class CheckRegistrationFragment extends Fragment {
 
         if (data == 0) {
             pd.dismiss();
-            return;
         } else if (data == 1) {
             UserDataSource userDataBase = new UserDataSource(getActivity());
             userDataBase.open();
@@ -308,12 +368,10 @@ public class CheckRegistrationFragment extends Fragment {
                                 getActivity().startActivity(intent);
                                 getActivity().finish();
                             } catch (Exception e) {
-                                // Toast.makeText(getActivity(), e.getMessage(),
-                                // Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, e.getMessage());
                             }
                         } catch (JSONException e) {
-
-                            e.printStackTrace();
+                            Log.e(TAG, e.getMessage());
                         }
                     }
                 }
@@ -322,7 +380,7 @@ public class CheckRegistrationFragment extends Fragment {
         }
     }
 
-    public void getJsonData(final HashMap<String, String> params) {
+    private void getJsonData(final HashMap<String, String> params) {
 
         CustomRequest jsonReq = new CustomRequest(Method.POST, URL.URL, params,
                 new Listener<JSONObject>() {
@@ -345,22 +403,10 @@ public class CheckRegistrationFragment extends Fragment {
                                 + password.getText())
                                 && params.containsValue("" + 0
                                 + mobileNumber.getText())) {
-                                /*
-                                 * Toast.makeText(
-								 * CheckRegistrationFragment.this
-								 * .getActivity(), response.toString() + ":/",
-								 * Toast.LENGTH_LONG).show();
-								 */
                             Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
                             parseJsonUserInfo(response);
                         } else if (params.containsValue("" + 0
                                 + mobileNumber.getText())) {
-                                /*
-                                 * Toast.makeText(
-								 * CheckRegistrationFragment.this
-								 * .getActivity(), response.toString(),
-								 * Toast.LENGTH_LONG) .show();
-								 */
                             parseJsonregdata(response);
                         }
                     }
