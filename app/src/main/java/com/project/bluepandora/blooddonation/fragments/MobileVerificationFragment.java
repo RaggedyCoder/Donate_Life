@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -65,24 +66,24 @@ public class MobileVerificationFragment extends Fragment {
      */
     private static final String TAG = MobileVerificationFragment.class.getSimpleName();
     /**
-     * A {@link android.widget.Spinner} for showing the country's list
+     * A {@link Spinner} for showing the country's list
      */
     private Spinner countryNameSpinner;
     /**
-     * A Custom BaseAdapter{@link com.project.bluepandora.blooddonation.adapter.CountryListAdapter} for the countryNameSpinner
+     * A Custom BaseAdapter{@link CountryListAdapter} for the countryNameSpinner
      */
     private CountryListAdapter countryListAdapter;
 
     /**
-     * A TextField{@link com.widget.CustomTextView} for showing the country code of the user
+     * A TextField{@link =CustomTextView} for showing the country code of the user
      */
     private CustomTextView countryCode;
     /**
-     * A EditTextField{@link com.widget.CustomEditText} for the registered user to enter their mobile number.
+     * A EditTextField{@link CustomEditText} for the registered user to enter their mobile number.
      */
     private CustomEditText mobileNumber;
     /**
-     * An {@link java.util.ArrayList} for storing the country codes only for this Fragment.
+     * An {@link ArrayList} for storing the country codes only for this Fragment.
      */
     private ArrayList<String> countryCodes;
 
@@ -91,17 +92,17 @@ public class MobileVerificationFragment extends Fragment {
      */
     private ArrayList<String> categories;
     /**
-     * A Button {@link com.widget.CustomButton} for the un registered user to sign up.
+     * A Button {@link CustomButton} for the un registered user to sign up.
      */
     private CustomButton verificationButton;
     /**
-     * A {@link android.app.ProgressDialog} for showing the user background work is going on.
+     * A {@link ProgressDialog} for showing the user background work is going on.
      */
     private ProgressDialog pd;
     /**
      * An item selection listener for the countryNameSpinner.
      */
-    private AdapterView.OnItemSelectedListener mOnItemSelectedListener;
+    private OnItemSelectedListener mOnItemSelectedListener;
     /**
      * A {@link TextWatcher} for the mobileNumber EditTextField.
      */
@@ -232,6 +233,7 @@ public class MobileVerificationFragment extends Fragment {
         alertDialog.setNeutralButton("Ok", null);
         alertDialog.show();
     }
+
     private void getJsonData(final HashMap<String, String> params) {
 
         CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,

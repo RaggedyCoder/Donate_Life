@@ -34,10 +34,6 @@ public class NameVerificationFragment extends Fragment {
      */
     private static String TAG = NameVerificationFragment.class.getSimpleName();
     /**
-     * A {@link View} for the whole fragment view.
-     */
-    protected View rootView;
-    /**
      * A EditTextField{@link CustomEditText} for the First Name.
      */
     private CustomEditText firstNameField;
@@ -53,6 +49,12 @@ public class NameVerificationFragment extends Fragment {
      * A click detection listener for the SignUp Button.
      */
     private View.OnClickListener mVerificationListener;
+
+    /**
+     * A {@link View} for the whole fragment view.
+     */
+    protected View rootView;
+
 
     public static Fragment newInstance(Bundle bundle) {
         NameVerificationFragment fragment = new NameVerificationFragment();

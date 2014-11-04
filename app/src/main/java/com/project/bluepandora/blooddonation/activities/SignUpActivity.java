@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.project.bluepandora.blooddonation.fragments.MobileVerificationFragment;
 import com.project.bluepandora.blooddonation.fragments.NameVerificationFragment;
 import com.project.bluepandora.blooddonation.fragments.PasswordVerificationFragment;
+import com.project.bluepandora.blooddonation.fragments.RegistrationCompleteFragment;
 import com.project.bluepandora.donatelife.R;
 
 import java.util.ArrayList;
@@ -77,12 +78,17 @@ public class SignUpActivity extends ActionBarActivity {
             } else {
                 fragments.set(1, PasswordVerificationFragment.newInstance(bundle));
             }
-        }
-        if (number == 2) {
+        } else if (number == 2) {
             if (fragments.size() == 2) {
                 fragments.add(2, NameVerificationFragment.newInstance(bundle));
             } else {
                 fragments.set(2, NameVerificationFragment.newInstance(bundle));
+            }
+        } else if (number == 3) {
+            if (fragments.size() == 3) {
+                fragments.add(3, RegistrationCompleteFragment.newInstance(bundle));
+            } else {
+                fragments.set(3, RegistrationCompleteFragment.newInstance(bundle));
             }
         }
         Toast.makeText(this, fragments.size() + "", Toast.LENGTH_SHORT).show();

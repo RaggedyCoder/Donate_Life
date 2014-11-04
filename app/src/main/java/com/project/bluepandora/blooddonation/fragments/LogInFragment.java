@@ -144,6 +144,11 @@ public class LogInFragment extends Fragment {
     private OnClickListener mSignUpListener;
 
     /**
+     * A flag to detect whether to go to sign up or not
+     */
+    private boolean signUp = false;
+
+    /**
      * Fragments require an empty constructor.
      */
     public LogInFragment() {
@@ -268,8 +273,17 @@ public class LogInFragment extends Fragment {
         mSignUpListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
-                startActivity(signUpIntent);
+                createProgressDialog();
+                signUp = true;
+                params = new HashMap<String, String>();
+                params.put(URL.REQUEST_NAME, URL.BLOODLIST_PARAM);
+                getJsonData(params);
+                params = new HashMap<String, String>();
+                params.put(URL.REQUEST_NAME, URL.DISTRICTLIST_PARAM);
+                getJsonData(params);
+                params = new HashMap<String, String>();
+                params.put(URL.REQUEST_NAME, URL.HOSPITALLIST_PARAM);
+                getJsonData(params);
             }
         };
     }
@@ -403,6 +417,12 @@ public class LogInFragment extends Fragment {
                         } else if (params
                                 .containsValue(URL.HOSPITALLIST_PARAM)) {
                             parse.parseJsonHospital(response);
+                            if (signUp) {
+                                pd.dismiss();
+                                Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
+                                startActivity(signUpIntent);
+                                signUp = false;
+                            }
                         } else if (params.containsValue(""
                                 + password.getText())
                                 && params.containsValue("" + 0

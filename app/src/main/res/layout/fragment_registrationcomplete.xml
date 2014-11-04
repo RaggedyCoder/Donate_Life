@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/holo_gray_dark"
+    android:orientation="vertical"
+    android:padding="10.0dip">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="6.0dip"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@id/linearLayout1"
+            android:layout_width="120dip"
+            android:layout_height="120dip"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <com.widget.CustomTextView
+                style="@style/MuseoSansRounded_700_text"
+                android:id="@id/avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="6dip"
+                android:background="@drawable/blood_avatar"
+                android:contentDescription="@null"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:text="@string/dummy_blood_group_ID"
+                android:textColor="#f1f1f1"
+                android:textSize="70sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <com.widget.CustomTextView
+                style="@style/MuseoSansRounded_700_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/blood_group_confirm"
+                android:textColor="#111111"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
+                android:background="#55000000"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/blood_group_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:prompt="@string/spinner_prompt"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <com.widget.CustomTextView
+                style="@style/MuseoSansRounded_700_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/district_confirm"
+                android:textColor="#111111"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
+                android:background="#55000000"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/district_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:prompt="@string/spinner_prompt"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <com.widget.CustomButton
+                android:id="@+id/registration"
+                style="@style/MuseoSansRounded_700_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dip"
+                android:layout_marginRight="50dip"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/btn_blue_holo"
+                android:minHeight="0.0dip"
+                android:padding="5dip"
+                android:text="@string/registration"
+                android:textSize="20.0sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

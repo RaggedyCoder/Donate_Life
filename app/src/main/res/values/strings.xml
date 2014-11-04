@@ -74,6 +74,8 @@
     <string name="confirm_password">Confirm Password</string>
     <!--  -->
     <string name="confirm">Confirm</string>
+    <!--  -->
+    <string name="registration">Register</string>
 
     <!--  -->
     <string name="register_name_first">First Name</string>
@@ -142,6 +144,9 @@
     <string name="register_phone_number_code_confirm">Please confirm your country code and enter your phone number</string>
     <!--  -->
     <string name="register_password_confirm">Enter the password for your id.</string>
+    <string name="district_confirm">Select where you live.</string>
+
+    <string name="blood_group_confirm">Select your Blood Group.</string>
     <string name="blood_feed">Blood Feed</string>
     <string name="blood_request">Request Blood</string>
     <string name="profile">Profile</string>
