@@ -39,6 +39,41 @@ public class GCMIntentService extends GCMBaseIntentService {
     }
 
     /**
+     * Issues a notification to inform the user that server has sent a message.
+     */
+    private static void generateNotification(Context context, String message) {
+        int icon = R.drawable.notif;
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new Notification(icon, message, when);
+
+        String title = context.getString(R.string.app_name);
+
+
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        // set intent so it does not start a new activity
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent = PendingIntent.getActivity(context, 0,
+                notificationIntent, 0);
+        notification.setLatestEventInfo(context, title, message, intent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        // Play default notification sound
+        notification.defaults |= Notification.DEFAULT_SOUND;
+
+        // notification.sound = Uri.parse("android.resource://" +
+        // context.getPackageName() + "your_sound_file_name.mp3");
+
+        // Vibrate if vibrate is enabled
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        notification.ledARGB |= Notification.DEFAULT_LIGHTS;
+        notificationManager.notify(0, notification);
+
+    }
+
+    /**
      * Method called on device registered
      */
     @Override
@@ -75,12 +110,14 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(Context context, Intent intent) {
         Log.i(TAG, "Received message");
-        String groupId = intent.getExtras().getString("groupId");
-        String hospitaId = intent.getExtras().getString("hospitalId");
-        String message = "GroupId: " + groupId + " HospitalId: " + hospitaId;
-        CommonUtilities.displayMessage(context, message);
+        String groupId = intent.getExtras().getString("message");
+        //String hospitaId = intent.getExtras().getString("hospitalId");
+        String message = groupId;
         // notifies user
+        //Toast.makeText(context, context.getPackageName(), Toast.LENGTH_SHORT).show();
+        //CommonUtilities.displayMessage(context, message);
         generateNotification(context, message);
+
     }
 
     /**
@@ -111,38 +148,5 @@ public class GCMIntentService extends GCMBaseIntentService {
         CommonUtilities.displayMessage(context,
                 getString(R.string.gcm_recoverable_error, errorId));
         return super.onRecoverableError(context, errorId);
-    }
-
-    /**
-     * Issues a notification to inform the user that server has sent a message.
-     */
-    private static void generateNotification(Context context, String message) {
-        int icon = R.drawable.notif;
-        long when = System.currentTimeMillis();
-        NotificationManager notificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(icon, message, when);
-
-        String title = context.getString(R.string.app_name);
-
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        // set intent so it does not start a new activity
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent = PendingIntent.getActivity(context, 0,
-                notificationIntent, 0);
-        notification.setLatestEventInfo(context, title, message, intent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        // Play default notification sound
-        notification.defaults |= Notification.DEFAULT_SOUND;
-
-        // notification.sound = Uri.parse("android.resource://" +
-        // context.getPackageName() + "your_sound_file_name.mp3");
-
-        // Vibrate if vibrate is enabled
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(0, notification);
-
     }
 }
