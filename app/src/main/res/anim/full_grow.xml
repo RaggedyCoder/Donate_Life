@@ -3,12 +3,12 @@
 
     <scale
         android:duration="@android:integer/config_longAnimTime"
-        android:fromXScale="1.0"
-        android:fromYScale="1.0"
+        android:fromXScale="100%"
+        android:fromYScale="100%"
         android:interpolator="@android:anim/bounce_interpolator"
         android:pivotX="50.0%"
         android:pivotY="50.0%"
-        android:toXScale="100.0%p"
-        android:toYScale="100.0%p" />
+        android:toXScale="900%"
+        android:toYScale="900%" />
 
 </set>
