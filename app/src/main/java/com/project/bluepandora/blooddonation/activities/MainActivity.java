@@ -68,16 +68,7 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static boolean backPressed = false;
-    public ActionBar act;
-    public Fragment mContent;
     public static ArrayList<Fragment> fragments;
-    DrawerLayout mDrawerLayout;
-    protected DrawerSlideListners mDrawerSlideListners;
-    ListView mDrawerListView;
-    ActionBarDrawerToggle mActionBarDrawerToggle;
-    private SlideMenuAdapter listAdapter;
-    private List<Item> slideItems;
-    public int prevpos = 0;
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,8 +85,16 @@ public class MainActivity extends ActionBarActivity {
             WakeLocker.release();
         }
     };
+    public ActionBar act;
+    public Fragment mContent;
+    public int prevpos = 0;
+    protected DrawerSlideListners mDrawerSlideListners;
+    DrawerLayout mDrawerLayout;
+    ListView mDrawerListView;
+    ActionBarDrawerToggle mActionBarDrawerToggle;
     AsyncTask<Void, Void, Void> mRegisterTask;
-
+    private SlideMenuAdapter listAdapter;
+    private List<Item> slideItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -361,27 +360,8 @@ public class MainActivity extends ActionBarActivity {
                 .replace(R.id.frame_container, mContent).commit();
     }
 
-    private class ListItemListner implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            listAdapter.setSelected(position);
-            if (position > 3) {
-                mDrawerLayout.closeDrawer(mDrawerListView);
-                return;
-            }
-            if (prevpos != position) {
-                switchContent(position);
-                prevpos = position;
-            } else {
-                mDrawerLayout.closeDrawer(mDrawerListView);
-            }
-        }
-
-    }
-
     public void switchContent(int pos) {
+
         AppController.getInstance().cancelPendingRequests();
         backPressed = false;
         if (pos == 3) {
@@ -421,5 +401,31 @@ public class MainActivity extends ActionBarActivity {
 
     public interface DrawerSlideListners {
         public void onDrawerslide(float offset);
+    }
+
+    private class ListItemListner implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            listAdapter.setSelected(position);
+            if (position == 5) {
+                Intent intent =
+                        new Intent(MainActivity.this, FeedbackActivity.class);
+                startActivity(intent);
+                return;
+            }
+            if (position > 3) {
+                mDrawerLayout.closeDrawer(mDrawerListView);
+                return;
+            }
+            if (prevpos != position) {
+                switchContent(position);
+                prevpos = position;
+            } else {
+                mDrawerLayout.closeDrawer(mDrawerListView);
+            }
+        }
+
     }
 }

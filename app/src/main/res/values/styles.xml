@@ -87,6 +87,10 @@
 
     </style>
 
+    <style name="ThemeFeedback" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/holo_red_light</item>
+    </style>
+
     <style name="Widget.ActionBar.Transparent" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:background">@android:color/transparent</item>
         <item name="windowActionBarOverlay">true</item>
