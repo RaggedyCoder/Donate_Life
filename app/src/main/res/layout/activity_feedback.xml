@@ -68,6 +68,21 @@
                 android:maxLength="400"
                 android:scrollbars="vertical"
                 android:textSize="20sp" />
+
+            <com.widget.CustomButton
+                android:id="@+id/send"
+                style="@style/MuseoSansRounded_700_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dip"
+                android:layout_marginRight="50dip"
+                android:textColor="@color/holo_blue_dark"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/btn_blue_holo"
+                android:minHeight="0.0dip"
+                android:padding="10dip"
+                android:text="@string/send_feedback"
+                android:textSize="20.0sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

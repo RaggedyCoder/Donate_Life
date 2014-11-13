@@ -76,6 +76,8 @@
     <string name="confirm">Confirm</string>
     <!--  -->
     <string name="registration">Register</string>
+    <!--  -->
+    <string name="send_feedback">Send</string>
 
     <!--  -->
     <string name="register_name_first">First Name</string>

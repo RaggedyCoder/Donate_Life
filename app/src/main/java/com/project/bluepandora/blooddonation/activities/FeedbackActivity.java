@@ -3,6 +3,8 @@ package com.project.bluepandora.blooddonation.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import android.view.View;
 
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
+import com.widget.CustomButton;
 import com.widget.CustomEditText;
 import com.widget.CustomTextView;
 
@@ -20,6 +23,7 @@ public class FeedbackActivity extends ActionBarActivity {
     private CustomTextView mobileNumber;
     private CustomTextView textCounter;
     private CustomEditText feedback;
+    private CustomButton sendFeedback;
     private UserDataSource userDatabase;
 
     @Override
@@ -29,10 +33,36 @@ public class FeedbackActivity extends ActionBarActivity {
         feedback = (CustomEditText) findViewById(R.id.feedback_edittext);
         mobileNumber = (CustomTextView) findViewById(R.id.mobile_number);
         textCounter = (CustomTextView) findViewById(R.id.counter);
+        sendFeedback = (CustomButton) findViewById(R.id.send);
         userDatabase = new UserDataSource(this);
         userDatabase.open();
         mobileNumber.setText(userDatabase.getAllUserItem().get(0).getMobileNumber());
         userDatabase.close();
+        feedback.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textCounter.setText("" + (400 - feedback.getText().length()));
+                if (feedback.getText().length() != 0) {
+                    if (feedback.getText().toString().replace('\n', '\0').length() == 0) {
+                        sendFeedback.setEnabled(false);
+                    } else if (feedback.getText().toString().replace(' ', '\0').length() == 0) {
+                        sendFeedback.setEnabled(false);
+                    } else {
+                        sendFeedback.setEnabled(true);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
