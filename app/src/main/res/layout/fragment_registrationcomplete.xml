@@ -113,6 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dip"
                 android:layout_marginRight="50dip"
+                android:textColor="@color/holo_blue_dark"
                 android:layout_marginTop="20dip"
                 android:background="@drawable/btn_blue_holo"
                 android:minHeight="0.0dip"

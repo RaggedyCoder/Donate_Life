@@ -85,6 +85,7 @@
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/holo_blue_dark"
                 android:layout_marginLeft="50dip"
                 android:layout_marginRight="50dip"
                 android:layout_marginTop="20dip"
