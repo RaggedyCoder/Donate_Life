@@ -38,6 +38,7 @@ public class FeedbackActivity extends ActionBarActivity {
         userDatabase.open();
         mobileNumber.setText(userDatabase.getAllUserItem().get(0).getMobileNumber());
         userDatabase.close();
+        sendFeedback.setEnabled(false);
         feedback.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -47,17 +48,19 @@ public class FeedbackActivity extends ActionBarActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 textCounter.setText("" + (400 - feedback.getText().length()));
-                if (feedback.getText().length() != 0) {
-                    if (feedback.getText().toString().replace('\n', '\0').length() == 0) {
+                if (feedback.getText().length() == 0) {
+                    sendFeedback.setEnabled(false);
+                } else if (feedback.getText().length() != 0) {
+                    if (feedback.getText().toString().replaceAll("\n", "").length() == 0) {
                         sendFeedback.setEnabled(false);
-                    } else if (feedback.getText().toString().replace(' ', '\0').length() == 0) {
+
+                    } else if (feedback.getText().toString().replaceAll(" ", "").length() == 0) {
                         sendFeedback.setEnabled(false);
                     } else {
                         sendFeedback.setEnabled(true);
                     }
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
 
