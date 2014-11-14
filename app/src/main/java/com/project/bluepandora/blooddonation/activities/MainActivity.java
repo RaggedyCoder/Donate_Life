@@ -413,6 +413,7 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent =
                         new Intent(MainActivity.this, FeedbackActivity.class);
                 startActivity(intent);
+                mDrawerLayout.closeDrawer(mDrawerListView);
                 return;
             }
             if (position > 3) {

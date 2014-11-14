@@ -1,6 +1,9 @@
 package com.project.bluepandora.blooddonation.activities;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -9,12 +12,25 @@ import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.project.bluepandora.blooddonation.application.AppController;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
+import com.project.bluepandora.blooddonation.helpers.URL;
+import com.project.bluepandora.blooddonation.volley.CustomRequest;
 import com.project.bluepandora.donatelife.R;
 import com.widget.CustomButton;
 import com.widget.CustomEditText;
 import com.widget.CustomTextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 
 public class FeedbackActivity extends ActionBarActivity {
@@ -25,6 +41,11 @@ public class FeedbackActivity extends ActionBarActivity {
     private CustomEditText feedback;
     private CustomButton sendFeedback;
     private UserDataSource userDatabase;
+    /**
+     * A {@link ProgressDialog} for showing the user background work is going on.
+     */
+    private ProgressDialog pd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +87,41 @@ public class FeedbackActivity extends ActionBarActivity {
 
             }
         });
+        sendFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(URL.REQUEST_NAME, "feedback");
+                params.put("username", mobileNumber.getText().toString());
+                params.put("comments", feedback.getText().toString());
+                createProgressDialog();
+                CustomRequest customRequest;
+                customRequest = new CustomRequest(Request.Method.POST, URL.URL, params,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // Toast.makeText(FeedbackActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+                                pd.dismiss();
+                                try {
+                                    if (response.getInt("done") == 1) {
+                                        createAlertDialog("Thank you for your feedback");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        pd.dismiss();
+                        Toast.makeText(FeedbackActivity.this, volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                        VolleyLog.e("Feedback", volleyError.getMessage());
+                    }
+                });
+                AppController.getInstance().addToRequestQueue(customRequest);
 
+            }
+        });
     }
 
     @Override
@@ -107,5 +162,26 @@ public class FeedbackActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    private void createProgressDialog() {
+        pd = new ProgressDialog(this);
+        pd.setMessage(this.getResources().getString(R.string.loading));
+        pd.setIndeterminate(false);
+        pd.setCancelable(false);
+        pd.show();
+    }
+
+    private void createAlertDialog(String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Info");
+        alertDialog.setMessage(message);
+        alertDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alertDialog.show();
     }
 }
