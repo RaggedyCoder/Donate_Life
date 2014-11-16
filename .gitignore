@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 /DonateLife/nbproject/private/
+=======
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+>>>>>>> f4878bcbd66ae9ec768a82f0542b73d0a80f7a6f

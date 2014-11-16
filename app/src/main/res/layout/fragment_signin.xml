@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/holo_red_light"
+    android:orientation="vertical"
+    android:padding="10.0dip">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="6.0dip"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16.0dip"
+            android:src="@drawable/log_in_screen_logo" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="#55ffffff"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/registration_country"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:inputType="none"
+                android:prompt="@string/spinner_prompt"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/registration_fields"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="16.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16.0dip"
+            android:layout_marginLeft="12.0dip"
+            android:layout_marginRight="12.0dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.widget.CustomTextView
+                android:id="@+id/plus"
+                style="@style/MuseoSansRounded_300_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:text="@string/plus"
+                android:textColor="#ff000000"
+                android:textSize="20.0sp" />
+
+            <com.widget.CustomTextView
+                android:id="@+id/registration_cc"
+                style="@style/MuseoSansRounded_300_text"
+                android:layout_width="wrap_content"
+                android:layout_toRightOf="@+id/plus"
+                android:layout_marginTop="4dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:clickable="true"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textSize="20sp" />
+
+            <com.widget.CustomEditText
+                android:id="@+id/registration_phone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:hint="@string/dummy_mobile_number_ID"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:paddingLeft="60.0sp"
+                android:paddingStart="60.0sp"
+                android:paddingEnd="0.0sp"
+                android:paddingRight="0.0sp"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textSize="20.0sp"
+                android:textColorHint="#ddffffff"
+                app:font="MuseoSansRounded-300.otf" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/registration_password_field"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16.0dip"
+            android:layout_marginLeft="12.0dip"
+            android:layout_marginRight="12.0dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.widget.CustomTextView
+                android:id="@+id/TextView01"
+                style="@style/MuseoSansRounded_700_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:singleLine="true"
+                android:text="@string/password_field"
+                android:textColor="#ff020202"
+                android:textSize="@dimen/pass_dimen"
+                android:textStyle="bold" />
+
+            <com.widget.CustomEditText
+                android:id="@+id/check_reg_pass"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                android:ems="10"
+                android:hint="@string/register_password"
+                android:imeOptions="actionDone"
+                android:inputType="textWebPassword"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingLeft="60.0sp"
+                android:paddingStart="60.0sp"
+                android:paddingEnd="0.0sp"
+                android:paddingRight="0.0sp"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textColorHint="#ddffffff"
+                app:font="MuseoSansRounded-300.otf" />
+        </RelativeLayout>
+
+        <com.widget.CustomButton
+            android:id="@+id/registration_submit"
+            style="@style/MuseoSansRounded_700_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dip"
+            android:layout_marginRight="50dip"
+            android:layout_marginTop="20dip"
+            android:background="@drawable/btn_blue"
+            android:minHeight="0.0dip"
+            android:text="@string/log_in"
+            android:textSize="20.0sp" />
+
+        <com.widget.CustomButton
+            android:id="@+id/signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dip"
+            android:gravity="center"
+            app:font="MuseoSansRounded-700.otf"
+            android:text="@string/sign_up"
+            android:textColor="@drawable/text_color"
+            android:background="@android:color/transparent"
+            android:textSize="20sp" />
+    </LinearLayout>
+</LinearLayout>

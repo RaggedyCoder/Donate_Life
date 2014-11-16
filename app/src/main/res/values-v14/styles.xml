@@ -1,0 +1,111 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+    </style>
+
+    <style name="MuseoSansRounded_300_button" parent="@android:style/Widget.Button">
+        <item name="font">MuseoSansRounded-300.otf</item>
+    </style>
+
+    <style name="MuseoSansRounded_300_text" parent="@android:style/Widget.TextView">
+        <item name="font">MuseoSansRounded-300.otf</item>
+    </style>
+
+    <style name="MuseoSansRounded_700_text" parent="@android:style/Widget.TextView">
+        <item name="font">MuseoSansRounded-700.otf</item>
+    </style>
+
+    <style name="MuseoSansRounded_700_button" parent="@android:style/Widget.Button">
+        <item name="font">MuseoSansRounded-700.otf</item>
+    </style>
+
+    <style name="ThemeFeed" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/holo_red_light</item>
+        <item name="colorPrimaryDark">@null</item>
+        <item name="actionBarDivider">@null</item>
+        <item name="elevation">0dip</item>
+        <item name="backgroundStacked">@null</item>
+        <item name="backgroundSplit">@null</item>
+        <item name="colorAccent">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+    
+    <style name="ThemeFeedNotFlat" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/holo_red_light</item>
+        <item name="colorPrimaryDark">@null</item>
+        <item name="actionBarDivider">@null</item>
+        <item name="elevation">0dip</item>
+        <item name="backgroundStacked">@null</item>
+        <item name="backgroundSplit">@null</item>
+        <item name="colorAccent">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+   
+
+    <style name="Widget.ActionBar.Transparent" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="ActionBarButtonStyle" parent="@style/Widget.AppCompat.Light.ActionButton" />
+
+    <style name="Text" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#ff333333</item>
+        <item name="android:shadowColor">#ffffff</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">0.0</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+    </style>
+
+    <style name="Text.Description" parent="@style/Text">
+        <item name="android:textSize">16.0sp</item>
+        <item name="font">MuseoSansRounded-300.otf</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff333333</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:shadowColor">#ffffff</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">0.0</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+    </style>
+
+    <style name="Text.FieldHeader" parent="@style/Text">
+        <item name="android:textSize">12.0sp</item>
+        <item name="font">MuseoSansRounded-300.otf</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff808080</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:paddingLeft">16.0dip</item>
+        <item name="android:paddingRight">16.0dip</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:shadowColor">#ffffff</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">0.0</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+    </style>
+
+</resources>

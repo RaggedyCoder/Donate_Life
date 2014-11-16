@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--  -->
+    <string name="app_name">Donate Life</string>
+    <!--  -->
+    <string name="emergency_text">EMERGENCY</string>
+    <!--  -->
+    <string name="non_emergency_text"></string>
+    <string name="emergency_char">E</string>
+    <!--  -->
+    <string name="emergency_request">EMERGENCY REQUEST</string>
+    <!--  -->
+    <string name="dummy_name">System</string>
+    <!--  -->
+    <string name="dummy_blood_group">Required:</string>
+    <!--  -->
+    <string name="blood_group">Blood group</string>
+    <!--  -->
+    <string name="Ok">OK</string>
+    <!--  -->
+    <string name="log_in">Log In</string>
+    <!--  -->
+    <string name="sign_up">Sign Up</string>
+
+    <!--  -->
+    <string name="refresh">refresh</string>
+
+    <!--  -->
+    <string name="refresh_notice">Pull Down to Refresh</string>
+
+    <!--  -->
+    <string name="request">Request for Blood</string>
+
+    <!--  -->
+    <string name="profile_details">Profile Details</string>
+    <!--  -->
+    <string name="profile_edit">Edit</string>
+
+    <!--  -->
+    <string name="password_field">Pass</string>
+    <!--  -->
+    <string name="plus">+</string>
+
+    <!--  -->
+    <string name="Warning_no_number">You Must Enter a mobile number</string>
+    <!--  -->
+    <string name="Warning_number_short">You Must Enter a valid number</string>
+    <!--  -->
+    <string name="Warning_select_a_country">You Must select a country</string>
+    <!--  -->
+    <string name="Warning_enter_a_password">Registered Phone.Enter Password.</string>
+    <!--  -->
+    <string name="Warning_must_enter_a_password">You must Enter Password.</string>
+    <!--  -->
+    <string name="Warning_must_enter_a_first_name">You must Enter your First Name.</string>
+    <!--  -->
+    <string name="Warning_must_enter_a_last_name">You must Enter your Last Name.</string>
+
+    <!--  -->
+    <string name="Warning_password_not_matched">Password Didn\'t Matched.</string>
+    <!--  -->
+    <string name="Warning_wrong_password">Enter the right Password.</string>
+
+    <!--  -->
+    <string name="Warning_remove_the_password">Remove the password for registration</string>
+    <!--  -->
+    <string name="register_name_info">First Last</string>
+    <!--  -->
+    <string name="register_name_last">Last Name</string>
+    <!--  -->
+    <string name="register_password">Password</string>
+    <!--  -->
+    <string name="confirm_password">Confirm Password</string>
+    <!--  -->
+    <string name="confirm">Confirm</string>
+    <!--  -->
+    <string name="registration">Register</string>
+    <!--  -->
+    <string name="send_feedback">Send</string>
+
+    <!--  -->
+    <string name="register_name_first">First Name</string>
+    <!--  -->
+    <string name="spinner_prompt">Select A Country</string>
+    <!--  -->
+    <string name="dummy_blood_group_ID">A+</string>
+    <!--  -->
+    <string name="dummy_hospital_name_ID">Dhaka Medical College</string>
+    <!--  -->
+    <string name="dummy_blood_amount">Amount:</string>
+    <!--  -->
+    <string name="dummy_blood_amount_ID">(2 Bags)</string>
+    <!--  -->
+    <string name="dummy_area_name_ID">Dhaka</string>
+    <!--  -->
+    <string name="select_area">Blood Required Area:</string>
+    <!--  -->
+    <string name="select_hospital">Select Your Hospital Name:</string>
+
+    <!--  -->
+    <string name="select_blood_group">Blood group:</string>
+    <!--  -->
+    <string name="select_amount">Amount:</string>
+
+    <!--  -->
+    <string name="area_name">District</string>
+    <!--  -->
+    <string name="mobile_number">Mobile Number</string>
+    <!--  -->
+    <string name="full_name">Full Name</string>
+    <!--  -->
+    <string name="dummy_full_name">Android System</string>
+    <!--  -->
+    <string name="dummy_mobile_number_ID">1*********</string>
+    <!--  -->
+
+    <string name="dummy_time">16 January 1993</string>
+    <!--  -->
+    <string name="hello_world">Hello world!</string>
+    <!--  -->
+    <string name="action_settings">Settings</string>
+    <!--  -->
+    <string name="action_delete">Delete</string>
+    <!--  -->
+    <string name="action_delete_own">Delete the request</string>
+    <!--  -->
+    <string name="action_call">Call:</string>
+    <!--  -->
+    <string name="action_sms">Send SMS:</string>
+
+    <!--  -->
+    <string name="action_logout">Log Out</string>
+
+    <!--  -->
+    <string name="sample_news_feed">Sample News Feed</string>
+    <!--  -->
+    <string name="sample_slide_menu">Sample Slide menu</string>
+    <!--  -->
+    <string name="sample_slide_menu_land">Sample Slide Menu Land</string>
+    <!--  -->
+    <string name="sample_news_feed_land">Sample News Feed land</string>
+    <!--  -->
+    <string name="register_sms_one_time">Donate Life checks your mobile number to verify your registration.</string>
+    <!--  -->
+    <string name="register_phone_number_code_confirm">Please confirm your country code and enter your phone number</string>
+    <!--  -->
+    <string name="register_password_confirm">Enter the password for your id.</string>
+    <string name="district_confirm">Select where you live.</string>
+
+    <string name="blood_group_confirm">Select your Blood Group.</string>
+    <string name="blood_feed">Blood Feed</string>
+    <string name="blood_request">Request Blood</string>
+    <string name="profile">Profile</string>
+    <string name="hospital">Hospital</string>
+    <string name="loading">Loading\.\.\.</string>
+    <string name="availability">Checking Availability\.\.\.</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="progressing">Progressing\.\.\.</string>
+
+
+    <!-- -->
+    <string name="title_activity_main">Push Notifications</string>
+    <string name="error_config">Please set the %1$s constant and recompile the app.</string>
+    <string name="already_registered">Device is already registered on server.</string>
+    <string name="gcm_registered">From GCM: device successfully registered!</string>
+    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message">From GCM: you got message!</string>
+    <string name="gcm_error">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Demo Server.</string>
+    <string name="server_registered">From Demo Server: successfully added device!</string>
+    <string name="server_unregistered">From Demo Server: successfully removed device!</string>
+    <string name="server_register_error">Could not register device on Demo Server after %1$d attempts.</string>
+    <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).</string>
+    <string name="options_register">Register</string>
+    <string name="options_unregister">Unregister</string>
+    <string name="options_clear">Clear</string>
+    <string name="options_exit">Exit</string>
+
+</resources>
