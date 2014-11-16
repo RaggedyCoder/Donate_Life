@@ -17,6 +17,8 @@
     <!--  -->
     <string name="blood_group">Blood group</string>
     <!--  -->
+    <string name="total_donation">Total Donation</string>
+    <!--  -->
     <string name="Ok">OK</string>
     <!--  -->
     <string name="log_in">Log In</string>

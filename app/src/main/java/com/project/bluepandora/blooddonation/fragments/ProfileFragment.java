@@ -94,7 +94,6 @@ public class ProfileFragment extends Fragment {
         bloodItem.setBloodId(userInfo.get(0).getGroupId());
         bloodItem = bloodDatabase.cursorToBloodItem(bloodDatabase
                 .bloodItemToCursor(bloodItem));
-
         distItem = new DistrictItem();
         distItem.setDistId(userInfo.get(0).getDistId());
         distItem = districtDatabase.cursorToDistrictItem(districtDatabase
@@ -157,7 +156,6 @@ public class ProfileFragment extends Fragment {
 
         mTitle = (CustomTextView) mCustomView
                 .findViewById(R.id.actionbar_title_text);
-
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setDisplayShowTitleEnabled(false);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
@@ -170,6 +168,8 @@ public class ProfileFragment extends Fragment {
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .hide();
         mTitle.setText(R.string.profile);
         return rootView;
     }

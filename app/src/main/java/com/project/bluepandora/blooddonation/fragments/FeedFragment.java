@@ -17,8 +17,10 @@ package com.project.bluepandora.blooddonation.fragments;
  */
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -94,23 +97,20 @@ import java.util.List;
 @SuppressLint({"InflateParams", "NewApi"})
 public class FeedFragment extends Fragment {
 
+    public static final String TAG = FeedFragment.class.getSimpleName();
+    public static boolean firstTime = true;
+    public static boolean slideChange = false;
+    public JSONObject json;
+    public JSONObject newJsonObject;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView listView;
     private FeedListAdapter listAdapter;
     private List<Item> feedItems;
     private ImageButton actionButton;
-
-    public static final String TAG = FeedFragment.class.getSimpleName();
     private Drawable mActionBarBackgroundDrawable;
-
     private ProgressBar progress;
-    public JSONObject json;
-    public JSONObject newJsonObject;
-    public SwipeRefreshLayout mSwipeRefreshLayout;
     private CustomTextView mTitle;
-    public static boolean firstTime = true;
     private View mCustomView;
-    public static boolean slideChange = false;
-
     private OnRefreshListener mOnFeedRefresh;
 
     public FeedFragment() {
@@ -132,7 +132,7 @@ public class FeedFragment extends Fragment {
                 false);
         setHasOptionsMenu(true);
         listView = (ListView) rootView.findViewById(R.id.list);
-
+        listView.addHeaderView(new Button(getActivity()));
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
         actionButton = (ImageButton) rootView.findViewById(R.id.imageButton1);
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar2);
@@ -332,6 +332,7 @@ public class FeedFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // TODO Auto-generated method stub
@@ -374,7 +375,6 @@ public class FeedFragment extends Fragment {
             }, 800);
 
         }
-        return;
 
     }
 
@@ -420,7 +420,7 @@ public class FeedFragment extends Fragment {
                                     Toast.makeText(getActivity(),
                                             "Feed up to Date.",
                                             Toast.LENGTH_LONG).show();
-                                    return;
+
                                 } else {
                                     parseJsonFeed(response);
                                 }
@@ -446,14 +446,12 @@ public class FeedFragment extends Fragment {
 
     private void readFromMemory() {
         try {
-            FileInputStream feed = null;
-            feed = getActivity().openFileInput("feed.json");
+            FileInputStream feed = getActivity().openFileInput("feed.json");
             makejson(feed);
         } catch (FileNotFoundException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
-        } finally {
         }
     }
 

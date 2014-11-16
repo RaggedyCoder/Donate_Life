@@ -15,6 +15,9 @@
     <!--  -->
     <string name="blood_group">রক্তের গ্রুপ</string>
     <!--  -->
+    <string name="total_donation">মোট রক্তদান</string>
+
+    <!--  -->
     <string name="Ok">ঠিক আছে</string>
     <!--  -->
     <string name="log_in">লগ ইন</string>
