@@ -6,6 +6,11 @@
     <item name="list" type="id"></item>
     <item name="swiperefresh" type="id"></item>
     <item name="profile_container" type="id"></item>
+    <item name="header_picture" type="id"></item>
+    <item name="header_logo" type="id"></item>
+    <item name="header" type="id"></item>
+    <item name="pager" type="id"></item>
+    <item name="tabs" type="id"></item>
     <item name="gradient_profile_background" type="id"></item>
     <item name="linearLayout1" type="id"></item>
     <item name="avatar" type="id"></item>
