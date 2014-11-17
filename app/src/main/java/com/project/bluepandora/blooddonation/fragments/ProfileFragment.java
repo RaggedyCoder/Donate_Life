@@ -20,9 +20,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.project.bluepandora.blooddonation.data.BloodItem;
@@ -32,12 +35,14 @@ import com.project.bluepandora.blooddonation.datasource.BloodDataSource;
 import com.project.bluepandora.blooddonation.datasource.DistrictDataSource;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
+import com.widget.CustomScrollView;
 import com.widget.CustomTextView;
 
 import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment {
 
+    private float density;
     private UserDataSource userDatabase;
     private ArrayList<UserInfoItem> userInfo;
     private BloodDataSource bloodDatabase;
@@ -51,6 +56,7 @@ public class ProfileFragment extends Fragment {
     private TextView bloodGroup;
     private TextView profileDetail;
     private TextView profileEdit;
+    private CustomScrollView scrollView;
 
     private TextView fullName;
 
@@ -104,6 +110,7 @@ public class ProfileFragment extends Fragment {
         avatar = (TextView) rootView.findViewById(R.id.avatar);
         avatar.setTypeface(tf);
         avatar.setText(bloodItem.getBloodName());
+        scrollView = (CustomScrollView) rootView.findViewById(R.id.profile_details_scroll_view);
 
         userName = (TextView) rootView.findViewById(R.id.username);
         userName.setText(userInfo.get(0).getFirstName());
@@ -170,6 +177,18 @@ public class ProfileFragment extends Fragment {
                 .setCustomView(mCustomView);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .hide();
+        density = getActivity().getResources().getDisplayMetrics().density;
+        final LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.profile_details_header_holder);
+        scrollView.setOnScrollChangedListener(new CustomScrollView.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
+                final int paddingTop = 225;
+                float ratio = 1.0f - (Math.min(Math.max(t, 0), paddingTop) / paddingTop);
+                Log.e(ProfileFragment.class.getSimpleName(), "" + ratio + " " + t);
+                final int newPaddingTop = (int) (ratio * 225);
+                layout.setPadding(0, (int) (newPaddingTop * density), 0, 0);
+            }
+        });
         mTitle.setText(R.string.profile);
         return rootView;
     }

@@ -5,4 +5,8 @@
         <attr name="font" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="CustomDragView">
+        <attr name="custom_header_view" format="reference" />
+        <attr name="custom_body_view" format="reference" />
+    </declare-styleable>
 </resources>

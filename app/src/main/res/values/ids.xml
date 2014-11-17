@@ -13,6 +13,7 @@
     <item name="profile_details_header_holder" type="id"></item>
     <item name="profile_header_holder" type="id"></item>
     <item name="profile_details" type="id"></item>
+    <item name="profile_details_body" type="id"></item>
     <item name="profile_edit" type="id"></item>
     <item name="profile_details_scroll_view" type="id"></item>
     <item name="profile_details_holder" type="id"></item>
