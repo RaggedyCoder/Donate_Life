@@ -54,7 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00000000"
-        android:paddingTop="225dip"
+        android:paddingTop="5dip"
+        android:layout_below="@id/username"
         android:orientation="vertical">
         <include
             android:id="@id/profile_details_body"

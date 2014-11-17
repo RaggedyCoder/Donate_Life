@@ -40,7 +40,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -132,7 +131,6 @@ public class FeedFragment extends Fragment {
                 false);
         setHasOptionsMenu(true);
         listView = (ListView) rootView.findViewById(R.id.list);
-        listView.addHeaderView(new Button(getActivity()));
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
         actionButton = (ImageButton) rootView.findViewById(R.id.imageButton1);
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar2);

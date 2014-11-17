@@ -19,13 +19,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.project.bluepandora.blooddonation.data.BloodItem;
@@ -37,12 +35,12 @@ import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
 import com.widget.CustomScrollView;
 import com.widget.CustomTextView;
+import com.widget.ScrollTabHolder;
 
 import java.util.ArrayList;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements ScrollTabHolder, ViewPager.OnPageChangeListener {
 
-    private float density;
     private UserDataSource userDatabase;
     private ArrayList<UserInfoItem> userInfo;
     private BloodDataSource bloodDatabase;
@@ -70,13 +68,11 @@ public class ProfileFragment extends Fragment {
     private View mCustomView;
 
     public ProfileFragment() {
-        // TODO Auto-generated constructor stub
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
     }
@@ -175,22 +171,32 @@ public class ProfileFragment extends Fragment {
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .hide();
-        density = getActivity().getResources().getDisplayMetrics().density;
-        final LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.profile_details_header_holder);
-        scrollView.setOnScrollChangedListener(new CustomScrollView.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
-                final int paddingTop = 225;
-                float ratio = 1.0f - (Math.min(Math.max(t, 0), paddingTop) / paddingTop);
-                Log.e(ProfileFragment.class.getSimpleName(), "" + ratio + " " + t);
-                final int newPaddingTop = (int) (ratio * 225);
-                layout.setPadding(0, (int) (newPaddingTop * density), 0, 0);
-            }
-        });
         mTitle.setText(R.string.profile);
         return rootView;
     }
 
+    @Override
+    public void onPageScrolled(int i, float v, int i2) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
+    }
+
+    @Override
+    public void adjustScroll(int scrollHeight) {
+
+    }
+
+    @Override
+    public void onScroll(View view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+
+    }
 }
