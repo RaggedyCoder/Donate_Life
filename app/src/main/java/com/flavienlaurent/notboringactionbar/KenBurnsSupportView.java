@@ -8,13 +8,15 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.kmshack.newsstand.R;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.project.bluepandora.donatelife.R;
 
 import java.util.Random;
+
+import nineoldandroids.animation.AnimatorSet;
+import nineoldandroids.animation.ObjectAnimator;
+import nineoldandroids.view.ViewHelper;
+import nineoldandroids.view.ViewPropertyAnimator;
+
 
 /**
  * Created by f.laurent on 21/11/13.
@@ -79,6 +81,7 @@ public class KenBurnsSupportView extends FrameLayout {
 
         animate(activeImageView);
 
+
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setDuration(mFadeInOutMs);
         animatorSet.playTogether(
@@ -142,11 +145,9 @@ public class KenBurnsSupportView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        View view = inflate(getContext(), R.layout.view_kenburns, this);
-
-        mImageViews = new ImageView[2];
+        View view = inflate(getContext(), R.layout.header_view, this);
+        mImageViews = new ImageView[1];
         mImageViews[0] = (ImageView) view.findViewById(R.id.image0);
-        mImageViews[1] = (ImageView) view.findViewById(R.id.image1);
     }
 
     private void fillImageViews() {
