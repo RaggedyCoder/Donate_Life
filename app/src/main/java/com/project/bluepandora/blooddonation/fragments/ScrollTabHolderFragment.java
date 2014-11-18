@@ -1,7 +1,7 @@
 package com.project.bluepandora.blooddonation.fragments;
 
 import android.support.v4.app.Fragment;
-import android.view.View;
+import android.widget.AbsListView;
 
 import com.widget.ScrollTabHolder;
 
@@ -16,7 +16,7 @@ public abstract class ScrollTabHolderFragment extends Fragment implements Scroll
     }
 
     @Override
-    public void onScroll(View view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
         // nothing
     }
 }

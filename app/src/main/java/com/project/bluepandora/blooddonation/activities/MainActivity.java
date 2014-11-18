@@ -48,6 +48,7 @@ import com.project.bluepandora.blooddonation.data.SlideItem;
 import com.project.bluepandora.blooddonation.data.UserInfoItem;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.blooddonation.fragments.FeedFragment;
+import com.project.bluepandora.blooddonation.fragments.ProfileDetailsFragment;
 import com.project.bluepandora.blooddonation.fragments.ProfileFragment;
 import com.project.bluepandora.blooddonation.fragments.RequestFragment;
 import com.project.bluepandora.blooddonation.helpers.URL;
@@ -152,7 +153,7 @@ public class MainActivity extends ActionBarActivity {
             fragments = new ArrayList<Fragment>();
             fragments.add(new FeedFragment());
             fragments.add(new RequestFragment());
-            fragments.add(new ProfileFragment());
+            fragments.add(new ProfileDetailsFragment());
             mContent = fragments.get(0);
         }
         mDrawerListView = (ListView) findViewById(R.id.list_slidermenu);
@@ -379,7 +380,7 @@ public class MainActivity extends ActionBarActivity {
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
         } else if ((mContent instanceof ProfileFragment)
-                && (fragments.get(pos) instanceof ProfileFragment)) {
+                && (fragments.get(pos) instanceof ProfileDetailsFragment)) {
             Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.widget.CustomScrollView
+            android:id="@id/profile_details_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f9f9f9">
+
+            <LinearLayout
+                android:id="@id/profile_details_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:orientation="vertical">
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_full_name_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/full_name"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/dummy_full_name"
+                    android:textSize="18sp"
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <LinearLayout
+                    android:id="@id/profile_number_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_margin="10dip"
+                    android:background="@drawable/feed__list_item_background"
+                    android:orientation="vertical" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_mobile_number_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mobile_number"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/dummy_mobile_number_ID"
+                    android:textSize="18sp"
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <LinearLayout
+                    android:id="@id/profile_area_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_margin="10dip"
+                    android:background="@drawable/feed__list_item_background"
+                    android:orientation="vertical" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_area_name_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/area_name"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_area_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/dummy_area_name_ID"
+                    android:textSize="18sp"
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <LinearLayout
+                    android:id="@id/profile_blood_group_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_margin="10dip"
+                    android:background="@drawable/feed__list_item_background"
+                    android:orientation="vertical" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_blood_group_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blood_group"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <com.widget.CustomTextView
+                    android:id="@id/profile_blood_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/dummy_blood_group_ID"
+                    android:textSize="18sp"
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <LinearLayout
+                    android:id="@+id/profile_blood_donation_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_margin="10dip"
+                    android:background="@drawable/feed__list_item_background"
+                    android:orientation="vertical" />
+
+                <com.widget.CustomTextView
+                    android:id="@+id/profile_blood_donation_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_donation"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <com.widget.CustomTextView
+
+                    android:id="@+id/profile_blood_donation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/dummy_blood_group_ID"
+                    android:textSize="18sp"
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="10dip"
+                    android:background="#00000000"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.widget.CustomScrollView>
+    </LinearLayout>
+</merge>

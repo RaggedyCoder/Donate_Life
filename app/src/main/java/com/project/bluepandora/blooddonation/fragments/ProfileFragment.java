@@ -15,58 +15,29 @@ package com.project.bluepandora.blooddonation.fragments;
  * limitations under the License.
  */
 
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AbsListView;
+import android.widget.ListView;
 
-import com.project.bluepandora.blooddonation.data.BloodItem;
-import com.project.bluepandora.blooddonation.data.DistrictItem;
+import com.project.bluepandora.blooddonation.adapter.ProfileDetailsAdapter;
 import com.project.bluepandora.blooddonation.data.UserInfoItem;
-import com.project.bluepandora.blooddonation.datasource.BloodDataSource;
-import com.project.bluepandora.blooddonation.datasource.DistrictDataSource;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
-import com.widget.CustomScrollView;
-import com.widget.CustomTextView;
-import com.widget.ScrollTabHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ProfileFragment extends Fragment implements ScrollTabHolder, ViewPager.OnPageChangeListener {
+public class ProfileFragment extends ScrollTabHolderFragment implements AbsListView.OnScrollListener {
 
     private UserDataSource userDatabase;
     private ArrayList<UserInfoItem> userInfo;
-    private BloodDataSource bloodDatabase;
-    private DistrictDataSource districtDatabase;
-    private DistrictItem distItem;
-    private BloodItem bloodItem;
-    private TextView avatar;
-    private TextView userName;
-    private TextView mobileNumber;
-    private TextView districtName;
-    private TextView bloodGroup;
-    private TextView profileDetail;
-    private TextView profileEdit;
-    private CustomScrollView scrollView;
-
-    private TextView fullName;
-
-    private TextView mobileNumber_show;
-    private TextView districtName_show;
-    private TextView bloodGroup_show;
-    private TextView fullName_show;
-
-    private CustomTextView mTitle;
-    private Drawable mActionBarBackgroundDrawable;
-    private View mCustomView;
-
+    private ListView mListView;
+    private ArrayList<String> mListItems;
+    private int mPosition;
     public ProfileFragment() {
 
     }
@@ -74,129 +45,58 @@ public class ProfileFragment extends Fragment implements ScrollTabHolder, ViewPa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_profile, container,
+        View rootView = inflater.inflate(R.layout.fragment_list, container,
                 false);
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),
-                "MuseoSansRounded-700.otf");
+        mPosition = 0;
         userDatabase = new UserDataSource(getActivity());
         userDatabase.open();
-        bloodDatabase = new BloodDataSource(getActivity());
-        bloodDatabase.open();
-        districtDatabase = new DistrictDataSource(getActivity());
-        districtDatabase.open();
         userInfo = userDatabase.getAllUserItem();
-        bloodItem = new BloodItem();
-        bloodItem.setBloodId(userInfo.get(0).getGroupId());
-        bloodItem = bloodDatabase.cursorToBloodItem(bloodDatabase
-                .bloodItemToCursor(bloodItem));
-        distItem = new DistrictItem();
-        distItem.setDistId(userInfo.get(0).getDistId());
-        distItem = districtDatabase.cursorToDistrictItem(districtDatabase
-                .districtItemToCursor(distItem));
-        bloodDatabase.close();
         userDatabase.close();
-        districtDatabase.close();
-        avatar = (TextView) rootView.findViewById(R.id.avatar);
-        avatar.setTypeface(tf);
-        avatar.setText(bloodItem.getBloodName());
-        scrollView = (CustomScrollView) rootView.findViewById(R.id.profile_details_scroll_view);
-
-        userName = (TextView) rootView.findViewById(R.id.username);
-        userName.setText(userInfo.get(0).getFirstName());
-        userName.setTypeface(tf);
-
-        mobileNumber = (TextView) rootView
-                .findViewById(R.id.profile_mobile_number);
-        mobileNumber.setTypeface(tf);
-        mobileNumber.setText(userInfo.get(0).getMobileNumber());
-
-        districtName = (TextView) rootView.findViewById(R.id.profile_area_name);
-        districtName.setText(distItem.getDistName());
-        districtName.setTypeface(tf);
-
-        bloodGroup = (TextView) rootView.findViewById(R.id.profile_blood_group);
-        bloodGroup.setText(bloodItem.getBloodName());
-        bloodGroup.setTypeface(tf);
-
-        fullName = (TextView) rootView.findViewById(R.id.profile_full_name);
-        fullName.setText(userInfo.get(0).getFirstName() + " "
-                + userInfo.get(0).getLastName());
-        fullName.setTypeface(tf);
-
-        bloodGroup_show = (TextView) rootView
-                .findViewById(R.id.profile_blood_group_show);
-        bloodGroup_show.setTypeface(tf);
-        mobileNumber_show = (TextView) rootView
-                .findViewById(R.id.profile_mobile_number_show);
-        mobileNumber_show.setTypeface(tf);
-
-        districtName_show = (TextView) rootView
-                .findViewById(R.id.profile_area_name_show);
-        districtName_show.setTypeface(tf);
-        fullName_show = (TextView) rootView
-                .findViewById(R.id.profile_full_name_show);
-        fullName_show.setTypeface(tf);
-
-        profileDetail = (TextView) rootView.findViewById(R.id.profile_details);
-        profileDetail.setTypeface(tf);
-
-        profileEdit = (TextView) rootView.findViewById(R.id.profile_edit);
-        profileEdit.setTypeface(tf);
-        mActionBarBackgroundDrawable = getResources().getDrawable(
-                R.drawable.actionbar_background);
-
-        mActionBarBackgroundDrawable.setAlpha(255);
-
-        LayoutInflater mInflater = LayoutInflater.from(getActivity());
-        mCustomView = mInflater.inflate(R.layout.request_feed_actionbar, null);
-
-        mTitle = (CustomTextView) mCustomView
-                .findViewById(R.id.actionbar_title_text);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayShowTitleEnabled(false);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayHomeAsUpEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setHomeButtonEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayShowCustomEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayShowHomeEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setCustomView(mCustomView);
-        mTitle.setText(R.string.profile);
+        mListView = (ListView) rootView.findViewById(R.id.listView);
+        View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
+        mListView.addHeaderView(placeHolderView);
         return rootView;
     }
 
     @Override
-    public void onPageScrolled(int i, float v, int i2) {
-
-    }
-
-    @Override
-    public void onPageSelected(int i) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int i) {
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mListView.setOnScrollListener(this);
+        List<String> list = new ArrayList<String>();
+        list.add(getActivity().getResources().getString(R.string.full_name));
+        list.add(getActivity().getResources().getString(R.string.mobile_number));
+        list.add(getActivity().getResources().getString(R.string.area_name));
+        list.add(getActivity().getResources().getString(R.string.blood_group));
+        list.add(getActivity().getResources().getString(R.string.total_donation));
+        mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
 
     @Override
     public void adjustScroll(int scrollHeight) {
+        if (scrollHeight == 0 && mListView.getFirstVisiblePosition() >= 1) {
+            return;
+        }
+
+        mListView.setSelectionFromTop(1, scrollHeight);
 
     }
 
-    @Override
-    public void onScroll(View view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
 
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (mScrollTabHolder != null)
+            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, mPosition);
     }
 }

@@ -413,8 +413,9 @@ public class FeedFragment extends Fragment {
 
                                     e1.printStackTrace();
                                 }
-                                if (listAdapter.getCount() == feedArray
-                                        .length()) {
+
+                                if (feedArray != null && (listAdapter.getCount() == feedArray
+                                        .length())) {
                                     Toast.makeText(getActivity(),
                                             "Feed up to Date.",
                                             Toast.LENGTH_LONG).show();

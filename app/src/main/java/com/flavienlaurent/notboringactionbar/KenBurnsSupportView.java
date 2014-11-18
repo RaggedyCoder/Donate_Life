@@ -37,13 +37,6 @@ public class KenBurnsSupportView extends FrameLayout {
     private float maxScaleFactor = 1.5F;
     private float minScaleFactor = 1.2F;
 
-    private Runnable mSwapImageRunnable = new Runnable() {
-        @Override
-        public void run() {
-            swapImage();
-            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
-        }
-    };
 
     public KenBurnsSupportView(Context context) {
         this(context, null);
@@ -135,11 +128,9 @@ public class KenBurnsSupportView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mHandler.removeCallbacks(mSwapImageRunnable);
     }
 
     private void startKenBurnsAnimation() {
-        mHandler.post(mSwapImageRunnable);
     }
 
     @Override
