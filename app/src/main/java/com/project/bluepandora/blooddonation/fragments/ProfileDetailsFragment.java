@@ -1,8 +1,10 @@
 package com.project.bluepandora.blooddonation.fragments;
 
+import android.app.Activity;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +67,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mMinHeaderHeight = getResources().getDimensionPixelSize(R.dimen.min_header_height);
         mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.header_height);
         mMinHeaderTranslation = -mMinHeaderHeight + getActionBarHeight();
+        mPagerAdapter = new PagerAdapter(this.getFragmentManager());
     }
 
     @Override
@@ -73,20 +77,28 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mHeaderPicture.setResourceIds(R.drawable.gradient_background, R.drawable.gradient_background);
         mHeaderLogo = (ImageView) rootView.findViewById(R.id.header_logo);
         mHeader = rootView.findViewById(R.id.header);
-
         mPagerSlidingTabStrip = (PagerSlidingTabStrip) rootView.findViewById(R.id.tabs);
         mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
-        mViewPager.setOffscreenPageLimit(5);
-        mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
         mPagerAdapter.setTabHolderScrollingContent(this);
+        mPagerSlidingTabStrip.setOnPageChangeListener(this);
         mViewPager.setAdapter(mPagerAdapter);
         mPagerSlidingTabStrip.setViewPager(mViewPager);
-        mPagerSlidingTabStrip.setOnPageChangeListener(this);
+        mViewPager.setOffscreenPageLimit(2);
         mSpannableString = new SpannableString(getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
         ViewHelper.setAlpha(getActionBarIconView(), 0f);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(null);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     public int getActionBarHeight() {
@@ -122,7 +134,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     public void onPageSelected(int position) {
         SparseArrayCompat<ScrollTabHolder> scrollTabHolders = mPagerAdapter.getScrollTabHolders();
         ScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
-
+        if (currentHolder == null) {
+            Log.e("error", "null" + position);
+        }
         currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper.getTranslationY(mHeader)));
     }
 
@@ -145,6 +159,11 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio));
             setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void setTitleAlpha(float alpha) {
@@ -200,7 +219,6 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             super(fm);
             mScrollTabHolders = new SparseArrayCompat<ScrollTabHolder>();
         }
-
         public void setTabHolderScrollingContent(ScrollTabHolder listener) {
             mListener = listener;
         }
@@ -219,7 +237,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         public Fragment getItem(int position) {
             ScrollTabHolderFragment fragment;
             if (position == 0) {
-                fragment = (ScrollTabHolderFragment) new ProfileFragment();
+                fragment = (ScrollTabHolderFragment) ProfileFragment.newInstance();
 
             } else {
                 fragment = (ScrollTabHolderFragment) SampleListFragment.newInstance(position);
@@ -228,6 +246,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             mScrollTabHolders.put(position, fragment);
             if (mListener != null) {
                 fragment.setScrollTabHolder(mListener);
+
             }
             return fragment;
         }

@@ -17,6 +17,7 @@ package com.project.bluepandora.blooddonation.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,10 @@ public class ProfileFragment extends ScrollTabHolderFragment implements AbsListV
     private ListView mListView;
     private ArrayList<String> mListItems;
     private int mPosition;
+
+    public static Fragment newInstance() {
+        return new ProfileFragment();
+    }
     public ProfileFragment() {
 
     }

@@ -379,7 +379,7 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
-        } else if ((mContent instanceof ProfileFragment)
+        } else if ((mContent instanceof ProfileDetailsFragment)
                 && (fragments.get(pos) instanceof ProfileDetailsFragment)) {
             Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
             mDrawerLayout.closeDrawer(mDrawerListView);
@@ -389,15 +389,31 @@ public class MainActivity extends ActionBarActivity {
         if (pos == 1) {
             mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
         }
+        if (pos == 2) {
+            mContent = new ProfileDetailsFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left,
+                            R.anim.slide_out_right)
+                    .replace(R.id.frame_container, mContent).commit();
+        } else {
+            if ((mContent instanceof ProfileDetailsFragment)) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left,
+                                R.anim.slide_out_right)
+                        .remove(mContent).commit();
+            }
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left,
                         R.anim.slide_out_right)
                 .replace(R.id.frame_container, fragments.get(pos)).commit();
+            mContent = fragments.get(pos);
+        }
         mDrawerListView.setItemChecked(pos, true);
         mDrawerListView.setSelection(pos);
         mDrawerLayout.closeDrawer(mDrawerListView);
-        mContent = fragments.get(pos);
     }
 
     public interface DrawerSlideListners {
@@ -428,6 +444,5 @@ public class MainActivity extends ActionBarActivity {
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }
         }
-
     }
 }
