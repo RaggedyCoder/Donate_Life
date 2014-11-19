@@ -55,7 +55,7 @@ public class DonationRecordAdapter extends BaseAdapter {
                     (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                             310, activity.getResources().getDisplayMetrics())));
         else {
-            convertView.setLayoutParams(new GridView.LayoutParams(200,
+            convertView.setLayoutParams(new GridView.LayoutParams(225,
                     (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                             310 / 2, activity.getResources().getDisplayMetrics())));
         }
