@@ -53,40 +53,7 @@
                 android:layout_gravity="bottom"
                 android:background="@drawable/tab_background" />
 
-            <LinearLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="48dip"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="4dip"
-                android:background="@color/holo_red_light"
-                android:orientation="horizontal"
-                android:paddingLeft="5dip">
 
-                <com.widget.CustomButton
-                    android:id="@+id/profile_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/tab_button"
-                    android:padding="10dip"
-                    android:selectAllOnFocus="true"
-                    android:text="Profile"
-                    android:textColor="#e5e5e5"
-
-                    app:font="MuseoSansRounded-300.otf" />
-
-                <com.widget.CustomButton
-                    android:id="@+id/donation_record_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dip"
-                    android:background="@drawable/tab_button"
-                    android:padding="10dip"
-                    android:text="Donation Record"
-                    android:textColor="#e5e5e5"
-                    app:font="MuseoSansRounded-300.otf" />
-            </LinearLayout>
         </RelativeLayout>
     </FrameLayout>
 
@@ -125,6 +92,46 @@
             android:layout_centerVertical="true"
             android:src="@drawable/gradient_background"
             android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="48dip"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="4dip"
+            android:background="@color/holo_red_light"
+            android:orientation="horizontal"
+            android:paddingLeft="5dip">
+
+        </LinearLayout>
+
+        <com.widget.CustomButton
+            android:id="@+id/profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="48dip"
+            android:background="@drawable/tab_button"
+            android:padding="10dip"
+            android:layout_alignParentBottom="true"
+            android:selectAllOnFocus="true"
+            android:text="Profile"
+            android:textColor="#e5e5e5"
+            android:layout_marginBottom="4dip"
+            app:font="MuseoSansRounded-300.otf" />
+
+        <com.widget.CustomButton
+            android:id="@+id/donation_record_button"
+            android:layout_width="wrap_content"
+            android:layout_height="48dip"
+            android:layout_marginLeft="5dip"
+            android:background="@drawable/tab_button"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/profile_button"
+            android:padding="10dip"
+            android:text="Donation Record"
+            android:layout_marginBottom="4dip"
+            android:textColor="#e5e5e5"
+            app:font="MuseoSansRounded-300.otf" />
     </RelativeLayout>
 
 </FrameLayout>

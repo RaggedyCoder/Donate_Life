@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.flavienlaurent.notboringactionbar.AlphaForegroundColorSpan;
@@ -38,6 +40,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
 
     private KenBurnsSupportView mHeaderPicture;
     private View mHeader;
+    private LinearLayout tab;
 
     private int mActionBarHeight;
     private int mMinHeaderHeight;
@@ -80,6 +83,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mHeaderPicture = (KenBurnsSupportView) rootView.findViewById(R.id.header_picture);
         mHeaderPicture.setResourceIds(R.drawable.gradient_background, R.drawable.gradient_background);
         mHeader = rootView.findViewById(R.id.header);
+        tab = (LinearLayout) rootView.findViewById(R.id.tabs);
         profileButton = (CustomButton) rootView.findViewById(R.id.profile_button);
         donationRecordButton = (CustomButton) rootView.findViewById(R.id.donation_record_button);
         mHeaderLogo = (ImageView) rootView.findViewById(R.id.header_logo);
@@ -159,7 +163,18 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
         int scrollY = getScrollY(view);
         ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
-
+        ViewHelper.setTranslationY(tab, Math.max(-scrollY, mMinHeaderTranslation));
+        ViewHelper.setTranslationY(donationRecordButton, Math.max(-scrollY, mMinHeaderTranslation));
+        int[] origin = new int[2];
+        donationRecordButton.getLocationOnScreen(origin);
+        int xDest = origin[0];
+        int yDest = (donationRecordButton.getMeasuredHeight() / 2) + Math.max(-scrollY, mMinHeaderTranslation);
+        final int newleft = donationRecordButton.getLeft() + xDest - origin[0];
+        final int newTop = donationRecordButton.getTop() + yDest - origin[1];
+        donationRecordButton.layout(newleft, newTop,
+                newleft + donationRecordButton.getMeasuredWidth(), newTop
+                        + donationRecordButton.getMeasuredHeight());
+        Log.e("Translation", Math.max(-scrollY, mMinHeaderTranslation) + "");
         float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
         interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio), -scrollY);
         setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
