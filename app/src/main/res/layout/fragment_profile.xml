@@ -10,6 +10,7 @@
         android:layout_height="match_parent">
 
         <ViewSwitcher
+            android:id="@+id/view_switcher"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
@@ -25,6 +26,17 @@
                 android:divider="@null"
                 android:listSelector="@android:color/transparent"
                 android:scrollbars="none" />
+
+            <GridView
+                android:id="@+id/grid_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:columnWidth="90dp"
+                android:gravity="center"
+                android:horizontalSpacing="0dip"
+                android:numColumns="2"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0dip" />
         </ViewSwitcher>
     </RelativeLayout>
 
@@ -58,15 +70,15 @@
             android:id="@+id/username"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="215dip"
-            android:textSize="25sp"
-            android:text="@string/dummy_name"
-            android:textColor="#2e2e2e"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            app:font="MuseoSansRounded-700.otf"
-            android:gravity="center" />
+            android:layout_marginTop="215dip"
+            android:gravity="center"
+            android:text="@string/dummy_name"
+            android:textColor="#2e2e2e"
+            android:textSize="25sp"
+            app:font="MuseoSansRounded-700.otf" />
     </FrameLayout>
 
     <RelativeLayout
@@ -91,9 +103,9 @@
                 android:layout_width="42dip"
                 android:layout_height="42dip"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dip"
                 android:layout_marginBottom="10dip"
                 android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
                 android:background="@drawable/white_background"
                 android:visibility="invisible">
 
@@ -102,11 +114,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_margin="3dip"
-                    android:text="A+"
-                    app:font="MuseoSansRounded-700.otf"
+                    android:background="@drawable/blood_avatar"
                     android:gravity="center"
+                    android:text="A+"
 
-                    android:background="@drawable/blood_avatar" />
+                    app:font="MuseoSansRounded-700.otf" />
             </LinearLayout>
 
             <com.widget.CustomTextView
@@ -114,21 +126,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_margin="3dip"
-                android:textSize="20sp"
+                android:gravity="center"
                 android:text="@string/dummy_name"
                 android:textColor="#ffffff"
-                app:font="MuseoSansRounded-700.otf"
-                android:gravity="center" />
+                android:textSize="20sp"
+                app:font="MuseoSansRounded-700.otf" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/header_logo"
             android:layout_width="@dimen/header_logo_size"
             android:layout_height="@dimen/header_logo_size"
-            android:layout_gravity="center"
-            android:layout_margin="10dip"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dip"
             android:background="@drawable/white_background"
             android:visibility="visible">
 
@@ -136,12 +148,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dip"
-                android:text="AB+"
-                android:textSize="42dip"
-                android:textColor="#f1f1f1"
-                app:font="MuseoSansRounded-700.otf"
+                android:background="@drawable/blood_avatar"
                 android:gravity="center"
-                android:background="@drawable/blood_avatar" />
+                android:text="AB+"
+                android:textColor="#f1f1f1"
+                android:textSize="42dip"
+                app:font="MuseoSansRounded-700.otf" />
 
         </LinearLayout>
 

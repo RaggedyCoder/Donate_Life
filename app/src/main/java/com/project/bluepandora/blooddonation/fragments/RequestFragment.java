@@ -91,6 +91,7 @@ public class RequestFragment extends Fragment implements DrawerSlideListners {
     private ArrayList<HospitalItem> hospitalItems;
     private ArrayList<UserInfoItem> userInfoItems;
     private ArrayList<String> amounts;
+    private ArrayList<String> dummy;
 
     private ArrayAdapter<String> amountAdapter;
 

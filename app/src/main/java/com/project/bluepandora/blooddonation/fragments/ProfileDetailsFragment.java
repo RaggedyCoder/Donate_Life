@@ -1,5 +1,6 @@
 package com.project.bluepandora.blooddonation.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.RectF;
@@ -16,11 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ViewSwitcher;
 
 import com.flavienlaurent.notboringactionbar.AlphaForegroundColorSpan;
 import com.flavienlaurent.notboringactionbar.KenBurnsSupportView;
+import com.project.bluepandora.blooddonation.adapter.DonationRecordAdapter;
 import com.project.bluepandora.blooddonation.adapter.ProfileDetailsAdapter;
 import com.project.bluepandora.blooddonation.data.UserInfoItem;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
@@ -50,6 +54,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private LinearLayout mHeaderLogo;
     private CustomTextView mHeaderTitle;
     private CustomButton profileButton;
+    private ViewSwitcher switcher;
     private CustomButton donationRecordButton;
     private RectF mRect1 = new RectF();
     private RectF mRect2 = new RectF();
@@ -62,6 +67,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private ListView mListView;
     private LinearLayout actionbar;
     private ArrayList<String> mListItems;
+    private GridView mGridView;
     private Drawable actionbarDrawble;
     private int change;
 
@@ -90,11 +96,13 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         donationRecordButton = (CustomButton) rootView.findViewById(R.id.donation_record_button);
         mHeaderLogo = (LinearLayout) rootView.findViewById(R.id.header_logo);
         mHeaderTitle = (CustomTextView) rootView.findViewById(R.id.username);
+        switcher = (ViewSwitcher) rootView.findViewById(R.id.view_switcher);
         actionbarDrawble = getResources().getDrawable(
                 R.drawable.actionbar_background);
         actionbarDrawble.setAlpha(0);
         actionbar = (LinearLayout) rootView.findViewById(R.id.actionbar);
         actionbar.setBackgroundDrawable(actionbarDrawble);
+        mGridView = (GridView) rootView.findViewById(R.id.grid_view);
         mSpannableString = new SpannableString(getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(null);
@@ -127,6 +135,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView.setOnScrollListener(this);
+        mGridView.setOnScrollListener(this);
         List<String> list = new ArrayList<String>();
         list.add(getActivity().getResources().getString(R.string.full_name));
         list.add(getActivity().getResources().getString(R.string.mobile_number));
@@ -134,7 +143,17 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         list.add(getActivity().getResources().getString(R.string.blood_group));
         list.add(getActivity().getResources().getString(R.string.total_donation));
         list.add("");
+        list.add(getActivity().getResources().getString(R.string.full_name));
+        list.add(getActivity().getResources().getString(R.string.mobile_number));
+        list.add(getActivity().getResources().getString(R.string.area_name));
+        list.add(getActivity().getResources().getString(R.string.blood_group));
+        list.add(getActivity().getResources().getString(R.string.total_donation));
+        list.add("");
+
+
         firstTime = false;
+        switcher.showNext();
+        mGridView.setAdapter(new DonationRecordAdapter(getActivity(), list));
         mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
 
@@ -175,6 +194,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         }
         mListView.setSelectionFromTop(1, scrollHeight);
     }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
         int scrollY = getScrollY(view);
@@ -193,7 +214,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio), -scrollY);
         mHeaderTitle.setTextColor(Color.argb((int)
                 ((clamp(5.0F * (1.0f - ratio) - 4.0F, 0.0F, 1.0F)) * 255), 0x2e, 0x2e, 0x2e));
-        setTitleAlpha(clamp(4.5F * ratio - 4.0F, 0.0F, 1.0F));
+        setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
