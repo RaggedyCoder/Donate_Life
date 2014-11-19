@@ -5,28 +5,27 @@
     android:layout_height="match_parent"
     android:background="#e5e5e5"
     tools:context="com.sust.project.blooddonation.mainscreen.MainActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame">
 
-    <android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+
+        android:layout_height="match_parent">
 
         <!-- Framelayout to display Fragments -->
 
         <FrameLayout
-            
+
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
+            android:layout_height="match_parent"></FrameLayout>
 
         <!-- Listview to display slider menu -->
 
         <ListView
             android:id="@+id/list_slidermenu"
-            android:paddingTop="@dimen/abc_action_bar_default_height_material"
+            android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
             android:background="@drawable/list_view_back_selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,8 +33,7 @@
             android:choiceMode="singleChoice"
             android:divider="@drawable/list_view_back_default"
             android:listSelector="@drawable/list_view_back"
-            android:dividerHeight="@null"
-             />
+            android:dividerHeight="@null" />
     </android.support.v4.widget.DrawerLayout>
 
 </FrameLayout>

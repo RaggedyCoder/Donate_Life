@@ -65,39 +65,66 @@
                 android:paddingLeft="5dip">
 
                 <com.widget.CustomButton
+                    android:id="@+id/profile_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/tab_button"
                     android:padding="10dip"
-                    android:textColor="#e5e5e5"
                     android:selectAllOnFocus="true"
                     android:text="Profile"
+                    android:textColor="#e5e5e5"
 
                     app:font="MuseoSansRounded-300.otf" />
 
                 <com.widget.CustomButton
+                    android:id="@+id/donation_record_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dip"
                     android:background="@drawable/tab_button"
-                    android:textColor="#e5e5e5"
                     android:padding="10dip"
                     android:text="Donation Record"
+                    android:textColor="#e5e5e5"
                     app:font="MuseoSansRounded-300.otf" />
             </LinearLayout>
         </RelativeLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/header_height"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:background="@color/holo_red_light"
+            android:layout_height="@dimen/abc_action_bar_default_height_material">
+
+            <ImageView
+                android:layout_width="38dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/header_logos"
+                android:layout_width="38dip"
+                android:layout_margin="10dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/gradient_background"
+                android:visibility="invisible" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/header_logo"
             android:layout_width="@dimen/header_logo_size"
             android:layout_height="@dimen/header_logo_size"
-            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/gradient_background"
             android:visibility="visible" />
-    </FrameLayout>
+    </RelativeLayout>
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/abc_action_bar_default_height_material"
-        android:background="@color/holo_red_light" />
 </FrameLayout>

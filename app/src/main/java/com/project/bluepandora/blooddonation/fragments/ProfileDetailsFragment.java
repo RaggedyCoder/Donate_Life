@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
@@ -24,6 +23,7 @@ import com.project.bluepandora.blooddonation.adapter.ProfileDetailsAdapter;
 import com.project.bluepandora.blooddonation.data.UserInfoItem;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
+import com.widget.CustomButton;
 import com.widget.ScrollTabHolder;
 
 import java.util.ArrayList;
@@ -43,6 +43,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private int mMinHeaderHeight;
     private int mHeaderHeight;
     private int mMinHeaderTranslation;
+    private ImageView mHeaderLogo;
+    private CustomButton profileButton;
+    private CustomButton donationRecordButton;
 
     private RectF mRect1 = new RectF();
     private RectF mRect2 = new RectF();
@@ -77,9 +80,11 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mHeaderPicture = (KenBurnsSupportView) rootView.findViewById(R.id.header_picture);
         mHeaderPicture.setResourceIds(R.drawable.gradient_background, R.drawable.gradient_background);
         mHeader = rootView.findViewById(R.id.header);
+        profileButton = (CustomButton) rootView.findViewById(R.id.profile_button);
+        donationRecordButton = (CustomButton) rootView.findViewById(R.id.donation_record_button);
+        mHeaderLogo = (ImageView) rootView.findViewById(R.id.header_logo);
         mSpannableString = new SpannableString(getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
-        ViewHelper.setAlpha(getActionBarIconView(), 0f);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(null);
         userDatabase = new UserDataSource(getActivity());
         userDatabase.open();
@@ -88,11 +93,23 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mListView = (ListView) rootView.findViewById(R.id.listView);
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
         mListView.addHeaderView(placeHolderView);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowTitleEnabled(false);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setHomeButtonEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowCustomEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowHomeEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setCustomView(inflater.inflate(R.layout.profile_actionbar, null, false));
         return rootView;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView.setOnScrollListener(this);
         List<String> list = new ArrayList<String>();
@@ -128,10 +145,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     }
 
     private ImageView getActionBarIconView() {
-//        if (Utils.hasHoneycomb()) {
-        //          return (ImageView) rootView.findViewById(android.R.id.home);
-        //    }
-        return (ImageView) rootView.findViewById(R.id.header_logo);
+        return (ImageView) rootView.findViewById(R.id.header_logos);
     }
 
     @Override
@@ -141,16 +155,15 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         }
         mListView.setSelectionFromTop(1, scrollHeight);
     }
-
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-            int scrollY = getScrollY(view);
-            ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
-            float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
-        //interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio));
-            setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
-    }
+        int scrollY = getScrollY(view);
+        ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
 
+        float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
+        interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio), -scrollY);
+        setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -184,17 +197,15 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         return rect;
     }
 
-    private void interpolate(View view1, View view2, float interpolation) {
+    private void interpolate(View view1, View view2, float interpolation, int Y) {
         getOnScreenRect(mRect1, view1);
         getOnScreenRect(mRect2, view2);
-
         float scaleX = 1.0F + interpolation * (mRect2.width() / mRect1.width() - 1.0F);
         float scaleY = 1.0F + interpolation * (mRect2.height() / mRect1.height() - 1.0F);
         float translationX = 0.5F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
         float translationY = 0.5F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
-
         ViewHelper.setTranslationX(view1, translationX);
-        ViewHelper.setTranslationY(view1, translationY - ViewHelper.getTranslationY(mHeader));
+        ViewHelper.setTranslationY(view1, translationY);
         ViewHelper.setScaleX(view1, scaleX);
         ViewHelper.setScaleY(view1, scaleY);
     }
