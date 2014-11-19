@@ -37,11 +37,11 @@ import nineoldandroids.view.ViewHelper;
 public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder, AbsListView.OnScrollListener {
 
     private static AccelerateDecelerateInterpolator sSmoothInterpolator = new AccelerateDecelerateInterpolator();
-
+    int[] origin = new int[2];
+    boolean firstTime = false;
     private KenBurnsSupportView mHeaderPicture;
     private View mHeader;
     private LinearLayout tab;
-
     private int mActionBarHeight;
     private int mMinHeaderHeight;
     private int mHeaderHeight;
@@ -49,21 +49,16 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private ImageView mHeaderLogo;
     private CustomButton profileButton;
     private CustomButton donationRecordButton;
-
     private RectF mRect1 = new RectF();
     private RectF mRect2 = new RectF();
-
     private TypedValue mTypedValue = new TypedValue();
     private SpannableString mSpannableString;
     private AlphaForegroundColorSpan mAlphaForegroundColorSpan;
-
     private View rootView;
-
     private UserDataSource userDatabase;
     private ArrayList<UserInfoItem> userInfo;
     private ListView mListView;
     private ArrayList<String> mListItems;
-
 
     public static float clamp(float value, float max, float min) {
         return Math.max(Math.min(value, min), max);
@@ -96,6 +91,10 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         userDatabase.close();
         mListView = (ListView) rootView.findViewById(R.id.listView);
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
+        donationRecordButton.getLocationInWindow(origin);
+        Log.e("origin", origin[0] + " " + origin[1]);
+        donationRecordButton.layout(donationRecordButton.getLeft() - 10, donationRecordButton.getTop() - 100, donationRecordButton.getRight() - 10, donationRecordButton.getBottom() - 100);
+        //origin[1]=donationRecordButton.getTop()+origin[1];
         mListView.addHeaderView(placeHolderView);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setDisplayShowTitleEnabled(false);
@@ -109,6 +108,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(inflater.inflate(R.layout.profile_actionbar, null, false));
+        firstTime = false;
         return rootView;
     }
 
@@ -165,16 +165,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
         ViewHelper.setTranslationY(tab, Math.max(-scrollY, mMinHeaderTranslation));
         ViewHelper.setTranslationY(donationRecordButton, Math.max(-scrollY, mMinHeaderTranslation));
-        int[] origin = new int[2];
-        donationRecordButton.getLocationOnScreen(origin);
-        int xDest = origin[0];
-        int yDest = (donationRecordButton.getMeasuredHeight() / 2) + Math.max(-scrollY, mMinHeaderTranslation);
-        final int newleft = donationRecordButton.getLeft() + xDest - origin[0];
-        final int newTop = donationRecordButton.getTop() + yDest - origin[1];
-        donationRecordButton.layout(newleft, newTop,
-                newleft + donationRecordButton.getMeasuredWidth(), newTop
-                        + donationRecordButton.getMeasuredHeight());
-        Log.e("Translation", Math.max(-scrollY, mMinHeaderTranslation) + "");
+        donationRecordButton.layout((int) donationRecordButton.getX(), (int) donationRecordButton.getY(), (int) donationRecordButton.getX() + donationRecordButton.getMeasuredWidth(), (int) donationRecordButton.getY() + donationRecordButton.getMeasuredHeight());
+
+        Log.e("Trans", Math.max(-scrollY, mMinHeaderTranslation) + " " + origin[1]);
         float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
         interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio), -scrollY);
         setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
