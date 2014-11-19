@@ -44,17 +44,29 @@
             android:layout_width="match_parent"
             android:layout_height="150dip"
             android:layout_gravity="bottom"
-            android:background="#e5e5e5">
+            android:background="#f1f1f1">
 
-            <ImageView
+        <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
                 android:background="@drawable/tab_background" />
-
-
         </RelativeLayout>
+
+        <com.widget.CustomTextView
+            android:id="@+id/username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="215dip"
+            android:textSize="25sp"
+            android:text="@string/dummy_name"
+            android:textColor="#2e2e2e"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:font="MuseoSansRounded-700.otf"
+            android:gravity="center" />
     </FrameLayout>
 
     <RelativeLayout
@@ -63,35 +75,75 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/actionbar"
             android:layout_width="fill_parent"
-            android:background="@color/holo_red_light"
-            android:layout_height="@dimen/abc_action_bar_default_height_material">
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:background="@color/holo_red_light">
 
             <ImageView
                 android:layout_width="38dip"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
-
                 android:visibility="visible" />
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/header_logos"
-                android:layout_width="38dip"
-                android:layout_margin="10dip"
-                android:layout_height="fill_parent"
+                android:layout_width="42dip"
+                android:layout_height="42dip"
                 android:layout_gravity="center"
-                android:src="@drawable/gradient_background"
-                android:visibility="invisible" />
+                android:layout_marginTop="10dip"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:background="@drawable/white_background"
+                android:visibility="invisible">
+
+
+                <com.widget.CustomTextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="3dip"
+                    android:text="A+"
+                    app:font="MuseoSansRounded-700.otf"
+                    android:gravity="center"
+
+                    android:background="@drawable/blood_avatar" />
+            </LinearLayout>
+
+            <com.widget.CustomTextView
+                android:id="@+id/username_title"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_margin="3dip"
+                android:textSize="20sp"
+                android:text="@string/dummy_name"
+                android:textColor="#ffffff"
+                app:font="MuseoSansRounded-700.otf"
+                android:gravity="center" />
         </LinearLayout>
 
-        <ImageView
+        <LinearLayout
             android:id="@+id/header_logo"
             android:layout_width="@dimen/header_logo_size"
             android:layout_height="@dimen/header_logo_size"
+            android:layout_gravity="center"
+            android:layout_margin="10dip"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/gradient_background"
-            android:visibility="visible" />
+            android:background="@drawable/white_background"
+            android:visibility="visible">
+
+            <com.widget.CustomTextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dip"
+                android:text="AB+"
+                android:textSize="42dip"
+                android:textColor="#f1f1f1"
+                app:font="MuseoSansRounded-700.otf"
+                android:gravity="center"
+                android:background="@drawable/blood_avatar" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tabs"
@@ -110,28 +162,29 @@
             android:id="@+id/profile_button"
             android:layout_width="wrap_content"
             android:layout_height="48dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
             android:background="@drawable/tab_button"
             android:padding="10dip"
-            android:layout_alignParentBottom="true"
             android:selectAllOnFocus="true"
             android:text="Profile"
             android:textColor="#e5e5e5"
-            android:layout_marginBottom="4dip"
             app:font="MuseoSansRounded-300.otf" />
 
         <com.widget.CustomButton
             android:id="@+id/donation_record_button"
             android:layout_width="wrap_content"
             android:layout_height="48dip"
-            android:layout_marginLeft="5dip"
-            android:background="@drawable/tab_button"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginLeft="5dip"
             android:layout_toRightOf="@+id/profile_button"
+            android:background="@drawable/tab_button"
             android:padding="10dip"
             android:text="Donation Record"
-            android:layout_marginBottom="4dip"
             android:textColor="#e5e5e5"
             app:font="MuseoSansRounded-300.otf" />
+
     </RelativeLayout>
 
 </FrameLayout>

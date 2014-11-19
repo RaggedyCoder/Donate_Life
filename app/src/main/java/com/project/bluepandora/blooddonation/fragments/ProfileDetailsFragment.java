@@ -1,12 +1,13 @@
 package com.project.bluepandora.blooddonation.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -26,6 +26,7 @@ import com.project.bluepandora.blooddonation.data.UserInfoItem;
 import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
 import com.widget.CustomButton;
+import com.widget.CustomTextView;
 import com.widget.ScrollTabHolder;
 
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private int mMinHeaderHeight;
     private int mHeaderHeight;
     private int mMinHeaderTranslation;
-    private ImageView mHeaderLogo;
+    private LinearLayout mHeaderLogo;
+    private CustomTextView mHeaderTitle;
     private CustomButton profileButton;
     private CustomButton donationRecordButton;
     private RectF mRect1 = new RectF();
@@ -58,11 +60,15 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private UserDataSource userDatabase;
     private ArrayList<UserInfoItem> userInfo;
     private ListView mListView;
+    private LinearLayout actionbar;
     private ArrayList<String> mListItems;
+    private Drawable actionbarDrawble;
+    private int change;
 
     public static float clamp(float value, float max, float min) {
         return Math.max(Math.min(value, min), max);
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mMinHeaderHeight = getResources().getDimensionPixelSize(R.dimen.min_header_height);
         mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.header_height);
         mMinHeaderTranslation = -mMinHeaderHeight + getActionBarHeight();
+        firstTime = false;
     }
 
     @Override
@@ -81,7 +88,13 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         tab = (LinearLayout) rootView.findViewById(R.id.tabs);
         profileButton = (CustomButton) rootView.findViewById(R.id.profile_button);
         donationRecordButton = (CustomButton) rootView.findViewById(R.id.donation_record_button);
-        mHeaderLogo = (ImageView) rootView.findViewById(R.id.header_logo);
+        mHeaderLogo = (LinearLayout) rootView.findViewById(R.id.header_logo);
+        mHeaderTitle = (CustomTextView) rootView.findViewById(R.id.username);
+        actionbarDrawble = getResources().getDrawable(
+                R.drawable.actionbar_background);
+        actionbarDrawble.setAlpha(0);
+        actionbar = (LinearLayout) rootView.findViewById(R.id.actionbar);
+        actionbar.setBackgroundDrawable(actionbarDrawble);
         mSpannableString = new SpannableString(getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(null);
@@ -89,12 +102,11 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         userDatabase.open();
         userInfo = userDatabase.getAllUserItem();
         userDatabase.close();
+        origin[1] = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics());
+        change = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics()) - getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_default_height_material));
         mListView = (ListView) rootView.findViewById(R.id.listView);
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
-        donationRecordButton.getLocationInWindow(origin);
-        Log.e("origin", origin[0] + " " + origin[1]);
-        donationRecordButton.layout(donationRecordButton.getLeft() - 10, donationRecordButton.getTop() - 100, donationRecordButton.getRight() - 10, donationRecordButton.getBottom() - 100);
-        //origin[1]=donationRecordButton.getTop()+origin[1];
+        Log.e("origin", origin[1] + "");
         mListView.addHeaderView(placeHolderView);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setDisplayShowTitleEnabled(false);
@@ -108,7 +120,6 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(inflater.inflate(R.layout.profile_actionbar, null, false));
-        firstTime = false;
         return rootView;
     }
 
@@ -123,6 +134,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         list.add(getActivity().getResources().getString(R.string.blood_group));
         list.add(getActivity().getResources().getString(R.string.total_donation));
         list.add("");
+        firstTime = false;
         mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
 
@@ -148,8 +160,12 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         return mActionBarHeight;
     }
 
-    private ImageView getActionBarIconView() {
-        return (ImageView) rootView.findViewById(R.id.header_logos);
+    private LinearLayout getActionBarIconView() {
+        return (LinearLayout) rootView.findViewById(R.id.header_logos);
+    }
+
+    private CustomTextView getActionBarTitleView() {
+        return (CustomTextView) rootView.findViewById(R.id.username_title);
     }
 
     @Override
@@ -162,15 +178,22 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
         int scrollY = getScrollY(view);
+
         ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
         ViewHelper.setTranslationY(tab, Math.max(-scrollY, mMinHeaderTranslation));
-        ViewHelper.setTranslationY(donationRecordButton, Math.max(-scrollY, mMinHeaderTranslation));
-        donationRecordButton.layout((int) donationRecordButton.getX(), (int) donationRecordButton.getY(), (int) donationRecordButton.getX() + donationRecordButton.getMeasuredWidth(), (int) donationRecordButton.getY() + donationRecordButton.getMeasuredHeight());
-
+        float ratio1 = ((float) Math.min(Math.max(-Math.max(-scrollY, mMinHeaderTranslation), 0),
+                change) / change);
+        Log.e("ratio", ((float) Math.min(Math.max(-Math.max(-scrollY, mMinHeaderTranslation), 0),
+                change) / change) + "");
+        actionbarDrawble.setAlpha((int) (ratio1 * 255));
+        donationRecordButton.layout((int) donationRecordButton.getX(), origin[1] + Math.max(-scrollY, mMinHeaderTranslation), (int) donationRecordButton.getX() + donationRecordButton.getMeasuredWidth(), (int) origin[1] + donationRecordButton.getMeasuredHeight() + Math.max(-scrollY, mMinHeaderTranslation));
+        profileButton.layout((int) profileButton.getX(), origin[1] + Math.max(-scrollY, mMinHeaderTranslation), (int) profileButton.getX() + profileButton.getMeasuredWidth(), (int) origin[1] + profileButton.getMeasuredHeight() + Math.max(-scrollY, mMinHeaderTranslation));
         Log.e("Trans", Math.max(-scrollY, mMinHeaderTranslation) + " " + origin[1]);
         float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
         interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio), -scrollY);
-        setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
+        mHeaderTitle.setTextColor(Color.argb((int)
+                ((clamp(5.0F * (1.0f - ratio) - 4.0F, 0.0F, 1.0F)) * 255), 0x2e, 0x2e, 0x2e));
+        setTitleAlpha(clamp(4.5F * ratio - 4.0F, 0.0F, 1.0F));
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -179,8 +202,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
 
     private void setTitleAlpha(float alpha) {
         mAlphaForegroundColorSpan.setAlpha(alpha);
-        mSpannableString.setSpan(mAlphaForegroundColorSpan, 0, mSpannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(mSpannableString);
+        Log.e("alpha", alpha + "");
+        getActionBarTitleView().setTextColor(Color.argb((int) (alpha * 255), 0xf1, 0xf1, 0xf1));
     }
 
     public int getScrollY(AbsListView view) {

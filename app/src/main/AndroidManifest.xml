@@ -84,6 +84,7 @@
         <activity
             android:name="com.project.bluepandora.blooddonation.activities.MainActivity"
             android:icon="@null"
+            android:screenOrientation="portrait"
             android:theme="@style/ThemeFeed" />
     </application>
 
