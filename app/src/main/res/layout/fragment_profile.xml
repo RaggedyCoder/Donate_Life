@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
+    <RelativeLayout
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <ViewSwitcher
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:layout_marginTop="5dip"
+                android:background="@drawable/panel"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" />
+        </ViewSwitcher>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/header"
@@ -16,20 +36,68 @@
         <com.flavienlaurent.notboringactionbar.KenBurnsSupportView
             android:id="@+id/header_picture"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dip" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dip"
+            android:layout_gravity="bottom"
+            android:background="#e5e5e5">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="48dip"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:background="@drawable/tab_background" />
+
+            <LinearLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="48dip"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="4dip"
+                android:background="@color/holo_red_light"
+                android:orientation="horizontal"
+                android:paddingLeft="5dip">
+
+                <com.widget.CustomButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tab_button"
+                    android:padding="10dip"
+                    android:textColor="#e5e5e5"
+                    android:selectAllOnFocus="true"
+                    android:text="Profile"
+
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <com.widget.CustomButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dip"
+                    android:background="@drawable/tab_button"
+                    android:textColor="#e5e5e5"
+                    android:padding="10dip"
+                    android:text="Donation Record"
+                    app:font="MuseoSansRounded-300.otf" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/header_logo"
             android:layout_width="@dimen/header_logo_size"
             android:layout_height="@dimen/header_logo_size"
             android:layout_gravity="center"
-            android:src="@drawable/gradient_background" />
-
-        <com.widget.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="48dip"
-            android:layout_gravity="bottom"
-            android:background="@android:color/transparent" />
+            android:src="@drawable/gradient_background"
+            android:visibility="visible" />
     </FrameLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="@color/holo_red_light" />
 </FrameLayout>

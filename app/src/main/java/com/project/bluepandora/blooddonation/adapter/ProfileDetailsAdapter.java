@@ -80,7 +80,7 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.profile_details, null);
             holder = new ViewHolder();
             holder.profileHeaderHolder = (RelativeLayout) convertView.findViewById(R.id.profile_header_holder);
-            holder.edit = (CustomButton) convertView.findViewById(R.id.profile_edit);
+//            holder.edit = (CustomButton) convertView.findViewById(R.id.profile_edit);
             holder.header = (CustomTextView) convertView.findViewById(R.id.details_header);
             holder.description = (CustomTextView) convertView.findViewById(R.id.details_body);
             convertView.setTag(holder);

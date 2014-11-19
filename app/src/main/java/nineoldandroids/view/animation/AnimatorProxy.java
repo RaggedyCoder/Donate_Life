@@ -3,10 +3,11 @@ package nineoldandroids.view.animation;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.os.Build;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+
+import com.project.bluepandora.util.Utils;
 
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
@@ -20,7 +21,7 @@ public final class AnimatorProxy extends Animation {
     /**
      * Whether or not the current running platform needs to be proxied.
      */
-    public static final boolean NEEDS_PROXY = Integer.valueOf(Build.VERSION.SDK).intValue() < Build.VERSION_CODES.HONEYCOMB;
+    public static final boolean NEEDS_PROXY = Utils.hasHoneycomb();
 
     private static final WeakHashMap<View, AnimatorProxy> PROXIES =
             new WeakHashMap<View, AnimatorProxy>();

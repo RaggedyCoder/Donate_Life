@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape
+            android:dither="true"
+            android:shape="rectangle">
+            <solid android:color="@color/holo_red_light" />
+
+        </shape>
+    </item>
+    <item android:bottom="5dip">
+        <shape
+            android:dither="true"
+            android:shape="rectangle">
+            <solid android:color="@color/holo_red_light" />
+            <padding android:bottom="2dip" />
+        </shape>
+    </item>
+
+</layer-list>

@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#cc3333"
         android:orientation="horizontal">
 
         <com.widget.CustomTextView
@@ -23,31 +22,32 @@
             android:clickable="false"
             android:gravity="left|center"
             android:text="@string/profile_details"
-            android:textColor="#f8f8f8"
             android:textSize="22sp"
             android:textStyle="bold"
             app:font="MuseoSansRounded-700.otf" />
 
-        <com.widget.CustomButton
+        <ImageButton
             android:id="@id/profile_edit"
-            style="@style/ActionBarButtonStyle"
+            android:layout_margin="10dip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dip"
             android:clickable="true"
             android:gravity="right|center"
-            android:text="@string/profile_edit"
-            android:textColor="#f8f8f8"
             android:textSize="22sp"
             android:textStyle="bold"
+            android:background="@drawable/ic_create_grey600_36dp"
             app:font="MuseoSansRounded-700.otf" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="vertical">
 
         <com.widget.CustomTextView
@@ -66,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:text="@string/dummy_blood_group_ID"
+            android:paddingBottom="5dip"
             android:textSize="18sp"
             app:font="MuseoSansRounded-300.otf" />
     </LinearLayout>

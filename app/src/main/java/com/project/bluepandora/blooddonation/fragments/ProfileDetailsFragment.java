@@ -6,14 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.SparseArrayCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,32 +16,33 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.flavienlaurent.notboringactionbar.AlphaForegroundColorSpan;
 import com.flavienlaurent.notboringactionbar.KenBurnsSupportView;
+import com.project.bluepandora.blooddonation.adapter.ProfileDetailsAdapter;
+import com.project.bluepandora.blooddonation.data.UserInfoItem;
+import com.project.bluepandora.blooddonation.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.R;
-import com.widget.PagerSlidingTabStrip;
 import com.widget.ScrollTabHolder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import nineoldandroids.view.ViewHelper;
 
 
-public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder, ViewPager.OnPageChangeListener {
+public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder, AbsListView.OnScrollListener {
 
     private static AccelerateDecelerateInterpolator sSmoothInterpolator = new AccelerateDecelerateInterpolator();
 
     private KenBurnsSupportView mHeaderPicture;
     private View mHeader;
 
-    private PagerSlidingTabStrip mPagerSlidingTabStrip;
-    private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
-
     private int mActionBarHeight;
     private int mMinHeaderHeight;
     private int mHeaderHeight;
     private int mMinHeaderTranslation;
-    private ImageView mHeaderLogo;
 
     private RectF mRect1 = new RectF();
     private RectF mRect2 = new RectF();
@@ -56,6 +52,12 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private AlphaForegroundColorSpan mAlphaForegroundColorSpan;
 
     private View rootView;
+
+    private UserDataSource userDatabase;
+    private ArrayList<UserInfoItem> userInfo;
+    private ListView mListView;
+    private ArrayList<String> mListItems;
+
 
     public static float clamp(float value, float max, float min) {
         return Math.max(Math.min(value, min), max);
@@ -67,7 +69,6 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mMinHeaderHeight = getResources().getDimensionPixelSize(R.dimen.min_header_height);
         mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.header_height);
         mMinHeaderTranslation = -mMinHeaderHeight + getActionBarHeight();
-        mPagerAdapter = new PagerAdapter(this.getFragmentManager());
     }
 
     @Override
@@ -75,25 +76,33 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         mHeaderPicture = (KenBurnsSupportView) rootView.findViewById(R.id.header_picture);
         mHeaderPicture.setResourceIds(R.drawable.gradient_background, R.drawable.gradient_background);
-        mHeaderLogo = (ImageView) rootView.findViewById(R.id.header_logo);
         mHeader = rootView.findViewById(R.id.header);
-        mPagerSlidingTabStrip = (PagerSlidingTabStrip) rootView.findViewById(R.id.tabs);
-        mViewPager = (ViewPager) rootView.findViewById(R.id.pager);
-        mPagerAdapter.setTabHolderScrollingContent(this);
-        mPagerSlidingTabStrip.setOnPageChangeListener(this);
-        mViewPager.setAdapter(mPagerAdapter);
-        mPagerSlidingTabStrip.setViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(2);
         mSpannableString = new SpannableString(getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
         ViewHelper.setAlpha(getActionBarIconView(), 0f);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(null);
+        userDatabase = new UserDataSource(getActivity());
+        userDatabase.open();
+        userInfo = userDatabase.getAllUserItem();
+        userDatabase.close();
+        mListView = (ListView) rootView.findViewById(R.id.listView);
+        View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
+        mListView.addHeaderView(placeHolderView);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mListView.setOnScrollListener(this);
+        List<String> list = new ArrayList<String>();
+        list.add(getActivity().getResources().getString(R.string.full_name));
+        list.add(getActivity().getResources().getString(R.string.mobile_number));
+        list.add(getActivity().getResources().getString(R.string.area_name));
+        list.add(getActivity().getResources().getString(R.string.blood_group));
+        list.add(getActivity().getResources().getString(R.string.total_donation));
+        list.add("");
+        mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
 
     @Override
@@ -126,39 +135,20 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     }
 
     @Override
-    public void onPageScrolled(int i, float v, int i2) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        SparseArrayCompat<ScrollTabHolder> scrollTabHolders = mPagerAdapter.getScrollTabHolders();
-        ScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
-        if (currentHolder == null) {
-            Log.e("error", "null" + position);
-        }
-        currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper.getTranslationY(mHeader)));
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int i) {
-
-    }
-
-    @Override
     public void adjustScroll(int scrollHeight) {
-
+        if (scrollHeight == 0 && mListView.getFirstVisiblePosition() >= 1) {
+            return;
+        }
+        mListView.setSelectionFromTop(1, scrollHeight);
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mViewPager.getCurrentItem() == pagePosition) {
             int scrollY = getScrollY(view);
             ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
             float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
-            interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio));
+        //interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio));
             setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
-        }
     }
 
     @Override
@@ -209,50 +199,14 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         ViewHelper.setScaleY(view1, scaleY);
     }
 
-    private class PagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {"Profile", "Donation Record"};
-        private SparseArrayCompat<ScrollTabHolder> mScrollTabHolders;
-        private ScrollTabHolder mListener;
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-        public PagerAdapter(FragmentManager fm) {
-            super(fm);
-            mScrollTabHolders = new SparseArrayCompat<ScrollTabHolder>();
-        }
-        public void setTabHolderScrollingContent(ScrollTabHolder listener) {
-            mListener = listener;
-        }
+    }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return TITLES[position];
-        }
-
-        @Override
-        public int getCount() {
-            return TITLES.length;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            ScrollTabHolderFragment fragment;
-            if (position == 0) {
-                fragment = (ScrollTabHolderFragment) ProfileFragment.newInstance();
-
-            } else {
-                fragment = (ScrollTabHolderFragment) SampleListFragment.newInstance(position);
-
-            }
-            mScrollTabHolders.put(position, fragment);
-            if (mListener != null) {
-                fragment.setScrollTabHolder(mListener);
-
-            }
-            return fragment;
-        }
-
-        public SparseArrayCompat<ScrollTabHolder> getScrollTabHolders() {
-            return mScrollTabHolders;
-        }
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        this.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, 1);
     }
 }
