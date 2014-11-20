@@ -117,17 +117,20 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
         Log.e("origin", origin[1] + "");
         mListView.addHeaderView(placeHolderView);
-        switcher.setInAnimation(getActivity(), R.anim.to_left);
-        switcher.setOutAnimation(getActivity(), R.anim.out_right);
+
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!profile) {
+
                     switcher.showPrevious();
                     profile = true;
                     record = false;
                     profileButton.setSelected(true);
                     donationRecordButton.setSelected(false);
+                    switcher.setInAnimation(getActivity(), R.anim.to_left);
+                    switcher.setOutAnimation(getActivity(), R.anim.out_right);
+
                 }
             }
         });
@@ -135,14 +138,14 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             @Override
             public void onClick(View v) {
                 if (!record) {
+
                     switcher.showNext();
                     profile = false;
                     record = true;
                     profileButton.setSelected(false);
                     donationRecordButton.setSelected(true);
-                    mGridView.layout(mListView.getChildAt(0).getLeft(), mListView.getChildAt(0).getTop()
-                            , mListView.getChildAt(0).getLeft() + mGridView.getMeasuredWidth()
-                            , mListView.getChildAt(0).getTop() + mGridView.getMeasuredHeight());
+                    switcher.setInAnimation(getActivity(), R.anim.to_right);
+                    switcher.setOutAnimation(getActivity(), R.anim.out_left);
                 }
             }
         });
