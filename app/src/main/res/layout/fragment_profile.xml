@@ -36,7 +36,7 @@
                 android:horizontalSpacing="0dip"
                 android:numColumns="2"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="0dip" />
+                android:verticalSpacing="2.5dip" />
         </ViewSwitcher>
     </RelativeLayout>
 
@@ -128,6 +128,8 @@
                 android:layout_margin="3dip"
                 android:gravity="center"
                 android:text="@string/dummy_name"
+                android:layout_marginLeft="5dip"
+                android:padding="2.5dip"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 app:font="MuseoSansRounded-700.otf" />
@@ -176,6 +178,7 @@
             android:layout_height="48dip"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="4dip"
+            android:layout_marginLeft="5dip"
             android:background="@drawable/tab_button"
             android:padding="10dip"
             android:selectAllOnFocus="true"
@@ -189,7 +192,7 @@
             android:layout_height="48dip"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="4dip"
-            android:layout_marginLeft="5dip"
+            android:layout_marginLeft="10dip"
             android:layout_toRightOf="@+id/profile_button"
             android:background="@drawable/tab_button"
             android:padding="10dip"

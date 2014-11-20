@@ -70,6 +70,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private GridView mGridView;
     private Drawable actionbarDrawble;
     private int change;
+    private boolean profile = true;
+    private boolean record = false;
+
 
     public static float clamp(float value, float max, float min) {
         return Math.max(Math.min(value, min), max);
@@ -110,12 +113,42 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         userDatabase.open();
         userInfo = userDatabase.getAllUserItem();
         userDatabase.close();
+        mHeaderTitle.setText(userInfo.get(0).getFirstName());
+        ((CustomTextView) rootView.findViewById(R.id.username_title)).setText(userInfo.get(0).getFirstName());
         origin[1] = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics());
         change = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics()) - getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_default_height_material));
         mListView = (ListView) rootView.findViewById(R.id.listView);
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
         Log.e("origin", origin[1] + "");
         mListView.addHeaderView(placeHolderView);
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!profile) {
+                    switcher.showPrevious();
+                    profile = true;
+                    record = false;
+                    profileButton.setSelected(true);
+                    donationRecordButton.setSelected(false);
+                }
+            }
+        });
+        donationRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!record) {
+                    switcher.showNext();
+                    profile = false;
+                    record = true;
+                    profileButton.setSelected(false);
+                    donationRecordButton.setSelected(true);
+                    mGridView.layout(mListView.getChildAt(0).getLeft(), mListView.getChildAt(0).getTop()
+                            , mListView.getChildAt(0).getLeft() + mGridView.getMeasuredWidth()
+                            , mListView.getChildAt(0).getTop() + mGridView.getMeasuredHeight());
+                }
+            }
+        });
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setDisplayShowTitleEnabled(false);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
@@ -143,16 +176,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         list.add(getActivity().getResources().getString(R.string.blood_group));
         list.add(getActivity().getResources().getString(R.string.total_donation));
         list.add("");
-        list.add(getActivity().getResources().getString(R.string.full_name));
-        list.add(getActivity().getResources().getString(R.string.mobile_number));
-        list.add(getActivity().getResources().getString(R.string.area_name));
-        list.add(getActivity().getResources().getString(R.string.blood_group));
-        list.add(getActivity().getResources().getString(R.string.total_donation));
-        list.add("");
-
-
+        profileButton.setSelected(true);
         firstTime = false;
-        switcher.showNext();
+
         mGridView.setAdapter(new DonationRecordAdapter(getActivity(), list));
         mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
