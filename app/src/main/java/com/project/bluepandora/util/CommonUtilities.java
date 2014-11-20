@@ -19,7 +19,7 @@ package com.project.bluepandora.util;
 import android.content.Context;
 import android.content.Intent;
 
-import com.project.bluepandora.blooddonation.helpers.URL;
+import com.project.bluepandora.donatelife.helpers.URL;
 
 public final class CommonUtilities {
 

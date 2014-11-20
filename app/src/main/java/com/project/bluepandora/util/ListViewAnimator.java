@@ -7,9 +7,9 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.Transformation;
 
-import com.project.bluepandora.blooddonation.adapter.FeedListAdapter;
-import com.project.bluepandora.blooddonation.adapter.FeedListAdapter.ViewHolder;
-import com.project.bluepandora.blooddonation.data.Item;
+import com.project.bluepandora.donatelife.adapter.FeedListAdapter;
+import com.project.bluepandora.donatelife.adapter.FeedListAdapter.ViewHolder;
+import com.project.bluepandora.donatelife.data.Item;
 
 import java.util.List;
 

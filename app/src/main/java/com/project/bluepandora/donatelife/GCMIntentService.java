@@ -24,10 +24,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.project.bluepandora.blooddonation.activities.MainActivity;
-import com.project.bluepandora.blooddonation.data.UserInfoItem;
-import com.project.bluepandora.blooddonation.datasource.UserDataSource;
-import com.project.bluepandora.blooddonation.services.ServerUtilities;
+import com.project.bluepandora.donatelife.activities.MainActivity;
+import com.project.bluepandora.donatelife.data.UserInfoItem;
+import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.services.ServerUtilities;
 import com.project.bluepandora.util.CommonUtilities;
 
 public class GCMIntentService extends GCMBaseIntentService {

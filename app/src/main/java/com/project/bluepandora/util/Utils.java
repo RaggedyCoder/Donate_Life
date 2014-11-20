@@ -20,7 +20,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.StrictMode;
 
-import com.project.bluepandora.blooddonation.activities.MainActivity;
+import com.project.bluepandora.donatelife.activities.MainActivity;
 
 /**
  * This class contains static utility methods.
