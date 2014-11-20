@@ -23,7 +23,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_grey600_36dp" />
+                android:src="@drawable/ic_add_circle_outline_grey600_48dp" />
         </RelativeLayout>
 
     </LinearLayout>

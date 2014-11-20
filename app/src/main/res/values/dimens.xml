@@ -7,6 +7,7 @@
     <dimen name="slidingmenu_offset">50dp</dimen>
     <dimen name="pass_dimen">20sp</dimen>
     <dimen name="header_height">310dip</dimen>
+    <dimen name="footer_height">50dip</dimen>
     <dimen name="min_header_height">250dp</dimen>
     <dimen name="header_logo_size">120dp</dimen>
 

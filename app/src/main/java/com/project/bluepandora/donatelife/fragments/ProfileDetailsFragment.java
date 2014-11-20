@@ -40,7 +40,7 @@ import nineoldandroids.view.ViewHelper;
 
 public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder, AbsListView.OnScrollListener {
 
-    private static AccelerateDecelerateInterpolator sSmoothInterpolator = new AccelerateDecelerateInterpolator();
+    private static final AccelerateDecelerateInterpolator sSmoothInterpolator = new AccelerateDecelerateInterpolator();
     int[] origin = new int[2];
     boolean firstTime = false;
     private ImageView mHeaderPicture;
@@ -115,6 +115,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         change = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics()) - getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_default_height_material));
         mListView = (ListView) rootView.findViewById(R.id.listView);
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
+        View footerView = inflater.inflate(R.layout.view_footer_placeholder, mListView, false);
+        mListView.addFooterView(footerView);
         Log.e("origin", origin[1] + "");
         mListView.addHeaderView(placeHolderView);
 
