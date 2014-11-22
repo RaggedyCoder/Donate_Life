@@ -87,6 +87,10 @@
 
     </style>
 
+    <style name="ThemeSettings" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/holo_red_light</item>
+    </style>
+
     <style name="ThemeFeedback" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/holo_red_light</item>
     </style>

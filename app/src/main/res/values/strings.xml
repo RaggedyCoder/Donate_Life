@@ -80,7 +80,6 @@
     <string name="registration">Register</string>
     <!--  -->
     <string name="send_feedback">Send</string>
-
     <!--  -->
     <string name="register_name_first">First Name</string>
     <!--  -->
@@ -181,4 +180,20 @@
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
 
+    <!-- -->
+
+    <string name="pref_request_feed">Feed Option and Filtering</string>
+    <string name="pref_notification">Notification Options</string>
+    <string name="pref_key_feed_show_limit">%d request feeds at a time</string>
+    <string name="pref_title_feed_show">Feed Limit</string>
+    <string name="pref_title_feed_district_filter">District Filtering</string>
+    <string name="pref_title_feed_blood_group_filter">Blood Group Filtering</string>
+    <string name="pref_title_notification_receive_filter">Push Notification</string>
+    <string name="pref_title_notification_vibration">Vibration</string>
+    <string name="pref_title_notification_ringtone">Ringtone</string>
+    <string name="pref_feed_district_filter">Filter the blood feed by own District</string>
+    <string name="pref_feed_blood_group_filter">Filter the blood feed by own Blood Group</string>
+    <string name="pref_notification_receive_filter">Receive the notification of blood request</string>
+    <string name="pref_notification_vibration">Vibrate on notification receive</string>
+    <string name="pref_notification_ringtone">Notification sound</string>
 </resources>

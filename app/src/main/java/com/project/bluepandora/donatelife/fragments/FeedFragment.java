@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -196,6 +197,7 @@ public class FeedFragment extends Fragment {
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
+        Log.e("TAG", PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("pref_key_feed_show_limit", 43) + "");
         try {
             Cache cache = AppController.getInstance().getRequestQueue()
                     .getCache();

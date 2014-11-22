@@ -107,8 +107,8 @@ public class MainActivity extends ActionBarActivity {
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "mContent");
         }
-        GCMRegistrar.checkDevice(this);
-        GCMRegistrar.checkManifest(this);
+//        GCMRegistrar.checkDevice(this);
+        //      GCMRegistrar.checkManifest(this);
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 CommonUtilities.DISPLAY_MESSAGE_ACTION));
         final String regId = GCMRegistrar.getRegistrationId(this);
@@ -426,6 +426,13 @@ public class MainActivity extends ActionBarActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             listAdapter.setSelected(position);
+            if (position == 4) {
+                Intent intent =
+                        new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                mDrawerLayout.closeDrawer(mDrawerListView);
+                return;
+            }
             if (position == 5) {
                 Intent intent =
                         new Intent(MainActivity.this, FeedbackActivity.class);

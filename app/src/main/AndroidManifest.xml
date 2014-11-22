@@ -86,6 +86,11 @@
             android:icon="@null"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFeed" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:icon="@null"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
     </application>
 
 

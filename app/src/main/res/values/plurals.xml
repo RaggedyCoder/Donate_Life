@@ -7,4 +7,7 @@
         <item quantity="other">(%d Bags)</item>
     </plurals>
 
+    <plurals name="numbers">
+        <item quantity="other">%d request feeds at a time</item>
+    </plurals>
 </resources>

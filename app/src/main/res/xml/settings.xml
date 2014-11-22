@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_request_feed"
+        android:key="pref_key_feed_settings">
+        <SwitchPreference
+            android:key="pref_filter_district"
+            android:summary="@string/pref_feed_district_filter"
+            android:title="@string/pref_title_feed_district_filter"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_filter_blood_group"
+            android:summary="@string/pref_feed_blood_group_filter"
+            android:title="@string/pref_title_feed_blood_group_filter"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_notification"
+        android:key="pref_key_notification_settings">
+        <SwitchPreference
+            android:key="pref_filter_notification"
+            android:summary="@string/pref_notification_receive_filter"
+            android:title="@string/pref_title_notification_receive_filter"
+            android:defaultValue="false" />
+        <RingtonePreference
+            android:key="pref_filter_ringtone"
+            android:summary="@string/pref_notification_ringtone"
+            android:dependency="pref_filter_notification"
+            android:title="@string/pref_title_notification_ringtone"
+            android:showDefault="true" />
+        <CheckBoxPreference
+            android:key="pref_filter_vibration"
+            android:dependency="pref_filter_notification"
+            android:summary="@string/pref_notification_vibration"
+            android:title="@string/pref_title_notification_vibration"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

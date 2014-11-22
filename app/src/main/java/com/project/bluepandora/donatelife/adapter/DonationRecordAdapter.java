@@ -2,7 +2,6 @@ package com.project.bluepandora.donatelife.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,24 +50,22 @@ public class DonationRecordAdapter extends BaseAdapter {
         }
         convertView = inflater.inflate(R.layout.grid_item, null);
         if (position >= 0 && position <= 1)
-            convertView.setLayoutParams(new GridView.LayoutParams(250,
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                            310, activity.getResources().getDisplayMetrics())));
+            convertView.setLayoutParams(new GridView.LayoutParams(
+                    250, activity.getResources().getDimensionPixelOffset(R.dimen.header_height)));
         else {
-            convertView.setLayoutParams(new GridView.LayoutParams(235,
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                            310 / 2, activity.getResources().getDisplayMetrics())));
+            convertView.setLayoutParams(new GridView.LayoutParams(
+                    activity.getResources().getDisplayMetrics().widthPixels / 2,
+                    activity.getResources().getDisplayMetrics().widthPixels / 2));
         }
         if (position + 1 == getCount()) {
+
             convertView = inflater.inflate(R.layout.grid_item_add, null);
-            convertView.setLayoutParams(new GridView.LayoutParams(235,
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                            310 / 2, activity.getResources().getDisplayMetrics())));
+            convertView.setLayoutParams(new GridView.LayoutParams(
+                    activity.getResources().getDisplayMetrics().widthPixels / 2,
+                    activity.getResources().getDisplayMetrics().widthPixels / 2));
         }
         return convertView;
     }
-
-
     static class ViewHolder {
 
     }
