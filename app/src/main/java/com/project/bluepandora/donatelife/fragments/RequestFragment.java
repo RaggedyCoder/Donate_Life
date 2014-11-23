@@ -36,7 +36,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -74,10 +73,9 @@ import java.util.HashMap;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class RequestFragment extends Fragment implements MainActivity.DrawerSlideListners {
+public class RequestFragment extends Fragment implements MainActivity.DrawerSlideListeners {
 
     private static final String NO_HOSPITAL_TAG = "Sorry No Hospital Name is available for this City";
-
     private Spinner district;
     private Spinner blood;
     private Spinner hospital;
@@ -91,7 +89,6 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private ArrayList<HospitalItem> hospitalItems;
     private ArrayList<UserInfoItem> userInfoItems;
     private ArrayList<String> amounts;
-    private ArrayList<String> dummy;
 
     private ArrayAdapter<String> amountAdapter;
 
@@ -106,12 +103,10 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
 
     private Drawable mActionBarBackgroundDrawable;
     private CustomTextView mTitle;
-    private LinearLayout mCustomHomeAsUp;
     private int currentAlpha;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         getActivity().setTheme(R.style.ThemeFeed);
         super.onCreate(savedInstanceState);
     }
@@ -122,14 +117,12 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
 
         final View rootView = inflater.inflate(R.layout.fragment_request,
                 container, false);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
-                "Blood Request");
-
         district = (Spinner) rootView.findViewById(R.id.district_spinner);
         blood = (Spinner) rootView.findViewById(R.id.blood_group_spinner);
         hospital = (Spinner) rootView.findViewById(R.id.hospital_spinner);
         amount = (Spinner) rootView.findViewById(R.id.amount_spinner);
         doneButton = (CustomButton) rootView.findViewById(R.id.done_button);
+        CustomScrollView sc = (CustomScrollView) rootView.findViewById(R.id.scrollview);
         emergencyCheck = (CheckBox) rootView
                 .findViewById(R.id.emergency_checkBox);
         emergencyCheck.isChecked();
@@ -158,43 +151,29 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         districtDatabase.open();
         distItems = districtDatabase.getAllDistrictItem();
         districtDatabase.close();
-
-        mActionBarBackgroundDrawable = getResources().getDrawable(
-                R.drawable.actionbar_background);
+        mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar_background);
         currentAlpha = 255;
         mActionBarBackgroundDrawable.setAlpha(currentAlpha);
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
-        View mCustomView = mInflater.inflate(R.layout.request_feed_actionbar,
-                null);
-        mTitle = (CustomTextView) mCustomView
-                .findViewById(R.id.actionbar_title_text);
-        mCustomHomeAsUp = (LinearLayout) mCustomView
-                .findViewById(R.id.actionbar_title);
+        View mCustomView = mInflater.inflate(R.layout.request_feed_actionbar, null);
+        mTitle = (CustomTextView) mCustomView.findViewById(R.id.actionbar_title_text);
         mTitle.setText(R.string.blood_request);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setBackgroundDrawable(mActionBarBackgroundDrawable);
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setDisplayShowTitleEnabled(false);
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setDisplayShowHomeEnabled(false);
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setDisplayHomeAsUpEnabled(true);
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setHomeButtonEnabled(false);
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setDisplayShowCustomEnabled(true);
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setCustomView(mCustomView);
-        } else {
-            ((ActionBarActivity) getActivity()).getSupportActionBar()
-                    .setBackgroundDrawable(mActionBarBackgroundDrawable);
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
-                    "Request Blood");
-
-        }
-        CustomScrollView sc = (CustomScrollView) rootView
-                .findViewById(R.id.scrollview);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
+                "Blood Request");
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setBackgroundDrawable(mActionBarBackgroundDrawable);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowTitleEnabled(false);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowHomeEnabled(false);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setHomeButtonEnabled(false);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowCustomEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setCustomView(mCustomView);
 
         sc.setOnScrollChangedListener(new OnScrollChangedListener() {
 
@@ -262,7 +241,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                             getActivity(),
                             "Sorry Blood Request is not availble for your city.",
                             Toast.LENGTH_SHORT).show();
-                    return;
+
                 } else {
                     // mobileNumber(String)
                     // groupId(Integer)
@@ -282,31 +261,11 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                                 @Override
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-                                    HashMap<String, String> params = new HashMap<String, String>();
-                                    params.put(URL.REQUEST_NAME,
-                                            URL.ADD_BLOODREQUEST_PARAM);
-                                    params.put(URL.MOBILE_TAG, userInfoItems
-                                            .get(0).getMobileNumber());
-                                    params.put(URL.GROUPID_TAG,
-                                            blood.getSelectedItemId() + "");
-                                    params.put(URL.AMOUNT_TAG,
-                                            (String) amount.getSelectedItem());
-                                    params.put(URL.HOSPITALID_TAG,
-                                            hospital.getSelectedItemId() + "");
-                                    params.put(URL.EMERGENCY_TAG,
-                                            emergencyCheck.isChecked() ? "1"
-                                                    : "0");
-                                    params.put(URL.PASSWORD_TAG, userInfoItems
-                                            .get(0).getKeyWord());
-                                    bloodRequest(params);
-                                    Log.d(RequestFragment.class.getSimpleName(),
-                                            params.toString());
-
+                                    bloodRequest(createParams());
                                 }
                             });
                     Dialog dialog = d.create();
                     dialog.show();
-
                 }
             }
         });
@@ -326,6 +285,18 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
 
             }
         });
+    }
+
+    private HashMap<String, String> createParams() {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put(URL.REQUEST_NAME, URL.ADD_BLOODREQUEST_PARAM);
+        params.put(URL.MOBILE_TAG, userInfoItems.get(0).getMobileNumber());
+        params.put(URL.GROUPID_TAG, blood.getSelectedItemId() + "");
+        params.put(URL.AMOUNT_TAG, (String) amount.getSelectedItem());
+        params.put(URL.HOSPITALID_TAG, hospital.getSelectedItemId() + "");
+        params.put(URL.EMERGENCY_TAG, emergencyCheck.isChecked() ? "1" : "0");
+        params.put(URL.PASSWORD_TAG, userInfoItems.get(0).getKeyWord());
+        return params;
     }
 
     public void bloodRequest(HashMap<String, String> params) {
@@ -373,12 +344,12 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     }
 
     @Override
-    public void onDrawerslide(float offset) {
+    public void onDrawerSlide(float offset) {
         final int newAlpha = (int) (currentAlpha + (offset * (255 - currentAlpha)));
-        final int newAlphatext = (int) (currentAlpha + (offset * (255 - currentAlpha)));
+        final int newAlphaText = (int) (currentAlpha + (offset * (255 - currentAlpha)));
         if (mActionBarBackgroundDrawable != null && mTitle != null) {
             mActionBarBackgroundDrawable.setAlpha(newAlpha);
-            mTitle.setTextColor(Color.argb(newAlphatext, 0xff, 0xff, 0xff));
+            mTitle.setTextColor(Color.argb(newAlphaText, 0xff, 0xff, 0xff));
         }
     }
 }

@@ -2,13 +2,11 @@ package com.project.bluepandora.donatelife.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +30,21 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 public class FeedbackActivity extends ActionBarActivity {
 
 
@@ -40,7 +52,7 @@ public class FeedbackActivity extends ActionBarActivity {
     private CustomTextView textCounter;
     private CustomEditText feedback;
     private CustomButton sendFeedback;
-    private UserDataSource userDatabase;
+    protected UserDataSource userDatabase;
     /**
      * A {@link ProgressDialog} for showing the user background work is going on.
      */
@@ -59,6 +71,9 @@ public class FeedbackActivity extends ActionBarActivity {
         userDatabase.open();
         mobileNumber.setText(userDatabase.getAllUserItem().get(0).getMobileNumber());
         userDatabase.close();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         sendFeedback.setEnabled(false);
         feedback.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,10 +140,6 @@ public class FeedbackActivity extends ActionBarActivity {
         });
     }
 
-    @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -137,11 +148,14 @@ public class FeedbackActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 

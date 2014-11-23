@@ -88,8 +88,8 @@ public class MainActivity extends ActionBarActivity {
     };
     public ActionBar act;
     public Fragment mContent;
-    public int prevpos = 0;
-    protected DrawerSlideListners mDrawerSlideListners;
+    public int prevPos = 0;
+    protected DrawerSlideListeners mDrawerSlideListeners;
     DrawerLayout mDrawerLayout;
     ListView mDrawerListView;
     ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -107,8 +107,8 @@ public class MainActivity extends ActionBarActivity {
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "mContent");
         }
-//        GCMRegistrar.checkDevice(this);
-        //      GCMRegistrar.checkManifest(this);
+        //GCMRegistrar.checkDevice(this);
+        //GCMRegistrar.checkManifest(this);
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 CommonUtilities.DISPLAY_MESSAGE_ACTION));
         final String regId = GCMRegistrar.getRegistrationId(this);
@@ -162,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
         listAdapter = new SlideMenuAdapter(this, slideItems);
         mDrawerListView.setAdapter(listAdapter);
         if (mContent instanceof RequestFragment) {
-            mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+            mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
         }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -181,7 +181,7 @@ public class MainActivity extends ActionBarActivity {
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 if (mContent instanceof RequestFragment) {
-                    ((DrawerSlideListners) mContent).onDrawerslide(slideOffset);
+                    ((DrawerSlideListeners) mContent).onDrawerSlide(slideOffset);
                 }
                 Log.d(TAG, "" + slideOffset);
             }
@@ -212,14 +212,14 @@ public class MainActivity extends ActionBarActivity {
                 .replace(R.id.frame_container, mContent).commit();
         if (mContent instanceof FeedFragment) {
             listAdapter.setSelected(0);
-            prevpos = 0;
+            prevPos = 0;
         } else if (mContent instanceof RequestFragment) {
-            mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+            mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
             listAdapter.setSelected(1);
-            prevpos = 1;
+            prevPos = 1;
         } else if (mContent instanceof ProfileFragment) {
             listAdapter.setSelected(2);
-            prevpos = 2;
+            prevPos = 2;
         }
     }
 
@@ -324,6 +324,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
+        if (mDrawerLayout.isDrawerOpen(mDrawerListView)) {
+            mDrawerLayout.closeDrawer(mDrawerListView);
+            return;
+        }
         if (backPressed) {
             finish();
             AppController.getInstance().getRequestQueue().getCache()
@@ -349,13 +353,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void switchContent() {
-        prevpos = 1;
+        prevPos = 1;
         listAdapter.setSelected(1);
         mContent = fragments.get(1);
         mDrawerListView.setItemChecked(1, true);
         mDrawerListView.setSelection(1);
         mDrawerLayout.closeDrawer(mDrawerListView);
-        mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+        mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.grow, R.anim.dim)
                 .replace(R.id.frame_container, mContent).commit();
@@ -387,37 +391,27 @@ public class MainActivity extends ActionBarActivity {
         }
         FeedFragment.slideChange = true;
         if (pos == 1) {
-            mDrawerSlideListners = (DrawerSlideListners) fragments.get(1);
+            mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
         }
-        if (pos == 2) {
-            mContent = new ProfileDetailsFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left,
-                            R.anim.slide_out_right)
-                    .replace(R.id.frame_container, mContent).commit();
-        } else {
-            if ((mContent instanceof ProfileDetailsFragment)) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_left,
-                                R.anim.slide_out_right)
-                        .remove(mContent).commit();
-            }
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left,
                         R.anim.slide_out_right)
                 .replace(R.id.frame_container, fragments.get(pos)).commit();
-            mContent = fragments.get(pos);
-        }
+        mContent = fragments.get(pos);
         mDrawerListView.setItemChecked(pos, true);
         mDrawerListView.setSelection(pos);
         mDrawerLayout.closeDrawer(mDrawerListView);
     }
 
-    public interface DrawerSlideListners {
-        public void onDrawerslide(float offset);
+    public interface DrawerSlideListeners {
+        public void onDrawerSlide(float offset);
+    }
+
+    @Override
+    protected void onPause() {
+        AppController.getInstance().cancelPendingRequests();
+        super.onPause();
     }
 
     private class ListItemListner implements ListView.OnItemClickListener {
@@ -440,13 +434,20 @@ public class MainActivity extends ActionBarActivity {
                 mDrawerLayout.closeDrawer(mDrawerListView);
                 return;
             }
+            if (position == 6) {
+                Intent intent =
+                        new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
+                mDrawerLayout.closeDrawer(mDrawerListView);
+                return;
+            }
             if (position > 3) {
                 mDrawerLayout.closeDrawer(mDrawerListView);
                 return;
             }
-            if (prevpos != position) {
+            if (prevPos != position) {
                 switchContent(position);
-                prevpos = position;
+                prevPos = position;
             } else {
                 mDrawerLayout.closeDrawer(mDrawerListView);
             }

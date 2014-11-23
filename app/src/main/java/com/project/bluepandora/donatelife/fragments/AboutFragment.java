@@ -1,17 +1,18 @@
 package com.project.bluepandora.donatelife.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.adapter.AboutAdapter;
+import com.project.bluepandora.donatelife.data.AboutItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
@@ -28,46 +29,47 @@ import com.project.bluepandora.donatelife.R;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class SettingsFragment extends PreferenceFragment {
+public class AboutFragment extends ListFragment {
 
+    private List<AboutItem> aboutItems;
     private View rootView;
-    private Toolbar actionbar;
-    private View.OnClickListener mOnClickListener;
+    private AboutAdapter mAdapter;
 
-    public SettingsFragment() {
+    public AboutFragment() {
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.activity_settings_legacy, container, false);
-        actionbar = (Toolbar) rootView.findViewById(R.id.actionbar);
-        return rootView;
+        rootView = inflater.inflate(R.layout.about_list, container, false);
+        aboutItems = new ArrayList<AboutItem>();
+        String[] header = getResources().getStringArray(R.array.about_list_header);
+        String[] body = getResources().getStringArray(R.array.about_list_body);
+        for (int i = 0; i < header.length; i++) {
+            AboutItem aboutItem = new AboutItem();
+            aboutItem.setHeader(header[i]);
+            aboutItem.setBody(body[i]);
+            aboutItems.add(aboutItem);
+        }
+        mAdapter = new AboutAdapter(getActivity(), aboutItems);
+        return super.onCreateView(inflater, container, savedInstanceState);
+//        WebView wv = (WebView)findViewById(R.id.the_webview);
+        //      wv.loadUrl("file:///android_asset/myweb.html");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        actionbar.setTitle("Settings");
-        actionbar.setTitleTextColor(Color.WHITE);
-        actionbar.setNavigationOnClickListener(mOnClickListener);
-        actionbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
+        getListView().setAdapter(mAdapter);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        };
     }
 }

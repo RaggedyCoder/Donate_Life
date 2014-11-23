@@ -11,6 +11,23 @@
         <item>About</item>
     </string-array>
 
+    <string-array name="about_list_header">
+        <item>Donate Life</item>
+        <item>Terms of Service</item>
+        <item>Privacy Policy</item>
+        <item>Usage Policy</item>
+        <item>Open Source Licenses</item>
+        <item>About Developers</item>
+    </string-array>
+    <string-array name="about_list_body">
+        <item>Version 1.1.1 | build 20141128</item>
+        <item>""</item>
+        <item>""</item>
+        <item>""</item>
+        <item>legal information about licenses</item>
+        <item>Name and contact</item>
+    </string-array>
+
     <array name="nav_drawer_icons">
         <item>@drawable/ic_card_feed_white_18dp</item>
         <item>@drawable/ic_request_blood_white_18dp</item>

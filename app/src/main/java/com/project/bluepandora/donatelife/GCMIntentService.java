@@ -21,10 +21,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.project.bluepandora.donatelife.activities.MainActivity;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.services.ServerUtilities;
@@ -60,17 +62,18 @@ public class GCMIntentService extends GCMBaseIntentService {
         notification.setLatestEventInfo(context, title, message, intent);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
+
         // Play default notification sound
         notification.defaults |= Notification.DEFAULT_SOUND;
 
         // notification.sound = Uri.parse("android.resource://" +
         // context.getPackageName() + "your_sound_file_name.mp3");
-
         // Vibrate if vibrate is enabled
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notification.ledARGB |= Notification.DEFAULT_LIGHTS;
+        if (PreferenceManager.getDefaultSharedPreferences(
+                context).getBoolean(SettingsActivity.VIBRATION_TAG, false)) {
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+        }
         notificationManager.notify(0, notification);
-
     }
 
     /**
@@ -116,7 +119,11 @@ public class GCMIntentService extends GCMBaseIntentService {
         // notifies user
         //Toast.makeText(context, context.getPackageName(), Toast.LENGTH_SHORT).show();
         //CommonUtilities.displayMessage(context, message);
-        generateNotification(context, message);
+
+        if (PreferenceManager.getDefaultSharedPreferences(
+                context).getBoolean(SettingsActivity.NOTIFICATION_TAG, true)) {
+            generateNotification(context, message);
+        }
 
     }
 
@@ -129,7 +136,10 @@ public class GCMIntentService extends GCMBaseIntentService {
         String message = getString(R.string.gcm_deleted, total);
         CommonUtilities.displayMessage(context, message);
         // notifies user
-        generateNotification(context, message);
+        if (PreferenceManager.getDefaultSharedPreferences(
+                context).getBoolean(SettingsActivity.NOTIFICATION_TAG, true)) {
+            generateNotification(context, message);
+        }
     }
 
     /**

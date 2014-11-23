@@ -55,6 +55,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.activities.MainActivity;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.adapter.FeedListAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.BloodItem;
@@ -62,9 +63,11 @@ import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.FeedItem;
 import com.project.bluepandora.donatelife.data.HospitalItem;
 import com.project.bluepandora.donatelife.data.Item;
+import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.HospitalDataSource;
+import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.project.bluepandora.util.Utils;
@@ -112,6 +115,7 @@ public class FeedFragment extends Fragment {
     private CustomTextView mTitle;
     private View mCustomView;
     private OnRefreshListener mOnFeedRefresh;
+    public UserInfoItem userInfo;
 
     public FeedFragment() {
 
@@ -121,6 +125,10 @@ public class FeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         feedItems = new ArrayList<Item>();
+        UserDataSource data = new UserDataSource(getActivity());
+        data.open();
+        userInfo = data.getAllUserItem().get(0);
+        data.close();
 
     }
 
@@ -197,7 +205,6 @@ public class FeedFragment extends Fragment {
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
-        Log.e("TAG", PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("pref_key_feed_show_limit", 43) + "");
         try {
             Cache cache = AppController.getInstance().getRequestQueue()
                     .getCache();
@@ -497,7 +504,10 @@ public class FeedFragment extends Fragment {
             for (int i = 0; i < feedArray.length(); i++) {
 
                 JSONObject feedObj = (JSONObject) feedArray.get(i);
-
+                boolean distFilter = PreferenceManager.getDefaultSharedPreferences(
+                        getActivity()).getBoolean(SettingsActivity.DISTRICT_FILTER_TAG, false);
+                boolean groupFiter = PreferenceManager.getDefaultSharedPreferences(
+                        getActivity()).getBoolean(SettingsActivity.GROUP_FILTER_TAG, false);
                 FeedItem item = new FeedItem();
                 String mobile = feedObj.getString("mobileNumber");
                 item.setContact(mobile);
@@ -511,6 +521,9 @@ public class FeedFragment extends Fragment {
                 item.setEmergency(emergency);
                 BloodItem bi = new BloodItem();
                 bi.setBloodId(new Integer(feedObj.getString("groupId")));
+                if (groupFiter && userInfo.getGroupId() != bi.getBloodId()) {
+                    continue;
+                }
                 BloodItem exbi = bloodDatabase.cursorToBloodItem(bloodDatabase
                         .bloodItemToCursor(bi));
                 item.setBloodGroup(exbi.getBloodName());
@@ -528,8 +541,10 @@ public class FeedFragment extends Fragment {
                         .cursorToDistrictItem(districtDatabase
                                 .districtItemToCursor(di));
 
+                if (distFilter && userInfo.getDistId() != exdi.getDistId()) {
+                    continue;
+                }
                 item.setHospital(exhi.getHospitalName());
-
                 item.setArea(exdi.getDistName());
                 feedItems.add(item);
             }

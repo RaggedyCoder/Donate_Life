@@ -19,21 +19,15 @@ package com.project.bluepandora.util;
 import android.content.Context;
 import android.content.Intent;
 
-import com.project.bluepandora.donatelife.helpers.URL;
-
 public final class CommonUtilities {
 
-    // give your server registration url here
-    public static final String SERVER_URL = URL.URL;
 
     // Google project id
     public static final String SENDER_ID = "59777463250";
-
     /**
      * Tag used on log messages.
      */
     public static final String TAG = "DonateLife GCM";
-
     public static final String DISPLAY_MESSAGE_ACTION =
             "com.project.bluepandora.donatelife.DISPLAY_MESSAGE";
     public static final String EXTRA_MESSAGE = "message";
