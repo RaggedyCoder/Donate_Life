@@ -4,6 +4,18 @@
     <!--  -->
     <string name="app_name">Donate Life</string>
     <!--  -->
+    <string name="app_version">1.1.1</string>
+    <!--  -->
+    <string name="app_info">Info</string>
+    <string name="app_copyright">2014 Blue Pandora Inc</string>
+
+    <!--  -->
+    <string name="app_version_code">Version 1.1.1</string>
+    <string name="the_doctor">The Doctor</string>
+    <string name="coder_bd">coder.bd</string>
+    <string name="about_developer">Developer Team</string>
+
+    <!--  -->
     <string name="emergency_text">EMERGENCY</string>
     <!--  -->
     <string name="non_emergency_text"></string>

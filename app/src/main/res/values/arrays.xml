@@ -21,9 +21,9 @@
     </string-array>
     <string-array name="about_list_body">
         <item>Version 1.1.1 | build 20141128</item>
-        <item>""</item>
-        <item>""</item>
-        <item>""</item>
+        <item></item>
+        <item></item>
+        <item>Donate Life is for personal and non-commercial use only.</item>
         <item>legal information about licenses</item>
         <item>Name and contact</item>
     </string-array>

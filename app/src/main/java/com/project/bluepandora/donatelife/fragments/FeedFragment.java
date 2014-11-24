@@ -46,8 +46,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Cache.Entry;
 import com.android.volley.Request.Method;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -83,7 +81,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,30 +202,7 @@ public class FeedFragment extends Fragment {
                 .setDisplayShowHomeEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
-        try {
-            Cache cache = AppController.getInstance().getRequestQueue()
-                    .getCache();
-            Entry entry = cache.get(URL.URL);
-            if (entry != null) {
-                Log.d(TAG, "not null");
-                try {
-                    String data = new String(entry.data, "UTF-8");
-                    try {
-                        json = new JSONObject(data);
-                        Log.d(TAG, json.toString(1));
-                        parseJsonFeed(json);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                json = jsonObjectRequest();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
+        jsonObjectRequest();
         final AnimationListener animListners = new AnimationListener() {
 
             @Override
@@ -380,9 +354,8 @@ public class FeedFragment extends Fragment {
                             getActivity(), R.anim.grow));
                 }
             }, 800);
-
         }
-
+        jsonObjectRequest();
     }
 
     private JSONObject jsonObjectRequest() {
@@ -570,5 +543,6 @@ public class FeedFragment extends Fragment {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
                     .show();
         }
+        progress.setVisibility(View.GONE);
     }
 }

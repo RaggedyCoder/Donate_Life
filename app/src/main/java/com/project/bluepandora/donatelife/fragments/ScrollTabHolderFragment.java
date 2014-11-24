@@ -3,7 +3,7 @@ package com.project.bluepandora.donatelife.fragments;
 import android.support.v4.app.Fragment;
 import android.widget.AbsListView;
 
-import com.widget.ScrollTabHolder;
+import com.widget.helper.ScrollTabHolder;
 
 /**
  * Created by tuman on 17/11/2014.

@@ -4,7 +4,9 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.project.bluepandora.donatelife.R;
@@ -43,6 +45,8 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         setTitle("Settings");
         if (Utils.hasHoneycomb()) {
+            Log.e("Settings", PreferenceManager.getDefaultSharedPreferences(
+                    this).getBoolean(SettingsActivity.NOTIFICATION_TAG, true) + "");
             getFragmentManager().beginTransaction()
                     .replace(android.R.id.content, new SettingsFragment()).commit();
         } else {

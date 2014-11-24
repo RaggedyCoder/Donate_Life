@@ -26,6 +26,7 @@ public class AboutActivity extends ActionBarActivity {
 
     private static final String FRAGMENT_TAG = "mContent";
     private Fragment mContent;
+    private BackPressImp mbackPressImp;
 
     public AboutActivity() {
 
@@ -40,14 +41,28 @@ public class AboutActivity extends ActionBarActivity {
         } else {
             mContent = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_TAG);
         }
-
+        mbackPressImp = (BackPressImp) mContent;
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.container, mContent).commit();
+    }
+
+    public interface BackPressImp {
+        public boolean onBackPressed();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_TAG, mContent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mbackPressImp.onBackPressed()) {
+            finish();
+            super.onBackPressed();
+        } else {
+
+        }
     }
 }

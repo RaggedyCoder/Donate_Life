@@ -51,7 +51,7 @@ public class AboutAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.sliding_menu_row, null);
+            convertView = inflater.inflate(R.layout.about_list_item, null);
             holder = new ViewHolder();
             holder.header = (CustomTextView) convertView.findViewById(R.id.about_header);
             holder.body = (CustomTextView) convertView.findViewById(R.id.about_body);
@@ -59,8 +59,9 @@ public class AboutAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.header.setText(items.get(position).getHeader());
-        holder.body.setText(items.get(position).getBody());
+        AboutItem item = items.get(position);
+        holder.header.setText(item.getHeader());
+        holder.body.setText(item.getBody());
         return convertView;
     }
 

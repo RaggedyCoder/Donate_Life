@@ -63,22 +63,25 @@ public class DonationRecordAdapter extends BaseAdapter {
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        convertView = inflater.inflate(R.layout.grid_item, null);
-        if (position >= 0 && position <= 1)
+
+        if (position >= 0 && position <= 1) {
+            convertView = new View(activity);
             convertView.setLayoutParams(new GridView.LayoutParams(
                     250, activity.getResources().getDimensionPixelOffset(R.dimen.header_height)));
-        else {
-            convertView.setLayoutParams(new GridView.LayoutParams(
-                    activity.getResources().getDisplayMetrics().widthPixels / 2,
-                    activity.getResources().getDisplayMetrics().widthPixels / 2));
-        }
-        if (position + 1 == getCount()) {
+
+        } else if (position + 1 == getCount()) {
 
             convertView = inflater.inflate(R.layout.grid_item_add, null);
             convertView.setLayoutParams(new GridView.LayoutParams(
                     activity.getResources().getDisplayMetrics().widthPixels / 2,
                     activity.getResources().getDisplayMetrics().widthPixels / 2));
+        } else {
+            convertView = inflater.inflate(R.layout.grid_item, null);
+            convertView.setLayoutParams(new GridView.LayoutParams(
+                    activity.getResources().getDisplayMetrics().widthPixels / 2,
+                    activity.getResources().getDisplayMetrics().widthPixels / 2));
         }
+
         return convertView;
     }
 

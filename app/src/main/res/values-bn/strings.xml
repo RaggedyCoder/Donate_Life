@@ -4,6 +4,14 @@
     <!--  -->
     <string name="app_name">ডোনেট লাইফ</string>
     <!--  -->
+    <string name="app_version">১.১.১</string>
+    <!--  -->
+    <string name="app_info">তথ্য</string>
+    <string name="app_copyright">২০১৪ ব্লু প্যান্ডোরা ইন.</string>
+    <!--  -->
+    <string name="app_version_code">ভার্সন ১.১.১</string>
+
+    <!--  -->
     <string name="emergency_text">জরুরী</string>
     <string name="emergency_char">E</string>
     <!--  -->

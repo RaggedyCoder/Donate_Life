@@ -34,6 +34,7 @@
                 android:columnWidth="90dp"
                 android:gravity="center"
                 android:horizontalSpacing="0dip"
+                android:listSelector="@android:color/transparent"
                 android:numColumns="2"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="2.5dip" />
@@ -59,7 +60,7 @@
             android:layout_gravity="bottom"
             android:background="#f1f1f1">
 
-        <ImageView
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
                 android:layout_alignParentBottom="true"

@@ -30,7 +30,7 @@ import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.widget.CustomButton;
 import com.widget.CustomTextView;
-import com.widget.ScrollTabHolder;
+import com.widget.helper.ScrollTabHolder;
 
 import java.util.ArrayList;
 import java.util.List;

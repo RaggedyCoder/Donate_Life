@@ -107,8 +107,8 @@ public class MainActivity extends ActionBarActivity {
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "mContent");
         }
-        //GCMRegistrar.checkDevice(this);
-        //GCMRegistrar.checkManifest(this);
+        GCMRegistrar.checkDevice(this);
+        GCMRegistrar.checkManifest(this);
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 CommonUtilities.DISPLAY_MESSAGE_ACTION));
         final String regId = GCMRegistrar.getRegistrationId(this);
