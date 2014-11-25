@@ -170,10 +170,13 @@
     <string name="blood_request">Request Blood</string>
     <string name="profile">Profile</string>
     <string name="hospital">Hospital</string>
-    <string name="loading">Loading\.\.\.</string>
-    <string name="availability">Checking Availability\.\.\.</string>
+    <string name="loading">Loading...</string>
+    <string name="processing">Request on Process...</string>
+    <string name="TimeoutError">Request not proceed.Check your Internet Connection.</string>
+    <string name="NoInternet">Check your Internet connection.</string>
+    <string name="availability">Checking Availability...</string>
     <string name="delete_request">Delete Request</string>
-    <string name="progressing">Progressing\.\.\.</string>
+    <string name="progressing">Progressing...</string>
 
 
     <!-- -->

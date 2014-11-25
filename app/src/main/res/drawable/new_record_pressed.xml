@@ -5,23 +5,21 @@
         <shape
             android:dither="true"
             android:shape="rectangle">
-            <corners android:radius="3.0dip" />
-
-            <solid android:color="@color/holo_blue_light" />
+            <corners android:radius="2.0dip" />
+            <solid android:color="#777777" />
             <padding
-                android:bottom="1.5dip"
-                android:left="1.5dip"
-                android:right="1.5dip"
-                android:top="1.5dip" />
+                android:bottom="5dip"
+                android:left="5dip"
+                android:right="5dip"
+                android:top="5dip" />
         </shape>
     </item>
     <item>
         <shape
             android:dither="true"
             android:shape="rectangle">
-            <corners android:radius="1.5dip" />
-            <solid android:color="@color/holo_gray_dark" />
+            <corners android:radius="2.0dip" />
+            <solid android:color="#e2e2e2" />
         </shape>
     </item>
-
 </layer-list>

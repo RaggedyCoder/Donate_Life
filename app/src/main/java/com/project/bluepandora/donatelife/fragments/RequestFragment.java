@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -101,6 +102,8 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private DistrictSpinnerAdapter districtAdapter;
     private HospitalSpinnerAdapter hospitalAdapter;
 
+    private ProgressDialog pd;
+
     private Drawable mActionBarBackgroundDrawable;
     private CustomTextView mTitle;
     private int currentAlpha;
@@ -160,6 +163,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         mTitle.setText(R.string.blood_request);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
                 "Blood Request");
+
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setBackgroundDrawable(mActionBarBackgroundDrawable);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
@@ -262,6 +266,8 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
                                     bloodRequest(createParams());
+                                    createProgressDialog();
+                                    pd.show();
                                 }
                             });
                     Dialog dialog = d.create();
@@ -313,13 +319,18 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getActivity(), response.toString(),
                                 Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), error.toString(),
-                        Toast.LENGTH_LONG).show();
+                pd.dismiss();
+                if (error.toString().contains("TimeoutError")) {
+                    createAlertDialog(getResources().getString(R.string.TimeoutError));
+                } else if (error.toString().contains("UnknownHostException")) {
+                    createAlertDialog(getResources().getString(R.string.NoInternet));
+                }
             }
         });
         AppController.getInstance().addToRequestQueue(jsonReq);
@@ -346,6 +357,22 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                     hospitalItems);
             hospital.setAdapter(hospitalAdapter);
         }
+    }
+
+    private void createAlertDialog(String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage(message);
+        alertDialog.setNeutralButton("Ok", null);
+        alertDialog.show();
+    }
+
+    private void createProgressDialog() {
+        pd = new ProgressDialog(getActivity());
+        pd.setMessage(getActivity().getResources().getString(R.string.processing));
+        pd.setIndeterminate(false);
+        pd.setCancelable(false);
+        pd.show();
     }
 
     @Override

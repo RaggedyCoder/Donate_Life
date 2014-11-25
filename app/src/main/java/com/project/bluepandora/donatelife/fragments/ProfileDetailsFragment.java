@@ -2,6 +2,9 @@ package com.project.bluepandora.donatelife.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -17,24 +20,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.adapter.DonationRecordAdapter;
 import com.project.bluepandora.donatelife.adapter.ProfileDetailsAdapter;
+import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.URL;
+import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomButton;
+import com.widget.CustomEditText;
 import com.widget.CustomTextView;
 import com.widget.helper.ScrollTabHolder;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import nineoldandroids.view.ViewHelper;
@@ -84,8 +100,14 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private LinearLayout actionbar;
     private ArrayList<String> mListItems;
     private GridView mGridView;
+    private CustomButton addDonationRecord;
+    private CustomEditText donationdetails;
     private Drawable actionbarDrawble;
     private int change;
+    private Dialog donationAddDialog;
+    private DatePicker donationDate;
+    private View addDRView;
+    private ProgressDialog pd;
     private boolean profile = true;
     private boolean record = false;
 
@@ -104,6 +126,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         firstTime = false;
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -124,6 +147,13 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mSpannableString = new SpannableString(getString(R.string.app_name));
         ((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(null);
         userDatabase = new UserDataSource(getActivity());
+        donationAddDialog = new Dialog(getActivity());
+        addDRView = inflater.inflate(R.layout.donation_record, null);
+        donationDate = (DatePicker) addDRView.findViewById(R.id.donation_date_picker);
+        donationdetails = (CustomEditText) addDRView.findViewById(R.id.donation_details);
+        addDonationRecord = (CustomButton) addDRView.findViewById(R.id.donation_add_button);
+        donationDate.setMaxDate(System.currentTimeMillis());
+        donationAddDialog.setContentView(addDRView);
         userDatabase.open();
         userInfo = userDatabase.getAllUserItem();
         userDatabase.close();
@@ -133,8 +163,11 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         donationDatabase.close();
         mHeaderTitle.setText(userInfo.get(0).getFirstName());
         ((CustomTextView) rootView.findViewById(R.id.username_title)).setText(userInfo.get(0).getFirstName());
-        origin[1] = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics());
-        change = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics()) - getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_default_height_material));
+        origin[1] = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                310 - 48 - 4, getActivity().getResources().getDisplayMetrics());
+        change = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                310 - 48 - 4, getActivity().getResources().getDisplayMetrics()) - getResources().
+                getDimensionPixelOffset(R.dimen.abc_action_bar_default_height_material));
         mListView = (ListView) rootView.findViewById(R.id.listView);
         View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, mListView, false);
         View footerView = inflater.inflate(R.layout.view_footer_placeholder, mListView, false);
@@ -155,9 +188,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                     record = false;
                     profileButton.setSelected(true);
                     donationRecordButton.setSelected(false);
+                    mListView.smoothScrollToPositionFromTop(0, -getScrollY(mGridView), 0);
                     switcher.setInAnimation(getActivity(), R.anim.to_left);
                     switcher.setOutAnimation(getActivity(), R.anim.out_right);
-
                 }
             }
         });
@@ -170,6 +203,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                     record = true;
                     profileButton.setSelected(false);
                     donationRecordButton.setSelected(true);
+                    mGridView.smoothScrollToPositionFromTop(0, -getScrollY(mListView), 0);
                     Log.e("TAG", getScrollY(mListView) + " " + getScrollY(mGridView));
                     switcher.setInAnimation(getActivity(), R.anim.to_right);
                     switcher.setOutAnimation(getActivity(), R.anim.out_left);
@@ -190,7 +224,6 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                 .setCustomView(inflater.inflate(R.layout.profile_actionbar, null, false));
         return rootView;
     }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -208,11 +241,43 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             donationInfo.add(new DRItem());
             donationInfo.add(new DRItem());
             donationInfo.add(new DRItem());
+            donationInfo.add(new DRItem());
+            donationInfo.add(new DRItem());
+            donationInfo.add(new DRItem());
         } else {
             donationInfo.set(0, new DRItem());
             donationInfo.set(0, new DRItem());
             donationInfo.add(new DRItem());
         }
+        addDonationRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //yyyy-MM-dd HH:mm:ss
+                String reqTime = "" + donationDate.getYear() + "-" + donationDate.getMonth() + "-"
+                        + donationDate.getDayOfMonth() + " " + "00:00:00";
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(URL.REQUEST_NAME, URL.ADD_DONATIONRECORD_REQUEST);
+                params.put(URL.DONATION_DATE_PARAM, reqTime);
+                params.put(URL.DONATION_DETAILS_PARAM, donationdetails.getText().toString());
+                params.put(URL.MOBILE_TAG, userInfo.get(0).getMobileNumber());
+                params.put(URL.PASSWORD_TAG, userInfo.get(0).getKeyWord());
+                createProgressDialog();
+                Toast.makeText(getActivity(), params.toString(), Toast.LENGTH_LONG).show();
+                pd.show();
+                addDonationRecord(params);
+            }
+        });
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mGridView.getCount() == (position + 1)) {
+                    donationAddDialog.show();
+
+                    Log.e("TAG", donationDate.getDayOfMonth() + "");
+                }
+
+            }
+        });
         mGridView.setAdapter(new DonationRecordAdapter(getActivity(), donationInfo));
         mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
@@ -259,7 +324,10 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
         int scrollY = getScrollY(view);
+        change(scrollY);
+    }
 
+    private void change(int scrollY) {
         ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
         ViewHelper.setTranslationY(tab, Math.max(-scrollY, mMinHeaderTranslation));
         float ratio1 = ((float) Math.min(Math.max(-Math.max(-scrollY, mMinHeaderTranslation), 0),
@@ -294,12 +362,10 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         }
         int firstVisiblePosition = view.getFirstVisiblePosition();
         int top = c.getTop();
-
         int headerHeight = 0;
         if (firstVisiblePosition >= 1) {
             headerHeight = mHeaderHeight;
         }
-
         return -top + firstVisiblePosition * c.getHeight() + headerHeight;
     }
 
@@ -331,4 +397,48 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         this.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, 1);
     }
+
+    private void addDonationRecord(HashMap<String, String> params) {
+
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getActivity(), response.toString(),
+                                Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                if (error.toString().contains("TimeoutError")) {
+                    createAlertDialog(getResources().getString(R.string.TimeoutError));
+                } else if (error.toString().contains("UnknownHostException")) {
+                    createAlertDialog(getResources().getString(R.string.NoInternet));
+                }
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonReq);
+    }
+
+    private void createProgressDialog() {
+        pd = new ProgressDialog(getActivity());
+        pd.setMessage(getActivity().getResources().getString(R.string.processing));
+        pd.setIndeterminate(false);
+        pd.setCancelable(false);
+        pd.show();
+    }
+
+    private void createAlertDialog(String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage(message);
+        alertDialog.setNeutralButton("Ok", null);
+        alertDialog.show();
+    }
+
+
 }

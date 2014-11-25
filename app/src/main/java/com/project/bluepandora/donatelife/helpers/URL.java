@@ -20,8 +20,11 @@ public interface URL {
     public static final String REQUEST_NAME = "requestName";
     public static final String MOBILE_TAG = "mobileNumber";
     public static final String GCM_TAG = "gcmId";
+    public static final String ADD_DONATIONRECORD_REQUEST = "addDonationRecord";
+    public static final String DONATION_DATE_PARAM = "donateionDate";
     public static final String DISTRICTID_TAG = "distId";
     public static final String GROUPID_TAG = "groupId";
+    public static final String DONATION_DETAILS_PARAM = "donationDetail";
     public static final String AMOUNT_TAG = "amount";
     public static final String HOSPITALID_TAG = "hospitalId";
     public static final String EMERGENCY_TAG = "emergency";

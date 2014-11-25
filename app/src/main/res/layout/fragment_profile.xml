@@ -31,11 +31,10 @@
                 android:id="@+id/grid_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:columnWidth="90dp"
                 android:gravity="center"
                 android:horizontalSpacing="0dip"
-                android:listSelector="@android:color/transparent"
                 android:numColumns="2"
+                android:listSelector="@android:color/transparent"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="2.5dip" />
         </ViewSwitcher>

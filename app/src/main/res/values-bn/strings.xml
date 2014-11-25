@@ -152,7 +152,10 @@
     <string name="profile">প্রোফাইল</string>
     <string name="hospital">হাসপাতাল</string>
     <string name="loading">লোড হচ্ছে...</string>
-    <string name="availability">আইডি প্রাপ্যতা দেখা হচ্ছে\.\.\.</string>
+    <string name="processing">আবেদনটি করা হচ্ছে...</string>
+    <string name="TimeoutError">আবেদনটি সম্পন্ন হয়নি। আপনার ইন্টারনেট কানেকশনটি পুনরায় দেখুন।</string>
+    <string name="NoInternet">আপনার ইন্টারনেট সংযোগটি সচল কিনা লক্ষ্য করুন।</string>
+    <string name="availability">আইডি প্রাপ্যতা দেখা হচ্ছে...</string>
     <string name="delete_request">মুছে ফেলার অনুরোধ</string>
     <string name="progressing">কাজ হচ্ছে...</string>
 
