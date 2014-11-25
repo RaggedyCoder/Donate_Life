@@ -91,7 +91,7 @@
         <item name="colorPrimary">@color/holo_red_light</item>
     </style>
 
-    <style name="ThemeAbout" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="ThemeAbout" parent="@style/Theme.AppCompat">
         <item name="colorPrimary">@color/holo_red_light</item>
     </style>
 

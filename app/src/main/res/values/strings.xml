@@ -12,7 +12,11 @@
     <!--  -->
     <string name="app_version_code">Version 1.1.1</string>
     <string name="the_doctor">The Doctor</string>
+    <string name="the_doctor_email">sajid.sust.cse@gmail.com</string>
+
     <string name="coder_bd">coder.bd</string>
+    <string name="coder_bd_email">biswajit.sust@gmail.com</string>
+
     <string name="about_developer">Developer Team</string>
 
     <!--  -->

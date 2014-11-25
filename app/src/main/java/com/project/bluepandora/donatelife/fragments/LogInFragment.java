@@ -307,8 +307,8 @@ public class LogInFragment extends Fragment {
 
     private void parseJsonregdata(JSONObject response) {
         try {
-            boolean data = response.getBoolean("reg");
-            if (data) {
+            int data = response.getInt("reg");
+            if (data == 1) {
                 if (password.getText().length() == 0) {
                     password.setError(getActivity().getResources().getString(
                             R.string.Warning_enter_a_password));
@@ -407,7 +407,6 @@ public class LogInFragment extends Fragment {
                     public void onResponse(JSONObject response) {
 
                         VolleyLog.d(TAG, "Response: " + response.toString());
-
 
                         if (params.containsValue(URL.BLOODLIST_PARAM)) {
                             parse.parseJsonBlood(response);

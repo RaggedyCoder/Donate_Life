@@ -35,20 +35,25 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.widget.CustomTextView
+                <com.widget.CustomButton
+                    android:id="@+id/the_doctor_facebook"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
+                    android:background="@android:color/transparent"
                     android:layout_height="wrap_content"
                     app:font="MuseoSansRounded-300.otf"
-                    android:layout_marginTop="15dip"
                     android:text="@string/the_doctor"
                     android:textSize="26sp" />
 
-                <com.widget.CustomTextView
+                <com.widget.CustomButton
+                    android:id="@+id/the_doctor_email"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:layout_marginBottom="15dip"
                     app:font="MuseoSansRounded-300.otf"
-                    android:text="@string/app_version_code"
+                    android:text="@string/the_doctor_email"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -58,7 +63,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="15dip"
+            android:layout_marginTop="20dip"
             android:layout_marginBottom="15dip"
             android:orientation="horizontal">
 
@@ -77,20 +82,26 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.widget.CustomTextView
+                <com.widget.CustomButton
+                    android:id="@+id/coder_bd_facebook"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:font="MuseoSansRounded-300.otf"
-                    android:layout_marginTop="15dip"
+                    android:background="@android:color/transparent"
+
                     android:text="@string/coder_bd"
                     android:textSize="26sp" />
 
-                <com.widget.CustomTextView
+                <com.widget.CustomButton
+                    android:id="@+id/coder_bd_email"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dip"
+                    android:background="@android:color/transparent"
                     app:font="MuseoSansRounded-300.otf"
-                    android:text="@string/app_version_code"
+                    android:text="@string/coder_bd_email"
                     android:textSize="15sp" />
             </LinearLayout>
 

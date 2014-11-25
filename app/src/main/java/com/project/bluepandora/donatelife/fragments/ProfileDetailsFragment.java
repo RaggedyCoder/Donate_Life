@@ -26,7 +26,9 @@ import android.widget.ViewSwitcher;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.adapter.DonationRecordAdapter;
 import com.project.bluepandora.donatelife.adapter.ProfileDetailsAdapter;
+import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
+import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.widget.CustomButton;
 import com.widget.CustomTextView;
@@ -37,7 +39,21 @@ import java.util.List;
 
 import nineoldandroids.view.ViewHelper;
 
-
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder, AbsListView.OnScrollListener {
 
     private static final AccelerateDecelerateInterpolator sSmoothInterpolator = new AccelerateDecelerateInterpolator();
@@ -61,7 +77,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private SpannableString mSpannableString;
     private View rootView;
     private UserDataSource userDatabase;
+    private DRDataSource donationDatabase;
     private ArrayList<UserInfoItem> userInfo;
+    private ArrayList<DRItem> donationInfo;
     private ListView mListView;
     private LinearLayout actionbar;
     private ArrayList<String> mListItems;
@@ -109,6 +127,10 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         userDatabase.open();
         userInfo = userDatabase.getAllUserItem();
         userDatabase.close();
+        donationDatabase = new DRDataSource(getActivity());
+        donationDatabase.open();
+        donationInfo = donationDatabase.getAllDRItem();
+        donationDatabase.close();
         mHeaderTitle.setText(userInfo.get(0).getFirstName());
         ((CustomTextView) rootView.findViewById(R.id.username_title)).setText(userInfo.get(0).getFirstName());
         origin[1] = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 310 - 48 - 4, getActivity().getResources().getDisplayMetrics());
@@ -119,7 +141,10 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         mListView.addFooterView(footerView);
         Log.e("origin", origin[1] + "");
         mListView.addHeaderView(placeHolderView);
-
+        profile = true;
+        record = false;
+        switcher.setInAnimation(getActivity(), R.anim.to_left);
+        switcher.setOutAnimation(getActivity(), R.anim.out_right);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,12 +165,12 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             @Override
             public void onClick(View v) {
                 if (!record) {
-
                     switcher.showNext();
                     profile = false;
                     record = true;
                     profileButton.setSelected(false);
                     donationRecordButton.setSelected(true);
+                    Log.e("TAG", getScrollY(mListView) + " " + getScrollY(mGridView));
                     switcher.setInAnimation(getActivity(), R.anim.to_right);
                     switcher.setOutAnimation(getActivity(), R.anim.out_left);
                 }
@@ -179,17 +204,16 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         list.add(getActivity().getResources().getString(R.string.total_donation));
         profileButton.setSelected(true);
         firstTime = false;
-
-        List<String> list2 = new ArrayList<String>();
-        list2.add("");
-        list2.add("");
-        list2.add("");
-        list2.add("");
-        list2.add("");
-        list2.add("");
-        list2.add("");
-
-        mGridView.setAdapter(new DonationRecordAdapter(getActivity(), list2));
+        if (donationInfo.size() == 0) {
+            donationInfo.add(new DRItem());
+            donationInfo.add(new DRItem());
+            donationInfo.add(new DRItem());
+        } else {
+            donationInfo.set(0, new DRItem());
+            donationInfo.set(0, new DRItem());
+            donationInfo.add(new DRItem());
+        }
+        mGridView.setAdapter(new DonationRecordAdapter(getActivity(), donationInfo));
         mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
 
@@ -262,12 +286,12 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         getActionBarTitleView().setTextColor(Color.argb((int) (alpha * 255), 0xf1, 0xf1, 0xf1));
     }
 
+
     public int getScrollY(AbsListView view) {
         View c = view.getChildAt(0);
         if (c == null) {
             return 0;
         }
-
         int firstVisiblePosition = view.getFirstVisiblePosition();
         int top = c.getTop();
 

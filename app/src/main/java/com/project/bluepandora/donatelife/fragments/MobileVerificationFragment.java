@@ -56,7 +56,7 @@ import java.util.HashMap;
 
 /**
  * <p/>
- * This fragment is for the user to veryfing the mobile number.
+ * This fragment is for the user to verifying the mobile number.
  * <p/>
  */
 public class MobileVerificationFragment extends Fragment {
@@ -244,7 +244,7 @@ public class MobileVerificationFragment extends Fragment {
                         VolleyLog.d(TAG, "Response: " + response.toString());
                         pd.dismiss();
                         try {
-                            if (response.getBoolean("reg")) {
+                            if (response.getInt("reg") == 1) {
                                 createAlertDialog("This Mobile is already Registered");
                             } else {
                                 Bundle bundle = new Bundle();
@@ -255,7 +255,6 @@ public class MobileVerificationFragment extends Fragment {
                         } catch (JSONException e) {
                             Log.e(TAG, e.getMessage());
                         }
-                        Toast.makeText(MobileVerificationFragment.this.getActivity(), response.toString(), Toast.LENGTH_SHORT).show();
                     }
 
                 }, new Response.ErrorListener() {

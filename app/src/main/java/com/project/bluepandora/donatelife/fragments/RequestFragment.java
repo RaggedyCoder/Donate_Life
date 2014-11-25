@@ -66,10 +66,10 @@ import com.widget.CustomTextView;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-
-//import android.widget.Toast;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -288,6 +288,9 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     }
 
     private HashMap<String, String> createParams() {
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateNow = new Date();
+        String reqTime = isoFormat.format(dateNow);
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(URL.REQUEST_NAME, URL.ADD_BLOODREQUEST_PARAM);
         params.put(URL.MOBILE_TAG, userInfoItems.get(0).getMobileNumber());
@@ -296,6 +299,8 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         params.put(URL.HOSPITALID_TAG, hospital.getSelectedItemId() + "");
         params.put(URL.EMERGENCY_TAG, emergencyCheck.isChecked() ? "1" : "0");
         params.put(URL.PASSWORD_TAG, userInfoItems.get(0).getKeyWord());
+        params.put(URL.REQUESTTIME_TAG, reqTime);
+        Log.e("MSG", reqTime);
         return params;
     }
 

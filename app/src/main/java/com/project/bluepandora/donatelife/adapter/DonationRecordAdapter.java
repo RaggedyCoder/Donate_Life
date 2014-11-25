@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.data.DRItem;
 
 import java.util.List;
 
@@ -30,24 +31,24 @@ import java.util.List;
 public class DonationRecordAdapter extends BaseAdapter {
 
 
-    List<String> header;
+    List<DRItem> items;
     private Activity activity;
     private LayoutInflater inflater;
 
-    public DonationRecordAdapter(Activity activity, List<String> header) {
+    public DonationRecordAdapter(Activity activity, List<DRItem> items) {
         this.activity = activity;
-        this.header = header;
+        this.items = items;
     }
 
     @Override
     public int getCount() {
-        return header.size();
+        return items.size();
     }
 
 
     @Override
     public Object getItem(int position) {
-        return header.get(position);
+        return items.get(position);
     }
 
     @Override

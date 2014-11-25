@@ -55,8 +55,7 @@ public class AppController extends Application {
     }
 
     public <T> void addToRequestQueue(Request<T> req) {
-        req.setTag(TAG);
-        getRequestQueue().add(req);
+        addToRequestQueue(req, TAG);
     }
 
     public void cancelPendingRequests(Object tag) {

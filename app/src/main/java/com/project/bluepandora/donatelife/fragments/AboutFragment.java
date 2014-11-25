@@ -2,6 +2,8 @@ package com.project.bluepandora.donatelife.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -16,11 +18,10 @@ import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.activities.AboutActivity;
 import com.project.bluepandora.donatelife.adapter.AboutAdapter;
 import com.project.bluepandora.donatelife.data.AboutItem;
+import com.widget.CustomButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import nineoldandroids.animation.Animator;
 
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
@@ -42,13 +43,20 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
     private static boolean licenseView = false;
     private List<AboutItem> aboutItems;
     private View rootView;
+
     private AboutAdapter mAdapter;
     private WebView wv;
     private Animation animOpen;
     private Animation animClose;
     private Dialog versionDialog;
     private Dialog developerDialog;
-    private Animator.AnimatorListener mAnimatorListener;
+    private Animation.AnimationListener mAnimatonListener;
+
+    private CustomButton theDoctorFacebook;
+    private CustomButton coderBdFacebook;
+    private CustomButton theDoctorEmail;
+    private CustomButton coderBdEmail;
+
 
     public AboutFragment() {
 
@@ -74,12 +82,17 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
         mAdapter = new AboutAdapter(getActivity(), aboutItems);
         animOpen = AnimationUtils.loadAnimation(getActivity(), R.anim.dim_grow);
         animClose = AnimationUtils.loadAnimation(getActivity(), R.anim.dim);
+        View view = inflater.inflate(R.layout.developer_info, null);
         versionDialog = new Dialog(getActivity());
         versionDialog.setTitle(R.string.app_info);
         versionDialog.setContentView(R.layout.version_info);
         developerDialog = new Dialog(getActivity());
         developerDialog.setTitle(R.string.about_developer);
-        developerDialog.setContentView(R.layout.developer_info);
+        developerDialog.setContentView(view);
+        theDoctorFacebook = (CustomButton) view.findViewById(R.id.the_doctor_facebook);
+        coderBdFacebook = (CustomButton) view.findViewById(R.id.coder_bd_facebook);
+        theDoctorEmail = (CustomButton) view.findViewById(R.id.the_doctor_email);
+        coderBdEmail = (CustomButton) view.findViewById(R.id.coder_bd_email);
         wv = (WebView) rootView.findViewById(R.id.license_view);
         if (getViewVisibility(wv)) {
             licenseView = true;
@@ -94,22 +107,7 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getListView().setAdapter(mAdapter);
-        animClose.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                wv.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+        animClose.setAnimationListener(mAnimatonListener);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -122,6 +120,40 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
                 } else if (position == 5) {
                     developerDialog.show();
                 }
+            }
+        });
+        theDoctorFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/tumanisdevil"));
+                startActivity(browserIntent);
+            }
+        });
+        coderBdFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/profile.php?id=100000043940885"));
+                startActivity(browserIntent);
+            }
+        });
+        theDoctorEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"sajid.sust.cse@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Donate Life:Contact");
+                startActivity(Intent.createChooser(intent, ""));
+            }
+        });
+        coderBdEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"biswajit.sust@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Donate Life:Contact");
+                startActivity(Intent.createChooser(intent, ""));
             }
         });
     }
@@ -144,5 +176,22 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mAnimatonListener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                wv.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
     }
+
 }
