@@ -25,12 +25,12 @@ public class UserInfoItem implements Item {
     private String lastName;
 
     public UserInfoItem() {
-        // TODO Auto-generated constructor stub
+
     }
 
     public UserInfoItem(String firstName, String lastName, String keyWord,
                         String mobileNumber, int distId, int groupId) {
-        // TODO Auto-generated constructor stub
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.keyWord = keyWord;

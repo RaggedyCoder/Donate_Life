@@ -44,7 +44,9 @@ import com.project.bluepandora.donatelife.activities.MainActivity;
 import com.project.bluepandora.donatelife.activities.SignUpActivity;
 import com.project.bluepandora.donatelife.adapter.CountryListAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
+import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
+import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.jsonperser.JSONParser;
@@ -84,7 +86,8 @@ public class LogInFragment extends Fragment {
     private Spinner countryNameSpinner;
 
     /**
-     * A Custom BaseAdapter{@link com.project.bluepandora.donatelife.adapter.CountryListAdapter} for the countryNameSpinner
+     * A Custom BaseAdapter{@link com.project.bluepandora.donatelife.adapter.CountryListAdapter}
+     * for the countryNameSpinner
      */
     private CountryListAdapter countryListAdapter;
     /**
@@ -377,14 +380,14 @@ public class LogInFragment extends Fragment {
                                     .getString("groupId")));
                             item.setDistId(Integer.parseInt(temp
                                     .getString("distId")));
-                            pd.dismiss();
+                            // pd.dismiss();
                             try {
                                 userDataBase.createUserInfoItem(item);
                                 userDataBase.close();
-                                Intent intent = new Intent(getActivity(),
-                                        MainActivity.class);
-                                getActivity().startActivity(intent);
-                                getActivity().finish();
+                                HashMap<String, String> params = new HashMap<String, String>();
+                                params.put(URL.REQUEST_NAME, URL.GET_DONATION_RECORD_PARAM);
+                                params.put(URL.MOBILE_TAG, item.getMobileNumber());
+                                getJsonData(params);
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
                             }
@@ -395,6 +398,25 @@ public class LogInFragment extends Fragment {
                 }
             }
 
+        }
+    }
+
+    private void parseDonationInfo(JSONObject response) {
+        DRDataSource drDataSource = new DRDataSource(getActivity());
+        drDataSource.open();
+        try {
+            JSONArray array = response.getJSONArray("donationRecord");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                DRItem item = new DRItem();
+                item.setDonationTime(obj.getString("donationDate"));
+                item.setDonationDetails(obj.getString("donationRecord"));
+                drDataSource.createDRItem(item);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            drDataSource.close();
         }
     }
 
@@ -422,6 +444,23 @@ public class LogInFragment extends Fragment {
                                 startActivity(signUpIntent);
                                 signUp = false;
                             }
+                        } else if (params.containsValue(URL.GET_DONATION_RECORD_PARAM)) {
+                            try {
+                                Log.e("TAG", response.toString(1));
+                                if (response.getInt("done") == 1) {
+                                    parseDonationInfo(response);
+                                    Intent intent = new Intent(getActivity(),
+                                            MainActivity.class);
+                                    getActivity().startActivity(intent);
+                                    getActivity().finish();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Intent intent = new Intent(getActivity(),
+                                    MainActivity.class);
+                            getActivity().startActivity(intent);
+                            getActivity().finish();
                         } else if (params.containsValue(""
                                 + password.getText())
                                 && params.containsValue("" + 0

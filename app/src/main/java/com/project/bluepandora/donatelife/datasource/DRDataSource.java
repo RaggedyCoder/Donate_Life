@@ -45,14 +45,26 @@ public class DRDataSource {
         values.put(DataBaseOpenHelper.DONATION_TIME_COLOUMN, donationTime);
         values.put(DataBaseOpenHelper.DONATION_DETAILS_COLOUMN, donationDetails);
         database.insert(DataBaseOpenHelper.DONATION_RECORD_TABLE, null, values);
-        Cursor cursor = database.query(DataBaseOpenHelper.DISTRICT_TABLE,
+        Cursor cursor = database.query(DataBaseOpenHelper.DONATION_RECORD_TABLE,
                 allColumns, DataBaseOpenHelper.DONATION_TIME_COLOUMN + " LIKE "
-                        + donationTime, null, null, null, null);
+                        + "'" + donationTime + "'", null, null, null, null);
         cursor.moveToFirst();
         DRItem item = cursorToDRItem(cursor);
         return item;
     }
 
+    public DRItem createDRItem(DRItem item) {
+        ContentValues values = new ContentValues();
+        values.put(DataBaseOpenHelper.DONATION_TIME_COLOUMN, item.getDonationTime());
+        values.put(DataBaseOpenHelper.DONATION_DETAILS_COLOUMN, item.getDonationDetails());
+        database.insert(DataBaseOpenHelper.DONATION_RECORD_TABLE, null, values);
+        Cursor cursor = database.query(DataBaseOpenHelper.DONATION_RECORD_TABLE,
+                allColumns, DataBaseOpenHelper.DONATION_TIME_COLOUMN + " LIKE "
+                        + "'" + item.getDonationTime() + "'", null, null, null, null);
+        cursor.moveToFirst();
+        DRItem addItem = cursorToDRItem(cursor);
+        return addItem;
+    }
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
@@ -64,7 +76,7 @@ public class DRDataSource {
     public void deleteDistrictitem(DRItem item) {
         String donationTime = item.getDonationTime();
         database.delete(DataBaseOpenHelper.DONATION_RECORD_TABLE,
-                DataBaseOpenHelper.DONATION_TIME_COLOUMN + " = " + donationTime, null);
+                DataBaseOpenHelper.DONATION_TIME_COLOUMN + " LIKE " + "'" + donationTime + "'", null);
     }
 
     public ArrayList<DRItem> getAllDRItem() {

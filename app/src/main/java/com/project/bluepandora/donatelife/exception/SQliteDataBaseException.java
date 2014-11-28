@@ -27,7 +27,6 @@ public class SQliteDataBaseException extends SQLException {
 
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
         return "Problem Occured During BloodDonate Database";
     }
 }

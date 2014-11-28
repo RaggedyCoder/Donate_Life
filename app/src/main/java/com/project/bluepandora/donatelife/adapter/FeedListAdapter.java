@@ -236,7 +236,6 @@ public class FeedListAdapter extends BaseAdapter {
     }
 
     private void createPopupMenu(String contact, ViewHolder holder) {
-        // TODO Auto-generated method stub
         if (contact.equals(userInfo.getMobileNumber())) {
             holder.popupMenu.getMenu().clear();
             holder.popupMenu.getMenuInflater().inflate(

@@ -35,13 +35,13 @@ public class CustomRequest extends Request<JSONObject> {
 
     @Override
     protected void deliverResponse(JSONObject response) {
-        // TODO Auto-generated method stub
+
         listener.onResponse(response);
     }
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-        // TODO Auto-generated method stub
+
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
@@ -56,7 +56,7 @@ public class CustomRequest extends Request<JSONObject> {
 
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
-        // TODO Auto-generated method stub
+
         return params;
     }
 }

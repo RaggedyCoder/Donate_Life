@@ -21,7 +21,7 @@ public class DistrictItem implements Item {
     private String distName;
 
     public DistrictItem() {
-        // TODO Auto-generated constructor stub
+
     }
 
     public DistrictItem(int distId, String distName) {

@@ -11,7 +11,7 @@ import com.project.bluepandora.donatelife.R;
 public class CustomFontHelper {
 
     public CustomFontHelper() {
-        // TODO Auto-generated constructor stub
+
     }
 
     public static void setCustomFont(TextView textview, Context context,

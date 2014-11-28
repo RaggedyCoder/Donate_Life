@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -47,6 +48,7 @@ import com.widget.CustomEditText;
 import com.widget.CustomTextView;
 import com.widget.helper.ScrollTabHolder;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -108,6 +110,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private DatePicker donationDate;
     private View addDRView;
     private ProgressDialog pd;
+    DonationRecordAdapter mDonationRecordAdapter;
     private boolean profile = true;
     private boolean record = false;
 
@@ -241,12 +244,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             donationInfo.add(new DRItem());
             donationInfo.add(new DRItem());
             donationInfo.add(new DRItem());
-            donationInfo.add(new DRItem());
-            donationInfo.add(new DRItem());
-            donationInfo.add(new DRItem());
         } else {
-            donationInfo.set(0, new DRItem());
-            donationInfo.set(0, new DRItem());
+            donationInfo.add(0, new DRItem());
+            donationInfo.add(0, new DRItem());
             donationInfo.add(new DRItem());
         }
         addDonationRecord.setOnClickListener(new View.OnClickListener() {
@@ -260,7 +260,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                 params.put(URL.DONATION_DATE_PARAM, reqTime);
                 params.put(URL.DONATION_DETAILS_PARAM, donationdetails.getText().toString());
                 params.put(URL.MOBILE_TAG, userInfo.get(0).getMobileNumber());
-                params.put(URL.PASSWORD_TAG, userInfo.get(0).getKeyWord());
+                //params.put(URL.PASSWORD_TAG, userInfo.get(0).getKeyWord());
                 createProgressDialog();
                 Toast.makeText(getActivity(), params.toString(), Toast.LENGTH_LONG).show();
                 pd.show();
@@ -278,7 +278,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
 
             }
         });
-        mGridView.setAdapter(new DonationRecordAdapter(getActivity(), donationInfo));
+        mDonationRecordAdapter = new DonationRecordAdapter(getActivity(), donationInfo);
+        mGridView.setAdapter(mDonationRecordAdapter);
         mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
     }
 
@@ -398,7 +399,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         this.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, 1);
     }
 
-    private void addDonationRecord(HashMap<String, String> params) {
+    private void addDonationRecord(final HashMap<String, String> params) {
 
         CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,
                 new Response.Listener<JSONObject>() {
@@ -407,6 +408,25 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getActivity(), response.toString(),
                                 Toast.LENGTH_LONG).show();
+                        try {
+                            if (response.getInt("done") == 1) {
+                                createAlertDialog(response.getString("message"));
+                                DRItem item = new DRItem();
+                                item.setDonationDetails(donationdetails.getText().toString());
+                                //yyyy-MM-dd HH:mm:ss
+                                String reqTime = "" + donationDate.getYear() + "-" + donationDate.getMonth() + "-"
+                                        + donationDate.getDayOfMonth() + " " + "00:00:00";
+                                item.setDonationTime(reqTime);
+                                donationDatabase.open();
+                                donationInfo.add(donationDatabase.createDRItem(reqTime, donationdetails.getText().toString()));
+                                mDonationRecordAdapter.notifyDataSetChanged();
+                                donationDatabase.close();
+                            } else {
+                                createAlertDialog(response.getString("message"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         pd.dismiss();
                     }
                 }, new Response.ErrorListener() {
@@ -431,14 +451,16 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         pd.setCancelable(false);
         pd.show();
     }
-
     private void createAlertDialog(String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle("Alert");
         alertDialog.setMessage(message);
-        alertDialog.setNeutralButton("Ok", null);
+        alertDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                donationAddDialog.dismiss();
+            }
+        });
         alertDialog.show();
     }
-
-
 }

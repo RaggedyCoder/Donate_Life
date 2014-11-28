@@ -103,6 +103,7 @@ public class FeedFragment extends Fragment {
     public JSONObject json;
     public JSONObject newJsonObject;
     public SwipeRefreshLayout mSwipeRefreshLayout;
+    public UserInfoItem userInfo;
     private ListView listView;
     private FeedListAdapter listAdapter;
     private List<Item> feedItems;
@@ -112,7 +113,6 @@ public class FeedFragment extends Fragment {
     private CustomTextView mTitle;
     private View mCustomView;
     private OnRefreshListener mOnFeedRefresh;
-    public UserInfoItem userInfo;
 
     public FeedFragment() {
 
@@ -164,7 +164,7 @@ public class FeedFragment extends Fragment {
     private void makejson(FileInputStream feed) throws IOException {
 
         String temp = "";
-        int content = 0;
+        int content;
         while ((content = feed.read()) != -1) {
             temp += (char) content;
         }
@@ -177,13 +177,15 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    @SuppressLint("NewApi")
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView.setAdapter(listAdapter);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_dark,
-                R.color.holo_green_dark, R.color.holo_purple,
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.holo_blue_dark,
+                R.color.holo_green_dark,
+                R.color.holo_purple,
                 R.color.holo_red_dark);
         mSwipeRefreshLayout.setOnRefreshListener(mOnFeedRefresh);
 
@@ -203,24 +205,18 @@ public class FeedFragment extends Fragment {
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
         jsonObjectRequest();
-        final AnimationListener animListners = new AnimationListener() {
+        final AnimationListener animListener = new AnimationListener() {
 
             @Override
             public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
-                // this.getWindowManager().getDefaultDisplay().getMetrics( dm );
                 int[] origin = new int[2];
                 actionButton.getLocationOnScreen(origin);
                 int xDest = listView.getMeasuredWidth() / 2;
@@ -229,10 +225,10 @@ public class FeedFragment extends Fragment {
                 yDest -= (actionButton.getMeasuredHeight() / 2)
                         - getActivity().getResources().getDimensionPixelSize(
                         R.dimen.abc_action_bar_default_height_material);
-                final int newleft = actionButton.getLeft() + xDest - origin[0];
+                final int newLeft = actionButton.getLeft() + xDest - origin[0];
                 final int newTop = actionButton.getTop() + yDest - origin[1];
-                actionButton.layout(newleft, newTop,
-                        newleft + actionButton.getMeasuredWidth(), newTop
+                actionButton.layout(newLeft, newTop,
+                        newLeft + actionButton.getMeasuredWidth(), newTop
                                 + actionButton.getMeasuredHeight());
                 actionButton.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), R.anim.full_grow));
@@ -265,10 +261,9 @@ public class FeedFragment extends Fragment {
                         android.R.integer.config_longAnimTime));
                 anim.setInterpolator(getActivity(),
                         android.R.interpolator.decelerate_quad);
-                anim.setAnimationListener(animListners);
+                anim.setAnimationListener(animListener);
                 Log.e(TAG, actionButton.getX() + " " + actionButton.getY());
                 actionButton.startAnimation(anim);
-
             }
         });
     }
@@ -296,7 +291,7 @@ public class FeedFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
+
         if (item.getItemId() == R.id.action_refresh) {
             mSwipeRefreshLayout.setRefreshing(true);
             jsonObjectRequest();
@@ -304,7 +299,7 @@ public class FeedFragment extends Fragment {
 
                 @Override
                 public void run() {
-                    // TODO Auto-generated method stub
+
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }, 4000);
@@ -316,7 +311,7 @@ public class FeedFragment extends Fragment {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Auto-generated method stub
+
         menu.clear();
         MenuItem settings = menu.add(Menu.NONE, R.id.action_refresh, 100,
                 R.string.refresh);

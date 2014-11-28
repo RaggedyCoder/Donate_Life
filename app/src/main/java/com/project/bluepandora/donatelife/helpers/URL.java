@@ -21,7 +21,7 @@ public interface URL {
     public static final String MOBILE_TAG = "mobileNumber";
     public static final String GCM_TAG = "gcmId";
     public static final String ADD_DONATIONRECORD_REQUEST = "addDonationRecord";
-    public static final String DONATION_DATE_PARAM = "donateionDate";
+    public static final String DONATION_DATE_PARAM = "donationDate";
     public static final String DISTRICTID_TAG = "distId";
     public static final String GROUPID_TAG = "groupId";
     public static final String DONATION_DETAILS_PARAM = "donationDetail";
@@ -33,6 +33,7 @@ public interface URL {
     public static final String BLOODLIST_PARAM = "bloodGroupList";
     public static final String DISTRICTLIST_PARAM = "districtList";
     public static final String HOSPITALLIST_PARAM = "hospitalList";
+    public static final String GET_DONATION_RECORD_PARAM = "getDonationRecord";
     public static final String FIRST_NAME_KEY = "firstName";
     public static final String LAST_NAME_KEY = "lastName";
     public static final String REGISTER_CHECK = "isRegistered";

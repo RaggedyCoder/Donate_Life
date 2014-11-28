@@ -21,16 +21,16 @@ public class SlideItem implements Item {
     private int background;
 
     public SlideItem() {
-        // TODO Auto-generated constructor stub
+
     }
 
     public SlideItem(String slideItem) {
-        // TODO Auto-generated constructor stub
+
         this.slideItem = slideItem;
     }
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+
 
     }
 
