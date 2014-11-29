@@ -1,20 +1,28 @@
 package com.project.bluepandora.donatelife.adapter;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.data.DRItem;
 import com.widget.CustomTextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -38,6 +46,9 @@ public class DonationRecordAdapter extends BaseAdapter {
     List<DRItem> items;
     private Activity activity;
     private LayoutInflater inflater;
+    private SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat showFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
 
     public DonationRecordAdapter(Activity activity, List<DRItem> items) {
         this.activity = activity;
@@ -111,9 +122,47 @@ public class DonationRecordAdapter extends BaseAdapter {
             holder.recordHolder.setVisibility(View.VISIBLE);
             holder.optionButton.setVisibility(View.VISIBLE);
         }
-        DRItem item = items.get(position);
-        holder.donationDate.setText(item.getDonationTime());
+        final DRItem item = items.get(position);
+        try {
+            Date date = isoFormat.parse(item.getDonationTime());
+            holder.donationDate.setText(showFormat.format(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        holder.optionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPopupMenu(holder, item);
+
+            }
+        });
         return convertView;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void createPopupMenu(ViewHolder holder, final DRItem value) {
+        holder.popupMenu.getMenu().clear();
+        holder.popupMenu.getMenuInflater().inflate(
+                R.menu.donation_menu, holder.popupMenu.getMenu());
+        holder.popupMenu.show();
+        holder.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.action_details) {
+                    View detailsView = inflater.inflate(R.layout.grid_item_details, null);
+                    try {
+                        ((CustomTextView) detailsView.findViewById(R.id.donation_date)).setText(showFormat.format(isoFormat.parse(value.getDonationTime())));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    ((CustomTextView) detailsView.findViewById(R.id.donation_details)).setText(value.getDonationDetails());
+                    ProgressDialog.Builder donationDetailsview = new ProgressDialog.Builder(activity);
+                    donationDetailsview.setView(detailsView);
+                    donationDetailsview.show();
+                }
+                return false;
+            }
+        });
     }
 
     private void setholder(View convertView, ViewHolder holder) {
@@ -123,6 +172,7 @@ public class DonationRecordAdapter extends BaseAdapter {
         holder.bloodDummyImageHolder = (RelativeLayout) convertView.findViewById(R.id.blood_dummy_image);
         holder.addDummyImageHolder = (RelativeLayout) convertView.findViewById(R.id.add_dummy_image);
         holder.optionButton = (ImageButton) convertView.findViewById(R.id.option_button);
+        holder.popupMenu = new PopupMenu(activity, holder.optionButton);
         holder.needInflate = false;
     }
     static class ViewHolder {
@@ -133,5 +183,6 @@ public class DonationRecordAdapter extends BaseAdapter {
         RelativeLayout bloodDummyImageHolder;
         RelativeLayout addDummyImageHolder;
         ImageButton optionButton;
+        PopupMenu popupMenu;
     }
 }

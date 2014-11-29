@@ -22,12 +22,12 @@ public class DRItem implements Item {
         return donationTime;
     }
 
-    public String getDonationDetails() {
-        return donationDetails;
-    }
-
     public void setDonationTime(String donationTime) {
         this.donationTime = donationTime;
+    }
+
+    public String getDonationDetails() {
+        return donationDetails;
     }
 
     public void setDonationDetails(String donationDetails) {

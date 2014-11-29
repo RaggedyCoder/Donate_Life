@@ -28,7 +28,7 @@
                 android:scrollbars="none" />
 
             <GridView
-                android:id="@+id/grid_view"
+                android:id="@+id/donation_record_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center"

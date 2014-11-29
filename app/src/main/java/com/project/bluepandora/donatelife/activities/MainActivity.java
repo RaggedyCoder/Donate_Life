@@ -44,9 +44,11 @@ import com.google.android.gcm.GCMRegistrar;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.adapter.SlideMenuAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
+import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.data.SlideItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
+import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.fragments.FeedFragment;
 import com.project.bluepandora.donatelife.fragments.ProfileDetailsFragment;
@@ -136,6 +138,13 @@ public class MainActivity extends ActionBarActivity {
                         database.open();
                         UserInfoItem userInfoItem = database.getAllUserItem().get(0);
                         database.close();
+                        DRDataSource dataSource = new DRDataSource(context);
+                        dataSource.open();
+                        ArrayList<DRItem> items = dataSource.getAllDRItem();
+                        for (DRItem item : items) {
+                            dataSource.deleteDistrictitem(item);
+                        }
+                        dataSource.close();
                         ServerUtilities.register(context, userInfoItem.getMobileNumber(), regId);
                         return null;
                     }
