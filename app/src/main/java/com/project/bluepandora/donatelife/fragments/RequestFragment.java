@@ -17,8 +17,6 @@ package com.project.bluepandora.donatelife.fragments;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -46,18 +44,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.activities.MainActivity;
-import com.project.bluepandora.donatelife.adapter.BloodSpinnerAdapter;
-import com.project.bluepandora.donatelife.adapter.DistrictSpinnerAdapter;
-import com.project.bluepandora.donatelife.adapter.HospitalSpinnerAdapter;
+import com.project.bluepandora.donatelife.adapter.SpinnerAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
-import com.project.bluepandora.donatelife.data.BloodItem;
 import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.HospitalItem;
+import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.HospitalDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomButton;
@@ -74,8 +71,9 @@ import java.util.HashMap;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class RequestFragment extends Fragment implements MainActivity.DrawerSlideListeners {
+public class RequestFragment extends Fragment implements MainActivity.DrawerSlideListeners, URL {
 
+    private static final String TAG = RequestFragment.class.getSimpleName();
     private static final String NO_HOSPITAL_TAG = "Sorry No Hospital Name is available for this City";
     private Spinner district;
     private Spinner blood;
@@ -85,9 +83,9 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private CustomButton doneButton;
     private CheckBox emergencyCheck;
 
-    private ArrayList<DistrictItem> distItems;
-    private ArrayList<BloodItem> bloodItems;
-    private ArrayList<HospitalItem> hospitalItems;
+    private ArrayList<Item> distItems;
+    private ArrayList<Item> bloodItems;
+    private ArrayList<Item> hospitalItems;
     private ArrayList<UserInfoItem> userInfoItems;
     private ArrayList<String> amounts;
 
@@ -98,11 +96,13 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private BloodDataSource bloodDatabase;
     private UserDataSource userDatase;
 
-    private BloodSpinnerAdapter bloodAdapter;
-    private DistrictSpinnerAdapter districtAdapter;
-    private HospitalSpinnerAdapter hospitalAdapter;
+    private SpinnerAdapter bloodAdapter;
+    private SpinnerAdapter districtAdapter;
+    private SpinnerAdapter hospitalAdapter;
 
     private ProgressDialog pd;
+
+    private DialogBuilder dialogBuilder;
 
     private Drawable mActionBarBackgroundDrawable;
     private CustomTextView mTitle;
@@ -117,7 +117,6 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         final View rootView = inflater.inflate(R.layout.fragment_request,
                 container, false);
         district = (Spinner) rootView.findViewById(R.id.district_spinner);
@@ -148,7 +147,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         amountAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.spinner_item, amounts);
         amount.setAdapter(amountAdapter);
-        bloodAdapter = new BloodSpinnerAdapter(getActivity(), bloodItems);
+        bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
         blood.setAdapter(bloodAdapter);
         districtDatabase = new DistrictDataSource(getActivity());
         districtDatabase.open();
@@ -223,11 +222,11 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                 }
             });
         }
-        districtAdapter = new DistrictSpinnerAdapter(getActivity(), distItems);
+        districtAdapter = new SpinnerAdapter(getActivity(), distItems);
         district.setAdapter(districtAdapter);
         district.setSelection(districtAdapter.getItemPosition(userInfoItems
                 .get(0).getDistId()));
-        createHospitalList(distItems.get(district.getSelectedItemPosition())
+        createHospitalList(((DistrictItem) distItems.get(district.getSelectedItemPosition()))
                 .getDistId());
         return rootView;
     }
@@ -235,7 +234,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        dialogBuilder = new DialogBuilder(getActivity(), TAG);
         doneButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -243,35 +242,22 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                 if (hospital.getSelectedItemId() == -1) {
                     Toast.makeText(
                             getActivity(),
-                            "Sorry Blood Request is not availble for your city.",
+                            "Sorry Blood Request is not available for your city.",
                             Toast.LENGTH_SHORT).show();
 
                 } else {
-                    // mobileNumber(String)
-                    // groupId(Integer)
-                    // amount(Integer)
-                    // hospitalId(Integer)
-                    // emergency(Integer 0,1)
-                    // keyWord(String only A-Z, a-z, 0-9)
-                    AlertDialog.Builder d = new AlertDialog.Builder(
-                            getActivity());
-                    d.setMessage("Are you sure about sending the request?");
-                    d.setCancelable(false);
-                    d.setTitle("Alert!");
-                    d.setNegativeButton("No", null);
-                    d.setPositiveButton("Yes",
-                            new DialogInterface.OnClickListener() {
+                    DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
 
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    bloodRequest(createParams());
-                                    createProgressDialog();
-                                    pd.show();
-                                }
-                            });
-                    Dialog dialog = d.create();
-                    dialog.show();
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                            int which) {
+                            bloodRequest(createParams());
+                            createProgressDialog();
+                            pd.show();
+                        }
+                    };
+                    dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request?",
+                            positiveClickListener, null);
                 }
             }
         });
@@ -281,8 +267,8 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
 
-                createHospitalList(distItems.get(
-                        district.getSelectedItemPosition()).getDistId());
+                createHospitalList(((DistrictItem) distItems.get(
+                        district.getSelectedItemPosition())).getDistId());
 
             }
 
@@ -294,25 +280,31 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     }
 
     private HashMap<String, String> createParams() {
+        // mobileNumber(String)
+        // groupId(Integer)
+        // amount(Integer)
+        // hospitalId(Integer)
+        // emergency(Integer 0,1)
+        // keyWord(String only A-Z, a-z, 0-9)
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateNow = new Date();
         String reqTime = isoFormat.format(dateNow);
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(URL.REQUEST_NAME, URL.ADD_BLOODREQUEST_PARAM);
-        params.put(URL.MOBILE_TAG, userInfoItems.get(0).getMobileNumber());
-        params.put(URL.GROUPID_TAG, blood.getSelectedItemId() + "");
-        params.put(URL.AMOUNT_TAG, (String) amount.getSelectedItem());
-        params.put(URL.HOSPITALID_TAG, hospital.getSelectedItemId() + "");
-        params.put(URL.EMERGENCY_TAG, emergencyCheck.isChecked() ? "1" : "0");
-        params.put(URL.PASSWORD_TAG, userInfoItems.get(0).getKeyWord());
-        params.put(URL.REQUESTTIME_TAG, reqTime);
+        params.put(REQUEST_NAME, ADD_BLOODREQUEST_PARAM);
+        params.put(MOBILE_TAG, userInfoItems.get(0).getMobileNumber());
+        params.put(GROUPID_TAG, blood.getSelectedItemId() + "");
+        params.put(AMOUNT_TAG, (String) amount.getSelectedItem());
+        params.put(HOSPITALID_TAG, hospital.getSelectedItemId() + "");
+        params.put(EMERGENCY_TAG, emergencyCheck.isChecked() ? "1" : "0");
+        params.put(PASSWORD_TAG, userInfoItems.get(0).getKeyWord());
+        params.put(REQUESTTIME_TAG, reqTime);
         Log.e("MSG", reqTime);
         return params;
     }
 
     public void bloodRequest(HashMap<String, String> params) {
 
-        CustomRequest jsonReq = new CustomRequest(Method.POST, URL.URL, params,
+        CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -327,9 +319,9 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss();
                 if (error.toString().contains("TimeoutError")) {
-                    createAlertDialog(getResources().getString(R.string.TimeoutError));
+                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.TimeoutError));
                 } else if (error.toString().contains("UnknownHostException")) {
-                    createAlertDialog(getResources().getString(R.string.NoInternet));
+                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.NoInternet));
                 }
             }
         });
@@ -343,30 +335,21 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             hospitalItems = hospitalDatabase.getAllHospitalItem(distId);
             hospitalDatabase.close();
         } catch (Exception e) {
-            hospitalItems = new ArrayList<HospitalItem>();
+            hospitalItems = new ArrayList<Item>();
             HospitalItem item = new HospitalItem();
             item.setHospitalName(NO_HOSPITAL_TAG);
             item.setHospitalId(-1);
             hospitalItems.add(item);
-            hospitalAdapter = new HospitalSpinnerAdapter(getActivity(),
+            hospitalAdapter = new SpinnerAdapter(getActivity(),
                     hospitalItems);
             hospital.setAdapter(hospitalAdapter);
         }
         if (hospitalItems != null) {
-            hospitalAdapter = new HospitalSpinnerAdapter(getActivity(),
+            hospitalAdapter = new SpinnerAdapter(getActivity(),
                     hospitalItems);
             hospital.setAdapter(hospitalAdapter);
         }
     }
-
-    private void createAlertDialog(String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage(message);
-        alertDialog.setNeutralButton("Ok", null);
-        alertDialog.show();
-    }
-
     private void createProgressDialog() {
         pd = new ProgressDialog(getActivity());
         pd.setMessage(getActivity().getResources().getString(R.string.processing));
@@ -374,7 +357,6 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         pd.setCancelable(false);
         pd.show();
     }
-
     @Override
     public void onDrawerSlide(float offset) {
         final int newAlpha = (int) (currentAlpha + (offset * (255 - currentAlpha)));

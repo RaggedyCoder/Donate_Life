@@ -59,7 +59,7 @@ import java.util.HashMap;
  * This fragment is for the user to verifying the mobile number.
  * <p/>
  */
-public class MobileVerificationFragment extends Fragment {
+public class MobileVerificationFragment extends Fragment implements URL {
 
     /**
      * Defines a tag for identifying log entries
@@ -211,8 +211,8 @@ public class MobileVerificationFragment extends Fragment {
                  * static final TAG->mobileNumber. Value will be determined by the user.
                  */
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.REGISTER_CHECK);
-                params.put(URL.MOBILE_TAG, "0" + mobileNumber.getText().toString());
+                params.put(REQUEST_NAME, REGISTER_CHECK);
+                params.put(MOBILE_TAG, "0" + mobileNumber.getText().toString());
                 getJsonData(params);
             }
         };
@@ -236,7 +236,7 @@ public class MobileVerificationFragment extends Fragment {
 
     private void getJsonData(final HashMap<String, String> params) {
 
-        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL, params,
                 new Response.Listener<JSONObject>() {
 
                     @Override

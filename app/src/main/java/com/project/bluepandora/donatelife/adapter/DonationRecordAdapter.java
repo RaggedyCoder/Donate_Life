@@ -5,25 +5,39 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.DRItem;
+import com.project.bluepandora.donatelife.data.UserInfoItem;
+import com.project.bluepandora.donatelife.datasource.DRDataSource;
+import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.URL;
+import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomTextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
@@ -43,16 +57,21 @@ import java.util.List;
 public class DonationRecordAdapter extends BaseAdapter {
 
 
-    List<DRItem> items;
+    ArrayList<DRItem> items;
     private Activity activity;
     private LayoutInflater inflater;
     private SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private SimpleDateFormat showFormat = new SimpleDateFormat("dd-MMM-yyyy");
+    private UserInfoItem userInfoItem;
 
 
-    public DonationRecordAdapter(Activity activity, List<DRItem> items) {
+    public DonationRecordAdapter(Activity activity, ArrayList<DRItem> items) {
         this.activity = activity;
         this.items = items;
+        UserDataSource database = new UserDataSource(activity);
+        database.open();
+        userInfoItem = database.getAllUserItem().get(0);
+        database.close();
     }
 
     @Override
@@ -73,7 +92,7 @@ public class DonationRecordAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final ViewHolder holder;
         if (inflater == null) {
@@ -132,7 +151,7 @@ public class DonationRecordAdapter extends BaseAdapter {
         holder.optionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createPopupMenu(holder, item);
+                createPopupMenu(holder, position);
 
             }
         });
@@ -140,7 +159,7 @@ public class DonationRecordAdapter extends BaseAdapter {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void createPopupMenu(ViewHolder holder, final DRItem value) {
+    private void createPopupMenu(ViewHolder holder, final int position) {
         holder.popupMenu.getMenu().clear();
         holder.popupMenu.getMenuInflater().inflate(
                 R.menu.donation_menu, holder.popupMenu.getMenu());
@@ -148,6 +167,10 @@ public class DonationRecordAdapter extends BaseAdapter {
         holder.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                for (DRItem Item : items) {
+                    Log.e("items", Item.getDonationTime());
+                }
+                DRItem value = items.get(position);
                 if (item.getItemId() == R.id.action_details) {
                     View detailsView = inflater.inflate(R.layout.grid_item_details, null);
                     try {
@@ -159,22 +182,63 @@ public class DonationRecordAdapter extends BaseAdapter {
                     ProgressDialog.Builder donationDetailsview = new ProgressDialog.Builder(activity);
                     donationDetailsview.setView(detailsView);
                     donationDetailsview.show();
+                    return true;
+                } else if (item.getItemId() == R.id.action_delete) {
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put(URL.REQUEST_NAME, URL.REMOVE_DONATION_RECORD_PARAM);
+                    params.put(URL.MOBILE_TAG, userInfoItem.getMobileNumber());
+                    params.put(URL.DONATION_DATE_PARAM, value.getDonationTime().replace(".0", ""));
+                    Log.e("params", params.toString());
+                    removeRequest(params, value);
                 }
                 return false;
             }
         });
     }
 
+    private void removeRequest(HashMap<String, String> params, final DRItem item) {
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e("res", response.toString(1));
+                            if (response.getInt("done") == 1) {
+                                DRDataSource database = new DRDataSource(activity);
+                                database.open();
+                                database.deleteDistrictitem(item);
+                                database.close();
+                                items.remove(item);
+                                DonationRecordAdapter.this.notifyDataSetChanged();
+                            } else {
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        // Adding request to volley request queue
+        AppController.getInstance().addToRequestQueue(jsonReq);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setholder(View convertView, ViewHolder holder) {
         holder.donationDate = (CustomTextView) convertView.findViewById(R.id.donation_date);
         holder.gridBackground = (LinearLayout) convertView.findViewById(R.id.grid_background);
         holder.recordHolder = (LinearLayout) convertView.findViewById(R.id.record_holder);
         holder.bloodDummyImageHolder = (RelativeLayout) convertView.findViewById(R.id.blood_dummy_image);
         holder.addDummyImageHolder = (RelativeLayout) convertView.findViewById(R.id.add_dummy_image);
-        holder.optionButton = (ImageButton) convertView.findViewById(R.id.option_button);
+        holder.optionButton = (ImageView) convertView.findViewById(R.id.option_button);
         holder.popupMenu = new PopupMenu(activity, holder.optionButton);
         holder.needInflate = false;
     }
+
     static class ViewHolder {
         public boolean needInflate;
         CustomTextView donationDate;
@@ -182,7 +246,7 @@ public class DonationRecordAdapter extends BaseAdapter {
         LinearLayout recordHolder;
         RelativeLayout bloodDummyImageHolder;
         RelativeLayout addDummyImageHolder;
-        ImageButton optionButton;
+        ImageView optionButton;
         PopupMenu popupMenu;
     }
 }

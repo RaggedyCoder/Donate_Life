@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.project.bluepandora.donatelife.data.BloodItem;
+import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.database.DataBaseOpenHelper;
 import com.project.bluepandora.donatelife.exception.BloodDatabaseException;
 
@@ -29,11 +30,11 @@ import java.util.ArrayList;
  */
 public class BloodDataSource {
 
-    private String[] allColumns = {DataBaseOpenHelper.GROUPID_COLOUMN,
-            DataBaseOpenHelper.GROUPNAME_COLOUMN};
     protected Context context;
     protected SQLiteDatabase database;
     protected DataBaseOpenHelper dbHelper;
+    private String[] allColumns = {DataBaseOpenHelper.GROUPID_COLOUMN,
+            DataBaseOpenHelper.GROUPNAME_COLOUMN};
 
     public BloodDataSource(Context context) {
         dbHelper = new DataBaseOpenHelper(context);
@@ -66,6 +67,16 @@ public class BloodDataSource {
         return returnItem;
     }
 
+    public BloodItem getBloodItem(BloodItem item) {
+
+        BloodItem returnItem = new BloodItem();
+        Cursor cursor = database.query(DataBaseOpenHelper.BLOOD_TABLE,
+                allColumns, DataBaseOpenHelper.GROUPID_COLOUMN + " = " + item.getBloodId(), null, null, null, null);
+        cursor.moveToFirst();
+        returnItem = cursorToBloodItem(cursor);
+        return returnItem;
+    }
+
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
@@ -80,8 +91,8 @@ public class BloodDataSource {
                 DataBaseOpenHelper.GROUPID_COLOUMN + " = " + bloodId, null);
     }
 
-    public ArrayList<BloodItem> getAllBloodItem() {
-        ArrayList<BloodItem> items = new ArrayList<BloodItem>();
+    public ArrayList<Item> getAllBloodItem() {
+        ArrayList<Item> items = new ArrayList<Item>();
         Cursor cursor = database.query(DataBaseOpenHelper.BLOOD_TABLE,
                 allColumns, null, null, null, null, null);
         cursor.moveToFirst();

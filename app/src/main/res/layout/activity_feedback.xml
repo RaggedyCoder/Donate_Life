@@ -58,28 +58,82 @@
                     app:font="MuseoSansRounded-700.otf" />
             </RelativeLayout>
 
-            <com.widget.CustomEditText
-                android:id="@+id/feedback_edittext"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dip"
-                android:hint="Write your feedback..."
-                android:maxLength="400"
-                android:scrollbars="vertical"
-                android:textSize="20sp"
-                app:font="MuseoSansRounded-300.otf" />
+                android:layout_marginTop="15dip">
 
-            <com.widget.CustomButton
-                android:id="@+id/send"
-                android:layout_width="match_parent"
-                android:layout_margin="15dip"
+                <com.widget.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:gravity="center"
+                    android:text="Subject:"
+                    android:textSize="20sp"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <Spinner
+                    android:id="@+id/subject_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/district_holder"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dip"
-                android:minHeight="0.0dip"
-                android:text="@string/send_feedback"
-                android:textColor="@color/holo_blue_dark"
-                android:textSize="20.0sp"
-                app:font="MuseoSansRounded-700.otf" />
+                android:layout_marginTop="15dip">
+
+                <com.widget.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:gravity="center"
+                    android:text="District:"
+                    android:textSize="20sp"
+                    app:font="MuseoSansRounded-700.otf" />
+
+                <Spinner
+                    android:id="@id/district_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="#44444444"
+                    android:spinnerMode="dialog" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.widget.CustomEditText
+                    android:id="@+id/feedback_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dip"
+                    android:hint="Write your feedback..."
+                    android:maxLength="400"
+                    android:scrollbars="vertical"
+                    android:textSize="20sp"
+                    app:font="MuseoSansRounded-300.otf" />
+
+                <com.widget.CustomButton
+                    android:id="@+id/send"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dip"
+                    android:minHeight="0.0dip"
+                    android:padding="15dip"
+                    android:text="@string/send_feedback"
+                    android:textColor="@color/holo_blue_dark"
+                    android:textSize="20.0sp"
+                    app:font="MuseoSansRounded-700.otf" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

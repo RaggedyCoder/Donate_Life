@@ -18,7 +18,7 @@ package com.project.bluepandora.donatelife.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.fragments.MobileVerificationFragment;
@@ -91,7 +91,7 @@ public class SignUpActivity extends ActionBarActivity {
                 fragments.set(3, RegistrationCompleteFragment.newInstance(bundle));
             }
         }
-        Toast.makeText(this, fragments.size() + "", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, fragments.size() + "");
         currentFragmentTrackNumber = number;
         mContent = fragments.get(number);
         getSupportFragmentManager().beginTransaction().

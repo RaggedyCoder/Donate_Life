@@ -87,4 +87,8 @@ public class HospitalSpinnerAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private static class ViewHolder {
+        CustomTextView spinnerItemName;
+    }
+
 }

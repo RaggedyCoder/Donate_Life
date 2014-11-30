@@ -21,6 +21,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -64,13 +66,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 
         // Play default notification sound
-        notification.defaults |= Notification.DEFAULT_SOUND;
-
-        // notification.sound = Uri.parse("android.resource://" +
-        // context.getPackageName() + "your_sound_file_name.mp3");
+        //notification.defaults |= Notification.DEFAULT_SOUND;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String strRingtonePreference = prefs.getString("pref_filter_ringtone", "DEFAULT_RINGTONE_URI");
+        notification.sound = Uri.parse(strRingtonePreference);
         // Vibrate if vibrate is enabled
         if (PreferenceManager.getDefaultSharedPreferences(
-                context).getBoolean(SettingsActivity.VIBRATION_TAG, false)) {
+                context).getBoolean(SettingsActivity.VIBRATION_TAG, true)) {
             notification.defaults |= Notification.DEFAULT_VIBRATE;
         }
         notificationManager.notify(0, notification);

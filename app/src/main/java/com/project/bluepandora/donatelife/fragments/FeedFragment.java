@@ -95,7 +95,7 @@ import java.util.List;
  * wanted to see.
  */
 @SuppressLint({"InflateParams", "NewApi"})
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements URL {
 
     public static final String TAG = FeedFragment.class.getSimpleName();
     public static boolean firstTime = true;
@@ -234,7 +234,7 @@ public class FeedFragment extends Fragment {
                         getActivity(), R.anim.full_grow));
                 MainActivity act = (MainActivity) getActivity();
                 act.switchContent();
-                Log.e(TAG, actionButton.getX() + " " + actionButton.getY());
+                Log.e(TAG, actionButton.getLeft() + " " + actionButton.getTop());
             }
         };
         actionButton.setOnClickListener(new OnClickListener() {
@@ -293,13 +293,14 @@ public class FeedFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_refresh) {
+            progress.setVisibility(View.VISIBLE);
             mSwipeRefreshLayout.setRefreshing(true);
             jsonObjectRequest();
             new Handler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
-
+                    progress.setVisibility(View.VISIBLE);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }, 4000);
@@ -356,55 +357,55 @@ public class FeedFragment extends Fragment {
     private JSONObject jsonObjectRequest() {
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put(URL.REQUEST_NAME, URL.BLOODREQUEST_PARAM);
+        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
 
-        CustomRequest jsonReq = new CustomRequest(Method.POST, URL.URL, params,
+        CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
                 new Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         VolleyLog.d(TAG, "Response: " + response.toString());
-                        if (response != null) {
-                            writeToMemory(response);
-                            newJsonObject = response;
-                            try {
-                                if (response.get("message").equals(
-                                        "Not Found Any Blood Request")) {
-                                    Toast.makeText(getActivity(),
-                                            "Not Found Any Blood Request",
-                                            Toast.LENGTH_LONG).show();
-                                    progress.setVisibility(View.GONE);
-                                    return;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
+                        writeToMemory(response);
+                        newJsonObject = response;
+                        try {
+                            if (response.get("message").equals(
+                                    "Not Found Any Blood Request")) {
+                                Toast.makeText(getActivity(),
+                                        "Not Found Any Blood Request",
+                                        Toast.LENGTH_LONG).show();
+                                progress.setVisibility(View.GONE);
+                                return;
                             }
-                            if (json != null) {
-                                JSONArray feedArray = null;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (json != null) {
+                            JSONArray feedArray = null;
 
-                                try {
+                            try {
 
-                                    feedArray = response
-                                            .getJSONArray("bloodRequest");
-                                } catch (JSONException e1) {
+                                feedArray = response
+                                        .getJSONArray("bloodRequest");
+                            } catch (JSONException e1) {
 
-                                    e1.printStackTrace();
-                                }
+                                e1.printStackTrace();
+                            }
 
-                                if (feedArray != null && (listAdapter.getCount() == feedArray
-                                        .length())) {
-                                    Toast.makeText(getActivity(),
-                                            "Feed up to Date.",
-                                            Toast.LENGTH_LONG).show();
+                            if (feedArray != null && (listAdapter.getCount() == feedArray
+                                    .length())) {
+                                Toast.makeText(getActivity(),
+                                        "Feed up to Date.",
+                                        Toast.LENGTH_LONG).show();
 
-                                } else {
-                                    parseJsonFeed(response);
-                                }
                             } else {
-                                json = response;
                                 parseJsonFeed(response);
                             }
+                        } else {
+                            json = response;
+                            parseJsonFeed(response);
                         }
+
                     }
                 }, new ErrorListener() {
 

@@ -46,6 +46,7 @@ import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
+import com.project.bluepandora.util.ConnectionManager;
 import com.project.bluepandora.util.ListViewAnimator;
 import com.widget.CustomTextView;
 
@@ -80,10 +81,12 @@ public class FeedListAdapter extends BaseAdapter {
     private List<Item> feedItems;
     private UserInfoItem userInfo;
     private ProgressDialog dialog;
+    private ConnectionManager connectionManager;
 
     public FeedListAdapter(Activity activity, List<Item> feedItems) {
         this.activity = activity;
         this.feedItems = feedItems;
+        connectionManager = new ConnectionManager(activity);
         UserDataSource database = new UserDataSource(activity);
         database.open();
         userInfo = database.getAllUserItem().get(0);
@@ -176,6 +179,10 @@ public class FeedListAdapter extends BaseAdapter {
                     public boolean onMenuItemClick(MenuItem item) {
 
                         if (item.getItemId() == R.id.action_delete_own) {
+                            if (!connectionManager.isConnectingToInternet()) {
+                                Toast.makeText(activity, "No Internet Connection", Toast.LENGTH_SHORT);
+                                return false;
+                            }
                             deleteRequest(view, pos, list);
                             dialog = new ProgressDialog(activity);
                             dialog.setTitle(R.string.delete_request);
@@ -274,8 +281,7 @@ public class FeedListAdapter extends BaseAdapter {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            int i = 0;
-                            i = response.getInt("done");
+                            int i = response.getInt("done");
                             if (i == 1) {
                                 ListViewAnimator.deleteCell(view, pos,
                                         feedItems, FeedListAdapter.this,
@@ -295,9 +301,10 @@ public class FeedListAdapter extends BaseAdapter {
                         }
                     }
                 }, new ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(activity, "Something went wrong.", Toast.LENGTH_SHORT);
+                dialog.dismiss();
             }
         });
         // Adding request to volley request queue

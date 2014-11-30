@@ -68,7 +68,7 @@ import java.util.HashMap;
  * Which is for the blood feed,request profile and other main operation.
  * <p/>
  */
-public class LogInFragment extends Fragment {
+public class LogInFragment extends Fragment implements URL {
 
     // Defines a tag for identifying log entries
     private final String TAG = LogInFragment.class.getSimpleName();
@@ -259,17 +259,17 @@ public class LogInFragment extends Fragment {
                 }
                 createProgressDialog();
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.BLOODLIST_PARAM);
+                params.put(REQUEST_NAME, BLOODLIST_PARAM);
                 getJsonData(params);
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.DISTRICTLIST_PARAM);
+                params.put(REQUEST_NAME, DISTRICTLIST_PARAM);
                 getJsonData(params);
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.HOSPITALLIST_PARAM);
+                params.put(REQUEST_NAME, HOSPITALLIST_PARAM);
                 getJsonData(params);
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.REGISTER_CHECK);
-                params.put(URL.MOBILE_TAG, "0" + mobileNumber.getText());
+                params.put(REQUEST_NAME, REGISTER_CHECK);
+                params.put(MOBILE_TAG, "0" + mobileNumber.getText());
                 getJsonData(params);
             }
         };
@@ -279,13 +279,13 @@ public class LogInFragment extends Fragment {
                 createProgressDialog();
                 signUp = true;
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.BLOODLIST_PARAM);
+                params.put(REQUEST_NAME, BLOODLIST_PARAM);
                 getJsonData(params);
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.DISTRICTLIST_PARAM);
+                params.put(REQUEST_NAME, DISTRICTLIST_PARAM);
                 getJsonData(params);
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.HOSPITALLIST_PARAM);
+                params.put(REQUEST_NAME, HOSPITALLIST_PARAM);
                 getJsonData(params);
             }
         };
@@ -319,9 +319,9 @@ public class LogInFragment extends Fragment {
                     return;
                 }
                 params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.USER_INFO);
-                params.put(URL.MOBILE_TAG, "" + 0 + mobileNumber.getText());
-                params.put(URL.PASSWORD_TAG, "" + password.getText());
+                params.put(REQUEST_NAME, USER_INFO);
+                params.put(MOBILE_TAG, "" + 0 + mobileNumber.getText());
+                params.put(PASSWORD_TAG, "" + password.getText());
                 getJsonData(params);
 
             } else {
@@ -385,8 +385,8 @@ public class LogInFragment extends Fragment {
                                 userDataBase.createUserInfoItem(item);
                                 userDataBase.close();
                                 HashMap<String, String> params = new HashMap<String, String>();
-                                params.put(URL.REQUEST_NAME, URL.GET_DONATION_RECORD_PARAM);
-                                params.put(URL.MOBILE_TAG, item.getMobileNumber());
+                                params.put(REQUEST_NAME, GET_DONATION_RECORD_PARAM);
+                                params.put(MOBILE_TAG, item.getMobileNumber());
                                 getJsonData(params);
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
@@ -422,7 +422,7 @@ public class LogInFragment extends Fragment {
 
     private void getJsonData(final HashMap<String, String> params) {
 
-        CustomRequest jsonReq = new CustomRequest(Method.POST, URL.URL, params,
+        CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
                 new Listener<JSONObject>() {
 
                     @Override
@@ -430,13 +430,13 @@ public class LogInFragment extends Fragment {
 
                         VolleyLog.d(TAG, "Response: " + response.toString());
 
-                        if (params.containsValue(URL.BLOODLIST_PARAM)) {
+                        if (params.containsValue(BLOODLIST_PARAM)) {
                             parse.parseJsonBlood(response);
                         } else if (params
-                                .containsValue(URL.DISTRICTLIST_PARAM)) {
+                                .containsValue(DISTRICTLIST_PARAM)) {
                             parse.parseJsonDistrict(response);
                         } else if (params
-                                .containsValue(URL.HOSPITALLIST_PARAM)) {
+                                .containsValue(HOSPITALLIST_PARAM)) {
                             parse.parseJsonHospital(response);
                             if (signUp) {
                                 pd.dismiss();
@@ -444,7 +444,7 @@ public class LogInFragment extends Fragment {
                                 startActivity(signUpIntent);
                                 signUp = false;
                             }
-                        } else if (params.containsValue(URL.GET_DONATION_RECORD_PARAM)) {
+                        } else if (params.containsValue(GET_DONATION_RECORD_PARAM)) {
                             try {
                                 Log.e("TAG", response.toString(1));
                                 if (response.getInt("done") == 1) {

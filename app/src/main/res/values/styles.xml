@@ -68,7 +68,7 @@
         <item name="colorPrimary">@color/holo_red_light</item>
     </style>
 
-    <style name="ThemeAbout" parent="@style/Theme.AppCompat">
+    <style name="ThemeAbout" parent="@style/Theme.AppCompat.Light">
         <item name="colorPrimary">@color/holo_red_light</item>
     </style>
 

@@ -147,6 +147,7 @@
             android:visibility="visible">
 
             <com.widget.CustomTextView
+                android:id="@id/avatar"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dip"

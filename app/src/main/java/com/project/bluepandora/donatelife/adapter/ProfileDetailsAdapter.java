@@ -14,7 +14,6 @@ import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
-import com.widget.CustomButton;
 import com.widget.CustomTextView;
 
 import java.util.List;
@@ -122,14 +121,17 @@ public class ProfileDetailsAdapter extends BaseAdapter {
         } else if (position == 3) {
             return bloodItem.getBloodName();
         } else if (position == 4) {
-            return "No Donation Record Found";
+            if (infoItem.getTotalDonation().equals("0")) {
+                return "No Donation Record Found";
+            } else {
+                return infoItem.getTotalDonation();
+            }
         }
         return null;
     }
 
     static class ViewHolder {
         RelativeLayout profileHeaderHolder;
-        CustomButton edit;
         CustomTextView header;
         CustomTextView description;
     }

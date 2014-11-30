@@ -24,6 +24,7 @@ import com.project.bluepandora.donatelife.fragments.AboutFragment;
 */
 public class AboutActivity extends ActionBarActivity {
 
+    private static final String TAG = AboutActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG = "mContent";
     private Fragment mContent;
     private BackPressImp mbackPressImp;

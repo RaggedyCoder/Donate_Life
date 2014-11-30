@@ -52,7 +52,6 @@ import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.fragments.FeedFragment;
 import com.project.bluepandora.donatelife.fragments.ProfileDetailsFragment;
-import com.project.bluepandora.donatelife.fragments.ProfileFragment;
 import com.project.bluepandora.donatelife.fragments.RequestFragment;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.services.ServerUtilities;
@@ -138,13 +137,6 @@ public class MainActivity extends ActionBarActivity {
                         database.open();
                         UserInfoItem userInfoItem = database.getAllUserItem().get(0);
                         database.close();
-                        DRDataSource dataSource = new DRDataSource(context);
-                        dataSource.open();
-                        ArrayList<DRItem> items = dataSource.getAllDRItem();
-                        for (DRItem item : items) {
-                            dataSource.deleteDistrictitem(item);
-                        }
-                        dataSource.close();
                         ServerUtilities.register(context, userInfoItem.getMobileNumber(), regId);
                         return null;
                     }
@@ -226,9 +218,6 @@ public class MainActivity extends ActionBarActivity {
             mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
             listAdapter.setSelected(1);
             prevPos = 1;
-        } else if (mContent instanceof ProfileFragment) {
-            listAdapter.setSelected(2);
-            prevPos = 2;
         }
     }
 
@@ -310,6 +299,13 @@ public class MainActivity extends ActionBarActivity {
                         userDatabase.deleteUserInfoitem(i);
                     }
                     userDatabase.close();
+                    DRDataSource dataSource = new DRDataSource(MainActivity.this);
+                    dataSource.open();
+                    ArrayList<DRItem> items = dataSource.getAllDRItem();
+                    for (DRItem item : items) {
+                        dataSource.deleteDistrictitem(item);
+                    }
+                    dataSource.close();
                     pd.dismiss();
                     Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                     startActivity(intent);

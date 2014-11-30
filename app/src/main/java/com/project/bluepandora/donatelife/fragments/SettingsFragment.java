@@ -1,18 +1,4 @@
 package com.project.bluepandora.donatelife.fragments;
-
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.project.bluepandora.donatelife.R;
-
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
  *
@@ -28,6 +14,21 @@ import com.project.bluepandora.donatelife.R;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.project.bluepandora.donatelife.R;
+
+
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsFragment extends PreferenceFragment {
 

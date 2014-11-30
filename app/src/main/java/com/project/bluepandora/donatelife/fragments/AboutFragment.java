@@ -1,7 +1,23 @@
 package com.project.bluepandora.donatelife.fragments;
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,21 +39,7 @@ import com.widget.CustomButton;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Copyright (C) 2014 The Blue Pandora Project Group
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 public class AboutFragment extends ListFragment implements AboutActivity.BackPressImp {
 
     private static boolean licenseView = false;
@@ -48,9 +50,11 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
     private WebView wv;
     private Animation animOpen;
     private Animation animClose;
+    private ProgressDialog.Builder versionDialogBuilder;
+    private ProgressDialog.Builder developerDialogBuilder;
     private Dialog versionDialog;
     private Dialog developerDialog;
-    private Animation.AnimationListener mAnimatonListener;
+    private Animation.AnimationListener mAnimationListener;
 
     private CustomButton theDoctorFacebook;
     private CustomButton coderBdFacebook;
@@ -82,23 +86,20 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
         mAdapter = new AboutAdapter(getActivity(), aboutItems);
         animOpen = AnimationUtils.loadAnimation(getActivity(), R.anim.dim_grow);
         animClose = AnimationUtils.loadAnimation(getActivity(), R.anim.dim);
-        View view = inflater.inflate(R.layout.developer_info, null);
-        versionDialog = new Dialog(getActivity());
-        versionDialog.setTitle(R.string.app_info);
-        versionDialog.setContentView(R.layout.version_info);
-        developerDialog = new Dialog(getActivity());
-        developerDialog.setTitle(R.string.about_developer);
-        developerDialog.setContentView(view);
-        theDoctorFacebook = (CustomButton) view.findViewById(R.id.the_doctor_facebook);
-        coderBdFacebook = (CustomButton) view.findViewById(R.id.coder_bd_facebook);
-        theDoctorEmail = (CustomButton) view.findViewById(R.id.the_doctor_email);
-        coderBdEmail = (CustomButton) view.findViewById(R.id.coder_bd_email);
+        View developerView = inflater.inflate(R.layout.developer_info, null);
+        versionDialogBuilder = new ProgressDialog.Builder(getActivity());
+        View versionView = inflater.inflate(R.layout.version_info, null);
+        versionDialogBuilder.setView(versionView);
+        developerDialogBuilder = new ProgressDialog.Builder(getActivity());
+        developerDialogBuilder.setView(developerView);
+        theDoctorFacebook = (CustomButton) developerView.findViewById(R.id.the_doctor_facebook);
+        coderBdFacebook = (CustomButton) developerView.findViewById(R.id.coder_bd_facebook);
+        theDoctorEmail = (CustomButton) developerView.findViewById(R.id.the_doctor_email);
+        coderBdEmail = (CustomButton) developerView.findViewById(R.id.coder_bd_email);
+        versionDialog = versionDialogBuilder.create();
+        developerDialog = developerDialogBuilder.create();
         wv = (WebView) rootView.findViewById(R.id.license_view);
-        if (getViewVisibility(wv)) {
-            licenseView = true;
-        } else {
-            licenseView = false;
-        }
+        licenseView = getViewVisibility(wv);
         wv.loadUrl("file:///android_asset/licences.html");
         return rootView;
     }
@@ -107,7 +108,7 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getListView().setAdapter(mAdapter);
-        animClose.setAnimationListener(mAnimatonListener);
+        animClose.setAnimationListener(mAnimationListener);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -176,7 +177,7 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mAnimatonListener = new Animation.AnimationListener() {
+        mAnimationListener = new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 

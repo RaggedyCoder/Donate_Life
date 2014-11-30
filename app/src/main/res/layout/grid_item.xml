@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <FrameLayout
+            android:clickable="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -31,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:clickable="false"
                     android:layout_centerVertical="true"
                     android:tint="#dddddd"
                     android:padding="0dip"
@@ -57,6 +59,7 @@
 
         <LinearLayout
             android:id="@+id/record_holder"
+            android:clickable="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dip"
@@ -64,6 +67,7 @@
 
             <com.widget.CustomTextView
                 android:id="@+id/donation_date"
+                android:clickable="false"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center"
@@ -74,14 +78,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/option_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#00000000"
         android:contentDescription="@null"
         android:paddingEnd="5dip"
         android:paddingRight="5dip"

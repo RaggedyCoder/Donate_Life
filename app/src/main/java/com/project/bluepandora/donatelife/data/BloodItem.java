@@ -20,6 +20,15 @@ public class BloodItem implements Item {
     private int bloodId;
     private String bloodName;
 
+    public BloodItem() {
+
+    }
+
+    public BloodItem(String bloodName, int bloodId) {
+        this.bloodId = bloodId;
+        this.bloodName = bloodName;
+    }
+
     public int getBloodId() {
         return bloodId;
     }

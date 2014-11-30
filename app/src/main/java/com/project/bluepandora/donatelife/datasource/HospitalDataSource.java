@@ -1,16 +1,5 @@
 package com.project.bluepandora.donatelife.datasource;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.project.bluepandora.donatelife.data.HospitalItem;
-import com.project.bluepandora.donatelife.database.DataBaseOpenHelper;
-
-import java.util.ArrayList;
-
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
  *
@@ -26,14 +15,27 @@ import java.util.ArrayList;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.project.bluepandora.donatelife.data.HospitalItem;
+import com.project.bluepandora.donatelife.data.Item;
+import com.project.bluepandora.donatelife.database.DataBaseOpenHelper;
+
+import java.util.ArrayList;
+
 public class HospitalDataSource {
 
-    private String[] allColumns = {DataBaseOpenHelper.DISTRICTID_COLOUMN,
-            DataBaseOpenHelper.HOSPITALID_COLOUMN,
-            DataBaseOpenHelper.HOSPITALNAME_COLOUMN};
     protected Context context;
     protected SQLiteDatabase database;
     protected DataBaseOpenHelper dbHelper;
+    private String[] allColumns = {DataBaseOpenHelper.DISTRICTID_COLOUMN,
+            DataBaseOpenHelper.HOSPITALID_COLOUMN,
+            DataBaseOpenHelper.HOSPITALNAME_COLOUMN};
 
     public HospitalDataSource(Context context) {
         dbHelper = new DataBaseOpenHelper(context);
@@ -71,8 +73,8 @@ public class HospitalDataSource {
                 null);
     }
 
-    public ArrayList<HospitalItem> getAllHospitalItem() {
-        ArrayList<HospitalItem> items = new ArrayList<HospitalItem>();
+    public ArrayList<Item> getAllHospitalItem() {
+        ArrayList<Item> items = new ArrayList<Item>();
         Cursor cursor = database.query(DataBaseOpenHelper.HOSPITAL_TABLE,
                 allColumns, null, null, null, null,
                 DataBaseOpenHelper.HOSPITALNAME_COLOUMN);
@@ -84,13 +86,12 @@ public class HospitalDataSource {
         return items;
     }
 
-    public ArrayList<HospitalItem> getAllHospitalItem(int distId) {
-        ArrayList<HospitalItem> items = new ArrayList<HospitalItem>();
+    public ArrayList<Item> getAllHospitalItem(int distId) {
+        ArrayList<Item> items = new ArrayList<Item>();
         Cursor cursor = database.query(DataBaseOpenHelper.HOSPITAL_TABLE,
                 allColumns, DataBaseOpenHelper.DISTRICTID_COLOUMN + " = "
                         + distId, null, null, null, DataBaseOpenHelper.HOSPITALNAME_COLOUMN);
         if (cursor == null) {
-
             return null;
         }
         cursor.moveToFirst();

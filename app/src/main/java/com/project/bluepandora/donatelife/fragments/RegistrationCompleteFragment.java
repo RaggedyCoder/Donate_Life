@@ -1,4 +1,19 @@
 package com.project.bluepandora.donatelife.fragments;
+/*
+ * Copyright (C) 2014 The Blue Pandora Project Group
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,11 +37,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.project.bluepandora.donatelife.R;
-import com.project.bluepandora.donatelife.adapter.BloodSpinnerAdapter;
-import com.project.bluepandora.donatelife.adapter.DistrictSpinnerAdapter;
+import com.project.bluepandora.donatelife.adapter.SpinnerAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.BloodItem;
 import com.project.bluepandora.donatelife.data.DistrictItem;
+import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.helpers.URL;
@@ -40,22 +55,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*
- * Copyright (C) 2014 The Blue Pandora Project Group
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-public class RegistrationCompleteFragment extends Fragment {
+public class RegistrationCompleteFragment extends Fragment implements URL {
 
     /**
      * Defines a tag for identifying log entries
@@ -75,16 +75,16 @@ public class RegistrationCompleteFragment extends Fragment {
     private Spinner bloodSpinner;
 
     /**
-     * A Custom BaseAdapter{@link com.project.bluepandora.donatelife.adapter.BloodSpinnerAdapter} for the bloodSpinner.
+     * A Custom BaseAdapter{@link SpinnerAdapter} for the bloodSpinner.
      */
 
-    private BloodSpinnerAdapter bloodAdapter;
+    private SpinnerAdapter bloodAdapter;
 
     /**
-     * A Custom BaseAdapter{@link com.project.bluepandora.donatelife.adapter.DistrictSpinnerAdapter} for the districtSpinner.
+     * A Custom BaseAdapter{@link SpinnerAdapter} for the districtSpinner.
      */
 
-    private DistrictSpinnerAdapter districtAdapter;
+    private SpinnerAdapter districtAdapter;
 
     /**
      * A {@link CustomButton} for the Registration
@@ -93,11 +93,11 @@ public class RegistrationCompleteFragment extends Fragment {
     /**
      * An {@link ArrayList} for storing the Name of the District only for this Fragment.
      */
-    private ArrayList<DistrictItem> distItems;
+    private ArrayList<Item> distItems;
     /**
-     * An {@link ArrayList} for storing the Name of the District only for this Fragment.
+     * An {@link ArrayList} for storing the Name of the Blood only for this Fragment.
      */
-    private ArrayList<BloodItem> bloodItems;
+    private ArrayList<Item> bloodItems;
 
     /**
      * A database{@link ArrayList} for retrieve the stored district list.
@@ -125,7 +125,7 @@ public class RegistrationCompleteFragment extends Fragment {
     /**
      * A click detection listener for the Registration Button.
      */
-    private View.OnClickListener mRegistarionListener;
+    private View.OnClickListener mRegistrationListener;
     /**
      * A {@link android.app.ProgressDialog} for showing the user background work is going on.
      */
@@ -173,15 +173,15 @@ public class RegistrationCompleteFragment extends Fragment {
         distItems = districtDatabase.getAllDistrictItem();
         bloodDatabase.close();
         districtDatabase.close();
-        bloodAdapter = new BloodSpinnerAdapter(getActivity(), bloodItems);
-        districtAdapter = new DistrictSpinnerAdapter(getActivity(), distItems);
+        bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
+        districtAdapter = new SpinnerAdapter(getActivity(), distItems);
         bloodSpinner.setAdapter(bloodAdapter);
         districtSpinner.setAdapter(districtAdapter);
         bloodAdapter.notifyDataSetChanged();
         districtAdapter.notifyDataSetChanged();
         bloodSpinner.setOnItemSelectedListener(mbloodSpinnerItemSelectedListener);
         districtSpinner.setOnItemSelectedListener(mDistrictItemSelectedListener);
-        registrationButton.setOnClickListener(mRegistarionListener);
+        registrationButton.setOnClickListener(mRegistrationListener);
     }
 
     @Override
@@ -191,7 +191,8 @@ public class RegistrationCompleteFragment extends Fragment {
         mbloodSpinnerItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                avatar.setText(bloodItems.get(bloodSpinner.getSelectedItemPosition()).getBloodName());
+                BloodItem item = (BloodItem) bloodItems.get(bloodSpinner.getSelectedItemPosition());
+                avatar.setText(item.getBloodName());
                 if (avatar.getText().toString().length() > 2) {
                     avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
                 } else {
@@ -213,27 +214,34 @@ public class RegistrationCompleteFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         };
-        mRegistarionListener = new View.OnClickListener() {
+        mRegistrationListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * Tags and Value for Registration Request
+                /*
+                 * Tags and Values for Registration Request
+                 *
                  * static final TAG->requestName.  static final Value->register
+                 *
                  * static final TAG->firstName.    Value will be determined by the user.
+                 *
                  * static final TAG->lastName.     Value will be determined by the user.
+                 *
                  * static final TAG->groupId.      Value will be determined by the user.
-                 * static final TAG->distId.      Value will be determined by the user.
+                 *
+                 * static final TAG->distId.       Value will be determined by the user.
+                 *
                  * static final TAG->mobileNumber. Value will be determined by the user.
+                 *
                  * static final TAG->keyWord.      Value will be determined by the user
                  */
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put(URL.REQUEST_NAME, URL.REGISTERREQUEST_PARAM);
-                params.put(URL.FIRST_NAME_KEY, getArguments().getString("firstName"));
-                params.put(URL.LAST_NAME_KEY, getArguments().getString("lastName"));
-                params.put(URL.DISTRICTID_TAG, distItems.get(districtSpinner.getSelectedItemPosition()).getDistId() + "");
-                params.put(URL.GROUPID_TAG, bloodItems.get(bloodSpinner.getSelectedItemPosition()).getBloodId() + "");
-                params.put(URL.MOBILE_TAG, getArguments().getString("mobileNumber"));
-                params.put(URL.PASSWORD_TAG, getArguments().getString("password"));
+                params.put(REQUEST_NAME, REGISTER_REQUEST_PARAM);
+                params.put(FIRST_NAME_KEY, getArguments().getString("firstName"));
+                params.put(LAST_NAME_KEY, getArguments().getString("lastName"));
+                params.put(DISTRICTID_TAG, ((DistrictItem) distItems.get(districtSpinner.getSelectedItemPosition())).getDistId() + "");
+                params.put(GROUPID_TAG, ((BloodItem) bloodItems.get(bloodSpinner.getSelectedItemPosition())).getBloodId() + "");
+                params.put(MOBILE_TAG, getArguments().getString("mobileNumber"));
+                params.put(PASSWORD_TAG, getArguments().getString("password"));
                 createProgressDialog();
                 getJsonData(params);
             }
@@ -265,7 +273,7 @@ public class RegistrationCompleteFragment extends Fragment {
 
     private void getJsonData(final HashMap<String, String> params) {
 
-        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL.URL, params,
+        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL, params,
                 new Response.Listener<JSONObject>() {
 
                     @Override

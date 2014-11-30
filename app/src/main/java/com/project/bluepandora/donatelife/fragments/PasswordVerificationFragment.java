@@ -34,6 +34,10 @@ public class PasswordVerificationFragment extends Fragment {
      */
     private static String TAG = PasswordVerificationFragment.class.getSimpleName();
     /**
+     * A {@link View} for the whole fragment view.
+     */
+    protected View rootView;
+    /**
      * A EditTextField{@link CustomEditText} for the password.
      */
     private CustomEditText passwordField;
@@ -49,11 +53,6 @@ public class PasswordVerificationFragment extends Fragment {
      * A click detection listener for the SignUp Button.
      */
     private View.OnClickListener mVerificationListener;
-    /**
-     * A {@link View} for the whole fragment view.
-     */
-    protected View rootView;
-
 
     public static Fragment newInstance(Bundle bundle) {
         PasswordVerificationFragment fragment = new PasswordVerificationFragment();

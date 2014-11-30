@@ -18,15 +18,16 @@ package com.project.bluepandora.donatelife.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 
 import java.util.ArrayList;
 
-//import android.widget.Toast;
-
 public class StartActivity extends Activity {
+
+    private static final String TAG = StartActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +37,8 @@ public class StartActivity extends Activity {
         userDatabase.open();
         try {
             items = userDatabase.getAllUserItem();
-            // Toast.makeText(this, items.size() + "",
-            // Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            // Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, e.getMessage());
         }
         if (items != null) {
             if (items.size() == 1) {
@@ -52,11 +51,9 @@ public class StartActivity extends Activity {
                 finish();
             }
         } else {
-
             Intent intent = new Intent(this, LogInActivity.class);
             startActivity(intent);
             finish();
         }
     }
-
 }

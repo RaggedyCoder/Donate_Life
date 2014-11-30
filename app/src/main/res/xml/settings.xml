@@ -23,11 +23,12 @@
             android:summary="@string/pref_notification_receive_filter"
             android:title="@string/pref_title_notification_receive_filter"
             android:defaultValue="true" />
-        <RingtonePreference
+        <com.project.bluepandora.donatelife.preferences.NotificationSoundPreference
             android:key="pref_filter_ringtone"
             android:summary="@string/pref_notification_ringtone"
             android:dependency="pref_filter_notification"
             android:title="@string/pref_title_notification_ringtone"
+            android:defaultValue="content://settings/system/notification_sound"
             android:showDefault="true" />
         <CheckBoxPreference
             android:key="pref_filter_vibration"

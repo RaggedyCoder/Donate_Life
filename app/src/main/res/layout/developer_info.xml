@@ -10,8 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="15dip"
-        android:layout_marginBottom="15dip"
+        android:layout_margin="15dip"
         android:layout_gravity="center">
 
         <LinearLayout
@@ -23,7 +22,9 @@
             <com.makeramen.RoundedImageView
                 android:layout_width="70dip"
                 android:layout_height="70dip"
-                android:layout_margin="15dip"
+                android:layout_marginTop="15dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginBottom="15dip"
                 android:tint="#44123456"
                 app:oval="true"
                 android:src="@drawable/the_doctor" />
@@ -64,13 +65,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dip"
-            android:layout_marginBottom="15dip"
+
             android:orientation="horizontal">
 
             <com.makeramen.RoundedImageView
                 android:layout_width="70dip"
                 android:layout_height="70dip"
-                android:layout_margin="15dip"
+                android:layout_marginTop="15dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginBottom="15dip"
                 android:tint="#44654321"
                 app:oval="true"
                 android:src="@drawable/coder_bd" />

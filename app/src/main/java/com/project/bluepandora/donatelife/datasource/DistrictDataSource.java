@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.project.bluepandora.donatelife.data.DistrictItem;
+import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.database.DataBaseOpenHelper;
 import com.project.bluepandora.donatelife.exception.DistrictDatabaseException;
 
@@ -69,8 +70,8 @@ public class DistrictDataSource {
                 DataBaseOpenHelper.DISTRICTID_COLOUMN + " = " + distId, null);
     }
 
-    public ArrayList<DistrictItem> getAllDistrictItem() {
-        ArrayList<DistrictItem> items = new ArrayList<DistrictItem>();
+    public ArrayList<Item> getAllDistrictItem() {
+        ArrayList<Item> items = new ArrayList<Item>();
         Cursor cursor = database.query(DataBaseOpenHelper.DISTRICT_TABLE,
                 allColumns, null, null, null, null,
                 DataBaseOpenHelper.DISTRICTNAME_COLOUMN);

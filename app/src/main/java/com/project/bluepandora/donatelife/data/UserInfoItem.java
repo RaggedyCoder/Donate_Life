@@ -21,6 +21,7 @@ public class UserInfoItem implements Item {
     private int distId;
     private int groupId;
     private String mobileNumber;
+    private String totalDonation;
     private String firstName;
     private String lastName;
 
@@ -87,4 +88,11 @@ public class UserInfoItem implements Item {
         this.lastName = lastName;
     }
 
+    public String getTotalDonation() {
+        return totalDonation;
+    }
+
+    public void setTotalDonation(String totalDonation) {
+        this.totalDonation = totalDonation;
+    }
 }

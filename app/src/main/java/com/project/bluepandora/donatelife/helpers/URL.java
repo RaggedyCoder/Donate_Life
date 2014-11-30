@@ -15,8 +15,14 @@ package com.project.bluepandora.donatelife.helpers;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
 public interface URL {
     public static final String URL = "http://life-donatelife.rhcloud.com/life/LifeService";
+    public static final String FEEDBACK_SUBJECT_PARAM = "subject";
+    public static final String FEEDBACK_COMMENT_PARAM = "comment";
+    public static final String FEEDBACK_USERNAME_PARAM = "idUser";
+    public static final String FEEDBACK_REQUEST = "feedback";
     public static final String REQUEST_NAME = "requestName";
     public static final String MOBILE_TAG = "mobileNumber";
     public static final String GCM_TAG = "gcmId";
@@ -34,13 +40,14 @@ public interface URL {
     public static final String DISTRICTLIST_PARAM = "districtList";
     public static final String HOSPITALLIST_PARAM = "hospitalList";
     public static final String GET_DONATION_RECORD_PARAM = "getDonationRecord";
+    public static final String REMOVE_DONATION_RECORD_PARAM = "removeDonationRecord";
     public static final String FIRST_NAME_KEY = "firstName";
     public static final String LAST_NAME_KEY = "lastName";
     public static final String REGISTER_CHECK = "isRegistered";
     public static final String USER_INFO = "userInfo";
     public static final String BLOODREQUEST_PARAM = "getBloodRequest";
     public static final String ADD_BLOODREQUEST_PARAM = "addBloodRequest";
-    public static final String REGISTERREQUEST_PARAM = "register";
+    public static final String REGISTER_REQUEST_PARAM = "register";
     public static final String GCMREGISTER_PARAM = "gcmUpdate";
     public static final String USERINFOUPDATE_PARAM = "updateUserInfo";
     public static final String BLOODREQUEST_DELETE_PARAM = "deleteBloodRequestInKey";
