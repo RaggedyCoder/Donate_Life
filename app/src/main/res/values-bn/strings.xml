@@ -160,4 +160,8 @@
     <string name="delete_request">মুছে ফেলার অনুরোধ</string>
     <string name="progressing">কাজ হচ্ছে...</string>
 
+    <string name="zero_grammar_correct">০ বার</string>
+    <string name="zero_grammar_result">কোনো ডোনেশন রেকর্ড পাওয়া যায় নি</string>
+
+
 </resources>

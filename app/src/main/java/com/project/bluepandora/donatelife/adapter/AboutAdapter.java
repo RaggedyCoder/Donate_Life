@@ -1,18 +1,4 @@
 package com.project.bluepandora.donatelife.adapter;
-
-import android.app.Activity;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
-import com.project.bluepandora.donatelife.R;
-import com.project.bluepandora.donatelife.data.AboutItem;
-import com.widget.CustomTextView;
-
-import java.util.List;
-
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
  *
@@ -28,6 +14,21 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.data.AboutItem;
+import com.widget.CustomTextView;
+
+import java.util.List;
+
+
 public class AboutAdapter extends BaseAdapter {
 
     private List<AboutItem> items;

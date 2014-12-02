@@ -13,7 +13,7 @@ package com.project.bluepandora.donatelife.fragments;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -63,10 +63,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * <p/>
+ * <p>
  * This fragment is for the user to log in to the Main Activity.
  * Which is for the blood feed,request profile and other main operation.
- * <p/>
+ * </p>
  */
 public class LogInFragment extends Fragment implements URL {
 
@@ -84,9 +84,8 @@ public class LogInFragment extends Fragment implements URL {
      * A {@link Spinner} for showing the country's list
      */
     private Spinner countryNameSpinner;
-
     /**
-     * A Custom BaseAdapter{@link com.project.bluepandora.donatelife.adapter.CountryListAdapter}
+     * A Custom BaseAdapter{@link CountryListAdapter}
      * for the countryNameSpinner
      */
     private CountryListAdapter countryListAdapter;
@@ -175,12 +174,12 @@ public class LogInFragment extends Fragment implements URL {
         super.onCreateView(inflater, container, savedInstanceState);
 
         rootView = inflater.inflate(R.layout.fragment_signin, container, false);
-        mobileNumber = (CustomEditText) rootView.findViewById(R.id.registration_phone);
-        password = (CustomEditText) rootView.findViewById(R.id.check_reg_pass);
-        signInButton = (CustomButton) rootView.findViewById(R.id.registration_submit);
-        signUpButton = (CustomButton) rootView.findViewById(R.id.signup);
-        countryNameSpinner = (Spinner) rootView.findViewById(R.id.registration_country);
-        countryCode = (CustomTextView) rootView.findViewById(R.id.registration_cc);
+        mobileNumber = (CustomEditText) rootView.findViewById(R.id.mobile_number);
+        password = (CustomEditText) rootView.findViewById(R.id.password);
+        signInButton = (CustomButton) rootView.findViewById(R.id.sign_in_button);
+        signUpButton = (CustomButton) rootView.findViewById(R.id.sign_up_button);
+        countryNameSpinner = (Spinner) rootView.findViewById(R.id.country_name_spinner);
+        countryCode = (CustomTextView) rootView.findViewById(R.id.country_code);
         return rootView;
     }
 
@@ -415,6 +414,7 @@ public class LogInFragment extends Fragment implements URL {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         } finally {
             drDataSource.close();
         }
@@ -488,5 +488,4 @@ public class LogInFragment extends Fragment implements URL {
         });
         AppController.getInstance().addToRequestQueue(jsonReq);
     }
-
 }

@@ -2,9 +2,15 @@
 <resources>
 
     <plurals name="bags">
-        <item quantity="zero"></item>
+        <item quantity="zero"> </item>
         <item quantity="one">(one Bag)</item>
         <item quantity="other">(%d Bags)</item>
+    </plurals>
+
+    <plurals name="donation">
+        <item quantity="zero">No Donation Record Found</item>
+        <item quantity="one">%d Time</item>
+        <item quantity="other">%d Times</item>
     </plurals>
 
     <plurals name="numbers">
