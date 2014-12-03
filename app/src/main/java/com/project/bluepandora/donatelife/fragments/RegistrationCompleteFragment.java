@@ -44,6 +44,7 @@ import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
+import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomButton;
@@ -131,6 +132,10 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
      */
     private ProgressDialog pd;
 
+    private DialogInterface.OnClickListener mOnClickListener;
+
+    private DialogBuilder dialogBuilder;
+
     public RegistrationCompleteFragment() {
 
     }
@@ -175,6 +180,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
         districtDatabase.close();
         bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
         districtAdapter = new SpinnerAdapter(getActivity(), distItems);
+        dialogBuilder = new DialogBuilder(getActivity(), TAG);
         bloodSpinner.setAdapter(bloodAdapter);
         districtSpinner.setAdapter(districtAdapter);
         bloodAdapter.notifyDataSetChanged();
@@ -203,6 +209,15 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        };
+        mOnClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AlertDialog d = (AlertDialog) dialog;
+                if (d.equals("Done!")) {
+                    getActivity().finish();
+                }
             }
         };
         mDistrictItemSelectedListener = new OnItemSelectedListener() {
@@ -263,9 +278,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
         alertDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (message.equals("Done!")) {
                     getActivity().finish();
-                }
             }
         });
         alertDialog.show();
@@ -286,9 +299,12 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
                         pd.dismiss();
                         try {
                             if (response.getInt("done") == 1) {
-                                createAlertDialog("Done!");
+                                //createAlertDialog("Done!");
+                                dialogBuilder.createAlertDialog(null, "Done!", mOnClickListener);
+
                             } else {
-                                createAlertDialog("Sorry! something went wrong.");
+                                //createAlertDialog("Sorry! something went wrong.");
+                                dialogBuilder.createAlertDialog("Sorry!something went wrong.");
                             }
                         } catch (JSONException e) {
                             Log.e(TAG, e.getMessage());
