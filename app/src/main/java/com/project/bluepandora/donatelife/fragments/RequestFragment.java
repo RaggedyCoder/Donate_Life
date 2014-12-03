@@ -68,7 +68,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -299,7 +298,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         params.put(EMERGENCY_TAG, emergencyCheck.isChecked() ? "1" : "0");
         params.put(PASSWORD_TAG, userInfoItems.get(0).getKeyWord());
         params.put(REQUESTTIME_TAG, reqTime);
-        Log.e("MSG", params.toString() + " " + String.format(Locale.ENGLISH, reqTime, reqTime));
+        Log.e("MSG", reqTime);
         return params;
     }
 

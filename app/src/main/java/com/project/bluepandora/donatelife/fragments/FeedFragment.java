@@ -257,7 +257,6 @@ public class FeedFragment extends Fragment implements URL {
                 TranslateAnimation anim = new TranslateAnimation(0, xDest
                         - origin[0], 0, yDest - origin[1]);
                 anim.setFillEnabled(true);
-                anim.setFillEnabled(true);
                 anim.setDuration(getActivity().getResources().getInteger(
                         android.R.integer.config_longAnimTime));
                 anim.setInterpolator(getActivity(),
@@ -398,7 +397,7 @@ public class FeedFragment extends Fragment implements URL {
                                 Toast.makeText(getActivity(),
                                         "Feed up to Date.",
                                         Toast.LENGTH_LONG).show();
-                                progress.setVisibility(View.GONE);
+
                             } else {
                                 parseJsonFeed(response);
                             }

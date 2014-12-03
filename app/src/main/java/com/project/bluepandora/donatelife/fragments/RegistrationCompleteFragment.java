@@ -291,11 +291,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            Log.e(TAG, response.toString(1));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        VolleyLog.d(TAG, "Response: " + response.toString());
                         pd.dismiss();
                         try {
                             if (response.getInt("done") == 1) {

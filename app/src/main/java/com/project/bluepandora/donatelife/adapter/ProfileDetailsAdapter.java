@@ -1,5 +1,23 @@
 package com.project.bluepandora.donatelife.adapter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
+
+import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.data.BloodItem;
+import com.project.bluepandora.donatelife.data.DistrictItem;
+import com.project.bluepandora.donatelife.data.UserInfoItem;
+import com.project.bluepandora.donatelife.datasource.BloodDataSource;
+import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
+import com.widget.CustomTextView;
+
+import java.util.List;
+
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
  *
@@ -15,28 +33,6 @@ package com.project.bluepandora.donatelife.adapter;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.project.bluepandora.donatelife.R;
-import com.project.bluepandora.donatelife.data.BloodItem;
-import com.project.bluepandora.donatelife.data.DistrictItem;
-import com.project.bluepandora.donatelife.data.UserInfoItem;
-import com.project.bluepandora.donatelife.datasource.BloodDataSource;
-import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
-import com.widget.CustomTextView;
-
-import java.util.List;
-
 public class ProfileDetailsAdapter extends BaseAdapter {
 
     UserInfoItem infoItem;
@@ -45,9 +41,10 @@ public class ProfileDetailsAdapter extends BaseAdapter {
     private BloodItem bloodItem;
     private Activity activity;
     private LayoutInflater inflater;
+    private String district;
+    private String bloodGroup;
     private BloodDataSource bloodDatabase;
     private DistrictDataSource districtDatabase;
-    private Resources resources;
 
     public ProfileDetailsAdapter(Activity activity, UserInfoItem infoItem, List<String> header) {
         this.activity = activity;
@@ -67,7 +64,6 @@ public class ProfileDetailsAdapter extends BaseAdapter {
                 .districtItemToCursor(distItem));
         bloodDatabase.close();
         districtDatabase.close();
-        resources = activity.getResources();
     }
 
     @Override
@@ -98,9 +94,9 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.profile_details, null);
             holder = new ViewHolder();
             holder.profileHeaderHolder = (RelativeLayout) convertView.findViewById(R.id.profile_header_holder);
-            holder.profileEdit = (ImageButton) convertView.findViewById(R.id.profile_edit);
-            holder.detailsHeader = (CustomTextView) convertView.findViewById(R.id.details_header);
-            holder.detailsBody = (CustomTextView) convertView.findViewById(R.id.details_body);
+//            holder.edit = (CustomButton) convertView.findViewById(R.id.profile_edit);
+            holder.header = (CustomTextView) convertView.findViewById(R.id.details_header);
+            holder.description = (CustomTextView) convertView.findViewById(R.id.details_body);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -109,15 +105,9 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             holder.profileHeaderHolder.setVisibility(View.GONE);
         } else {
             holder.profileHeaderHolder.setVisibility(View.VISIBLE);
-            holder.profileEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(activity, "pressed", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
-        holder.detailsHeader.setText(header.get(position));
-        holder.detailsBody.setText(getDescription(position));
+        holder.header.setText(header.get(position));
+        holder.description.setText(getDescription(position));
         return convertView;
     }
 
@@ -131,20 +121,18 @@ public class ProfileDetailsAdapter extends BaseAdapter {
         } else if (position == 3) {
             return bloodItem.getBloodName();
         } else if (position == 4) {
-            String totalDonation = resources.getQuantityString(R.plurals.donation,
-                    Integer.parseInt(infoItem.getTotalDonation()), Integer.parseInt(infoItem.getTotalDonation()));
-            if (totalDonation.equals(resources.getString(R.string.zero_grammar_correct))) {
-                totalDonation = resources.getString(R.string.zero_grammar_result);
+            if (infoItem.getTotalDonation().equals("0")) {
+                return "No Donation Record Found";
+            } else {
+                return infoItem.getTotalDonation();
             }
-            return totalDonation;
         }
         return null;
     }
 
     static class ViewHolder {
         RelativeLayout profileHeaderHolder;
-        CustomTextView detailsHeader;
-        ImageButton profileEdit;
-        CustomTextView detailsBody;
+        CustomTextView header;
+        CustomTextView description;
     }
 }
