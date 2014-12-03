@@ -22,7 +22,7 @@ public class DialogBuilder {
         this.activity = activity;
         progressDialogBuilder = new ProgressDialog.Builder(getActivity());
         alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        this.TAG = TAG + TAG;
+        this.TAG = TAG;
     }
 
     public void createAlertDialog(String message) {
