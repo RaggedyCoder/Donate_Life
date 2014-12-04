@@ -16,8 +16,6 @@ package com.project.bluepandora.donatelife.fragments;
  */
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,6 +46,8 @@ import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.DialogBuilder;
+import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.jsonperser.JSONParser;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
@@ -100,10 +100,6 @@ public class LogInFragment extends Fragment implements URL {
      */
     private CustomButton signUpButton;
     /**
-     * A {@link ProgressDialog} for showing the user background work is going on.
-     */
-    private ProgressDialog pd;
-    /**
      * An {@link ArrayList} for storing the country codes only for this Fragment.
      */
     private ArrayList<String> countryCodes;
@@ -151,6 +147,8 @@ public class LogInFragment extends Fragment implements URL {
      */
     private boolean signUp = false;
 
+    private DialogBuilder dialogBuilder;
+
     /**
      * Fragments require an empty constructor.
      */
@@ -196,6 +194,7 @@ public class LogInFragment extends Fragment implements URL {
         countryNameSpinner.setAdapter(countryListAdapter);
         countryListAdapter.notifyDataSetChanged();
 
+        dialogBuilder = new DialogBuilder(getActivity(), TAG);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .hide();
 
@@ -247,65 +246,40 @@ public class LogInFragment extends Fragment implements URL {
                 mobileNumber.clearFocus();
                 password.clearFocus();
                 if (mobileNumber.getText().length() == 0) {
-                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
+                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
                     return;
                 } else if (mobileNumber.getText().length() < 10) {
-                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
+                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
                     return;
                 }
                 if (countryCode.getText().length() == 0) {
-                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_select_a_country));
+                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_select_a_country));
                     return;
                 }
-                createProgressDialog();
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, BLOODLIST_PARAM);
+                dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
+                params = ParamsBuilder.bloodGroupList();
                 getJsonData(params);
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, DISTRICTLIST_PARAM);
+                params = ParamsBuilder.districtList();
                 getJsonData(params);
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, HOSPITALLIST_PARAM);
+                params = ParamsBuilder.hospitalList();
                 getJsonData(params);
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, REGISTER_CHECK);
-                params.put(MOBILE_TAG, "0" + mobileNumber.getText());
+                params = ParamsBuilder.registerCheckRequest("0" + mobileNumber.getText());
                 getJsonData(params);
             }
         };
         mSignUpListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                createProgressDialog();
+                dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
                 signUp = true;
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, BLOODLIST_PARAM);
+                params = ParamsBuilder.bloodGroupList();
                 getJsonData(params);
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, DISTRICTLIST_PARAM);
+                params = ParamsBuilder.districtList();
                 getJsonData(params);
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, HOSPITALLIST_PARAM);
+                params = ParamsBuilder.hospitalList();
                 getJsonData(params);
             }
         };
-    }
-
-    private void createProgressDialog() {
-        pd = new ProgressDialog(LogInFragment.this
-                .getActivity());
-        pd.setMessage(getActivity().getResources().getString(
-                R.string.loading));
-        pd.setIndeterminate(false);
-        pd.setCancelable(false);
-        pd.show();
-    }
-
-    private void createAlertDialog(String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage(message);
-        alertDialog.show();
     }
 
     private void parseJsonregdata(JSONObject response) {
@@ -315,7 +289,7 @@ public class LogInFragment extends Fragment implements URL {
                 if (password.getText().length() == 0) {
                     password.setError(getActivity().getResources().getString(
                             R.string.Warning_enter_a_password));
-                    pd.dismiss();
+                    dialogBuilder.getProgressDialog().dismiss();
                     return;
                 }
                 params = new HashMap<String, String>();
@@ -328,7 +302,7 @@ public class LogInFragment extends Fragment implements URL {
                 if (password.getText().length() != 0) {
                     password.setError(getActivity().getResources().getString(
                             R.string.Warning_remove_the_password));
-                    pd.dismiss();
+                    dialogBuilder.getProgressDialog().dismiss();
                 }
             }
 
@@ -348,7 +322,7 @@ public class LogInFragment extends Fragment implements URL {
         }
 
         if (data == 0) {
-            pd.dismiss();
+            dialogBuilder.getProgressDialog().dismiss();
         } else if (data == 1) {
             UserDataSource userDataBase = new UserDataSource(getActivity());
             userDataBase.open();
@@ -380,13 +354,10 @@ public class LogInFragment extends Fragment implements URL {
                                     .getString("groupId")));
                             item.setDistId(Integer.parseInt(temp
                                     .getString("distId")));
-                            // pd.dismiss();
                             try {
                                 userDataBase.createUserInfoItem(item);
                                 userDataBase.close();
-                                HashMap<String, String> params = new HashMap<String, String>();
-                                params.put(REQUEST_NAME, GET_DONATION_RECORD_PARAM);
-                                params.put(MOBILE_TAG, item.getMobileNumber());
+                                HashMap<String, String> params = ParamsBuilder.donationRecord(item.getMobileNumber());
                                 getJsonData(params);
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
@@ -400,7 +371,6 @@ public class LogInFragment extends Fragment implements URL {
 
         }
     }
-
     private void parseDonationInfo(JSONObject response) {
         DRDataSource drDataSource = new DRDataSource(getActivity());
         drDataSource.open();
@@ -439,7 +409,7 @@ public class LogInFragment extends Fragment implements URL {
                                 .containsValue(HOSPITALLIST_PARAM)) {
                             parse.parseJsonHospital(response);
                             if (signUp) {
-                                pd.dismiss();
+                                dialogBuilder.getProgressDialog().dismiss();
                                 Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
                                 startActivity(signUpIntent);
                                 signUp = false;
@@ -479,7 +449,7 @@ public class LogInFragment extends Fragment implements URL {
             public void onErrorResponse(VolleyError error) {
 
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                pd.dismiss();
+                dialogBuilder.getProgressDialog().dismiss();
                 Toast.makeText(
                         LogInFragment.this.getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();

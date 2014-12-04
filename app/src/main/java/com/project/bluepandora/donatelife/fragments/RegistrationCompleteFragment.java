@@ -16,7 +16,6 @@ package com.project.bluepandora.donatelife.fragments;
  */
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -45,6 +44,7 @@ import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
+import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomButton;
@@ -214,10 +214,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
         mOnClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                AlertDialog d = (AlertDialog) dialog;
-                if (d.equals("Done!")) {
-                    getActivity().finish();
-                }
+                getActivity().finish();
             }
         };
         mDistrictItemSelectedListener = new OnItemSelectedListener() {
@@ -232,56 +229,23 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
         mRegistrationListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                 * Tags and Values for Registration Request
-                 *
-                 * static final TAG->requestName.  static final Value->register
-                 *
-                 * static final TAG->firstName.    Value will be determined by the user.
-                 *
-                 * static final TAG->lastName.     Value will be determined by the user.
-                 *
-                 * static final TAG->groupId.      Value will be determined by the user.
-                 *
-                 * static final TAG->distId.       Value will be determined by the user.
-                 *
-                 * static final TAG->mobileNumber. Value will be determined by the user.
-                 *
-                 * static final TAG->keyWord.      Value will be determined by the user
-                 */
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, REGISTER_REQUEST_PARAM);
-                params.put(FIRST_NAME_KEY, getArguments().getString("firstName"));
-                params.put(LAST_NAME_KEY, getArguments().getString("lastName"));
-                params.put(DISTRICTID_TAG, ((DistrictItem) distItems.get(districtSpinner.getSelectedItemPosition())).getDistId() + "");
-                params.put(GROUPID_TAG, ((BloodItem) bloodItems.get(bloodSpinner.getSelectedItemPosition())).getBloodId() + "");
-                params.put(MOBILE_TAG, getArguments().getString("mobileNumber"));
-                params.put(PASSWORD_TAG, getArguments().getString("password"));
-                createProgressDialog();
+
+                String distId = Integer.toString(
+                        ((DistrictItem) distItems.get(districtSpinner.getSelectedItemPosition())).getDistId());
+                String groupId = Integer.toString(
+                        ((BloodItem) bloodItems.get(bloodSpinner.getSelectedItemPosition())).getBloodId());
+
+                HashMap<String, String> params = ParamsBuilder.registerRequest(
+                        getArguments().getString("firstName"),
+                        getArguments().getString("lastName"),
+                        distId,
+                        groupId,
+                        getArguments().getString("mobileNumber"),
+                        getArguments().getString("password"));
+                dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
                 getJsonData(params);
             }
         };
-    }
-
-    private void createProgressDialog() {
-        pd = new ProgressDialog(RegistrationCompleteFragment.this.getActivity());
-        pd.setMessage(getActivity().getResources().getString(R.string.loading));
-        pd.setIndeterminate(false);
-        pd.setCancelable(false);
-        pd.show();
-    }
-
-    private void createAlertDialog(final String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage(message);
-        alertDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                    getActivity().finish();
-            }
-        });
-        alertDialog.show();
     }
 
     private void getJsonData(final HashMap<String, String> params) {

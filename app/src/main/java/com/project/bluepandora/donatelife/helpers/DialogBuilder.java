@@ -26,7 +26,7 @@ public class DialogBuilder {
     }
 
     public void createAlertDialog(String message) {
-        createAlertDialog(null, message);
+        createAlertDialog("Alert!", message);
     }
 
     public void createAlertDialog(String title, String message) {
