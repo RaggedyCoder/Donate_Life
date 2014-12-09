@@ -16,8 +16,6 @@ package com.project.bluepandora.donatelife.activities;
  * limitations under the License.
  */
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -30,7 +28,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,6 +40,8 @@ import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.DialogBuilder;
+import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomButton;
@@ -58,6 +57,7 @@ import java.util.HashMap;
 public class FeedbackActivity extends ActionBarActivity implements URL {
 
 
+    private static final String TAG = FeedbackActivity.class.getSimpleName();
     /**
      * A {@link UserDataSource} for getting the user information.
      */
@@ -111,9 +111,15 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
      */
     private LinearLayout districtHolder;
     /**
-     * A {@link ProgressDialog} for showing the user background work is going on.
+     * A {@link DialogBuilder} for showing alert dialog or the progress dialog.
      */
-    private ProgressDialog pd;
+    private DialogBuilder mDialogBuilder;
+
+    /**
+     * A {@link DialogInterface.OnClickListener} for the neutral button of an alert dialog
+     * This Alert Dialog is created by  mDialogBuilder{@link DialogBuilder}.
+     */
+    private DialogInterface.OnClickListener mOnClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +133,7 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
         subjectSpinner = (Spinner) findViewById(R.id.subject_spinner);
         districtHolder = (LinearLayout) findViewById(R.id.district_holder);
         districtDataSource = new DistrictDataSource(this);
+        mDialogBuilder = new DialogBuilder(this, TAG);
         districtDataSource.open();
         subject = new ArrayList<String>();
         subject.add("App feedback");
@@ -163,6 +170,12 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
 
             }
         });
+        mOnClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        };
         feedback.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -207,27 +220,30 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
                 if (subjectSpinner.getSelectedItem().equals("Hospital Suggestion")) {
                     DistrictItem item = (DistrictItem) districtSpinnerAdapter.getItem(
                             districtSpinner.getSelectedItemPosition());
-                    params.put(REQUEST_NAME, FEEDBACK_REQUEST);
-                    params.put(FEEDBACK_USERNAME_PARAM, mobileNumber.getText().toString());
-                    params.put(FEEDBACK_SUBJECT_PARAM, "New Hospital Suggestion");
-                    params.put(FEEDBACK_COMMENT_PARAM, "District: " + item.getDistName() +
-                            " Hospital: " + feedback.getText().toString().trim());
+                    params = ParamsBuilder.feedbackRequest(
+                            mobileNumber.getText().toString(),
+                            "New Hospital Suggestion",
+                            "District: " + item.getDistName() +
+                                    " Hospital: " + feedback.getText().toString().trim());
                 } else {
-                    params.put(REQUEST_NAME, FEEDBACK_REQUEST);
-                    params.put(FEEDBACK_USERNAME_PARAM, mobileNumber.getText().toString());
-                    params.put(FEEDBACK_SUBJECT_PARAM, "App feedback");
-                    params.put(FEEDBACK_COMMENT_PARAM, feedback.getText().toString().trim());
+                    params = ParamsBuilder.feedbackRequest(
+                            mobileNumber.getText().toString(),
+                            "App feedback",
+                            feedback.getText().toString().trim());
                 }
-                createProgressDialog();
+                mDialogBuilder.createProgressDialog(getResources().getString(R.string.loading));
                 CustomRequest customRequest;
                 customRequest = new CustomRequest(Request.Method.POST, URL, params,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                pd.dismiss();
+                                mDialogBuilder.getProgressDialog().dismiss();
                                 try {
                                     if (response.getInt("done") == 1) {
-                                        createAlertDialog("Thank you for your feedback");
+                                        mDialogBuilder.createAlertDialog(
+                                                "Info",
+                                                getResources().getString(R.string.feedback_thank_you),
+                                                mOnClickListener);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -236,8 +252,8 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        pd.dismiss();
-                        Toast.makeText(FeedbackActivity.this, volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                        mDialogBuilder.getProgressDialog().dismiss();
+                        mDialogBuilder.createAlertDialog("Something went wrong!");
                         VolleyLog.e("Feedback", volleyError.getMessage());
                     }
                 });
@@ -284,26 +300,5 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
     @Override
     protected void onStop() {
         super.onStop();
-    }
-
-    private void createProgressDialog() {
-        pd = new ProgressDialog(this);
-        pd.setMessage(this.getResources().getString(R.string.loading));
-        pd.setIndeterminate(false);
-        pd.setCancelable(false);
-        pd.show();
-    }
-
-    private void createAlertDialog(String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Info");
-        alertDialog.setMessage(message);
-        alertDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        alertDialog.show();
     }
 }

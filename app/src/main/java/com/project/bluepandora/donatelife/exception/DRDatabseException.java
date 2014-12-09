@@ -15,15 +15,15 @@ package com.project.bluepandora.donatelife.exception;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class BloodDatabaseException extends SQliteDataBaseException {
-    public static final String BLOODDATABASEEXCEPTION_TAG = "BloodDatabaseException";
-    private String message = "Problem occurred During Blood Table";
+public class DRDatabseException extends SQliteDataBaseException {
+    public static final String DRDATABASEEXCEPTION_TAG = "DonationRecordDatabaseException";
+    private String message = "Problem occurred During Donation Record Table";
 
-    public BloodDatabaseException() {
+    public DRDatabseException() {
 
     }
 
-    public BloodDatabaseException(String message) {
+    public DRDatabseException(String message) {
         this.message = message;
     }
 

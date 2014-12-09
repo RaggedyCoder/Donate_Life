@@ -15,12 +15,11 @@ public class DialogBuilder {
     private Dialog alertDialog;
     private AlertDialog.Builder alertDialogBuilder;
 
-    private ProgressDialog.Builder progressDialogBuilder;
-    private Dialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public DialogBuilder(Activity activity, String TAG) {
         this.activity = activity;
-        progressDialogBuilder = new ProgressDialog.Builder(getActivity());
+        progressDialog = new ProgressDialog(getActivity());
         alertDialogBuilder = new AlertDialog.Builder(getActivity());
         this.TAG = TAG;
     }
@@ -56,7 +55,7 @@ public class DialogBuilder {
         alertDialogBuilder.setNegativeButton(noTitle, noClickListener);
         alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-        Log.e(TAG, "Alert Dialog Created."
+        Log.i(TAG, "Alert Dialog Created."
                 + "Title:" + title
                 + ". Message:" + message
                 + ". negativeButtonClickListener:" + noTitle + (noClickListener != null ? " not null." : " null.")
@@ -69,12 +68,12 @@ public class DialogBuilder {
     }
 
     public void createProgressDialog(String title, String message) {
-        progressDialogBuilder.setTitle(title);
-        progressDialogBuilder.setMessage(message);
-        progressDialogBuilder.setCancelable(false);
-        progressDialog = progressDialogBuilder.create();
-        progressDialogBuilder.show();
-        Log.e(TAG, "Progress Dialog Created. Title:" + title + ". Message:" + message);
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(false);
+        progressDialog.show();
+        Log.i(TAG, "Progress Dialog Created. Title:" + title + ". Message:" + message);
     }
 
     public Dialog getAlertDialog() {

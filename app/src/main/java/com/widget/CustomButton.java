@@ -24,6 +24,7 @@ import com.widget.helper.CustomFontHelper;
 
 public class CustomButton extends Button {
 
+
     public CustomButton(Context context) {
         super(context);
 
@@ -37,15 +38,15 @@ public class CustomButton extends Button {
 
     }
 
-    private void init(Context context, AttributeSet attrs) {
-
-        CustomFontHelper.setCustomFont(this, context, attrs);
-    }
-
     public CustomButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+
+        CustomFontHelper.setCustomFont(this, context, attrs);
     }
 
     @Override

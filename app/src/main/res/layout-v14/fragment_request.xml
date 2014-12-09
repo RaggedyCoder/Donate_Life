@@ -117,8 +117,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/amount_spinner"
-                    android:layout_alignStart="@+id/amount_spinner"
                     android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/amount_spinner"
                     android:layout_marginTop="5dip"
                     android:text="@string/select_amount"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -128,8 +128,8 @@
                     android:id="@id/amount_spinner"
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_below="@+id/textView3"
                     android:layout_marginBottom="5dip"
                     android:layout_marginLeft="10dip"
@@ -177,6 +177,7 @@
                 android:spinnerMode="dialog" />
         </RelativeLayout>
 
+
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -210,23 +211,23 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_below="@+id/emergency_checkBox_holder"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/emergency_checkBox_holder"
                 android:layout_marginTop="20dip"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
-
-                <com.widget.CustomCheckBox
+                <com.widget.CustomSwitch
+                    android:id="@+id/emergency_sms_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/emergency_sms"
                     android:textColor="#ff3333"
-                    android:textStyle="bold"
                     android:textSize="20sp"
-                    custom:font="MuseoSansRounded-700.otf"
-                    android:id="@+id/emergency_sms_checkbox" />
+                    android:layout_marginBottom="10dip"
+                    custom:font="MuseoSansRounded-700.otf" />
+
 
             </LinearLayout>
         </RelativeLayout>
@@ -241,10 +242,7 @@
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/abc_action_bar_default_height_material"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"
-                android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+                android:layout_margin="10dip"
                 android:background="@drawable/btn_blue"
                 android:text="@string/request"
                 android:textSize="18sp" />

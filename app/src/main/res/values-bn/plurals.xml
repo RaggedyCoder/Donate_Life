@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <plurals name="bags">
-        <item quantity="one">(%d ব্যাগ)</item>
-        <item quantity="other">(%d ব্যাগ)</item>
-    </plurals>
-
-</resources>

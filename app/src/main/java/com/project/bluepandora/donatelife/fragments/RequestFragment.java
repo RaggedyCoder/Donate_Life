@@ -17,7 +17,6 @@ package com.project.bluepandora.donatelife.fragments;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -34,7 +33,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -55,13 +53,18 @@ import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.HospitalDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
+import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
+import com.project.bluepandora.util.Utils;
 import com.widget.CustomButton;
+import com.widget.CustomCheckBox;
 import com.widget.CustomScrollView;
 import com.widget.CustomScrollView.OnScrollChangedListener;
+import com.widget.CustomSwitch;
 import com.widget.CustomTextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -81,7 +84,10 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private Spinner amount;
 
     private CustomButton doneButton;
-    private CheckBox emergencyCheck;
+    private CustomCheckBox emergencyCheck;
+    private CustomCheckBox emergencySmsCheckBox;
+    private CustomSwitch emergencySmsSwitch;
+
 
     private ArrayList<Item> distItems;
     private ArrayList<Item> bloodItems;
@@ -100,7 +106,6 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private SpinnerAdapter districtAdapter;
     private SpinnerAdapter hospitalAdapter;
 
-    private ProgressDialog pd;
 
     private DialogBuilder dialogBuilder;
 
@@ -125,9 +130,12 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         amount = (Spinner) rootView.findViewById(R.id.amount_spinner);
         doneButton = (CustomButton) rootView.findViewById(R.id.done_button);
         CustomScrollView sc = (CustomScrollView) rootView.findViewById(R.id.scrollview);
-        emergencyCheck = (CheckBox) rootView
-                .findViewById(R.id.emergency_checkBox);
-        emergencyCheck.isChecked();
+        emergencyCheck = (CustomCheckBox) rootView.findViewById(R.id.emergency_checkBox);
+        if (Utils.hasICS()) {
+            emergencySmsSwitch = (CustomSwitch) rootView.findViewById(R.id.emergency_sms_switch);
+        } else {
+            emergencySmsCheckBox = (CustomCheckBox) rootView.findViewById(R.id.emergency_sms_checkbox);
+        }
         userInfoItems = new ArrayList<UserInfoItem>();
 
         userDatase = new UserDataSource(getActivity());
@@ -252,21 +260,23 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                         public void onClick(DialogInterface dialog,
                                             int which) {
                             bloodRequest(createParams());
-                            createProgressDialog();
-                            pd.show();
+                            dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
                         }
                     };
-                    dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request?",
-                            positiveClickListener, null);
+                    if (isSmsRequest()) {
+                        dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request and for the sms request?",
+                                positiveClickListener, null);
+                    } else {
+                        dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request?",
+                                positiveClickListener, null);
+                    }
                 }
             }
         });
         district.setOnItemSelectedListener(new OnItemSelectedListener() {
-
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-
                 createHospitalList(((DistrictItem) distItems.get(
                         district.getSelectedItemPosition())).getDistId());
 
@@ -309,19 +319,37 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getActivity(), response.toString(),
-                                Toast.LENGTH_SHORT).show();
-                        pd.dismiss();
+
+                        dialogBuilder.getProgressDialog().dismiss();
+                        try {
+                            if (response.getString("requestName").equals("addBloodRequest")) {
+                                dialogBuilder.createAlertDialog(response.getString("message"));
+                                if (isSmsRequest()) {
+                                    HashMap<String, String> params = ParamsBuilder.donatorMobileNumber(
+                                            Long.toString(hospital.getSelectedItemId()),
+                                            Long.toString(blood.getSelectedItemId()),
+                                            userInfoItems.get(0).getMobileNumber(),
+                                            userInfoItems.get(0).getKeyWord());
+                                    Log.e("TAG", response.toString());
+                                    bloodRequest(params);
+                                }
+                            } else if (response.getString("requestName").equals("donatorMobileNumber")) {
+                                Log.e("TAG", response.toString());
+                                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.dismiss();
+                dialogBuilder.getProgressDialog().dismiss();
                 if (error.toString().contains("TimeoutError")) {
-                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.TimeoutError));
+                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.timeout_error));
                 } else if (error.toString().contains("UnknownHostException")) {
-                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.NoInternet));
+                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.no_internet));
                 }
             }
         });
@@ -350,13 +378,16 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             hospital.setAdapter(hospitalAdapter);
         }
     }
-    private void createProgressDialog() {
-        pd = new ProgressDialog(getActivity());
-        pd.setMessage(getActivity().getResources().getString(R.string.processing));
-        pd.setIndeterminate(false);
-        pd.setCancelable(false);
-        pd.show();
+
+
+    private boolean isSmsRequest() {
+        if (Utils.hasICS()) {
+            return emergencySmsSwitch.isChecked();
+        } else {
+            return emergencySmsCheckBox.isChecked();
+        }
     }
+
     @Override
     public void onDrawerSlide(float offset) {
         final int newAlpha = (int) (currentAlpha + (offset * (255 - currentAlpha)));

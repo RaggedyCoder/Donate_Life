@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.project.bluepandora.donatelife"
-    android:versionCode="1"
-    android:versionName="@string/app_version">
-
-    <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="21" />
+    package="com.project.bluepandora.donatelife">
 
     <permission
         android:name="com.project.bluepandora.donatelife.permission.C2D_MESSAGE"
@@ -22,6 +16,11 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-configuration android:reqHardKeyboard="false" />
 

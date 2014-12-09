@@ -2,30 +2,32 @@
 <resources>
 
     <string-array name="nav_drawer_items">
-        <item>Blood Feed</item>
-        <item>Blood Request</item>
-        <item>Profile</item>
-        <item>Hospital</item>
-        <item>Settings</item>
-        <item>Feedback</item>
-        <item>About</item>
+        <item>@string/blood_feed</item>
+        <item>@string/blood_request</item>
+        <item>@string/profile</item>
+        <item>@string/hospital</item>
+        <item>@string/settings</item>
+        <item>@string/feedback</item>
+        <item>@string/about_us</item>
     </string-array>
 
     <string-array name="about_list_header">
-        <item>Donate Life</item>
-        <item>Terms of Service</item>
-        <item>Privacy Policy</item>
-        <item>Usage Policy</item>
-        <item>Open Source Licenses</item>
-        <item>About Developers</item>
+        <item>@string/app_name</item>
+        <item>@string/terms_of_service</item>
+        <item>@string/privacy_policy</item>
+        <item>@string/usage_policy</item>
+        <item>@string/open_source_licenses</item>
+        <item>@string/about_developers</item>
     </string-array>
+
+
     <string-array name="about_list_body">
-        <item>Version 1.1.1 | build 20141128</item>
-        <item></item>
-        <item></item>
-        <item>Donate Life is for personal and non-commercial use only.</item>
-        <item>legal information about licenses</item>
-        <item>Name and contact</item>
+        <item>@string/about_version_bulid_code</item>
+        <item> </item>
+        <item> </item>
+        <item>@string/about_usage_policy</item>
+        <item>@string/about_legal_license</item>
+        <item>@string/name_and_contact</item>
     </string-array>
 
     <array name="nav_drawer_icons">

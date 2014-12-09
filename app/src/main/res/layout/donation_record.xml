@@ -59,7 +59,7 @@
             <com.widget.CustomButton
                 android:id="@+id/donation_add_button"
                 android:layout_width="fill_parent"
-                android:background="@drawable/btn_blue_holo"
+                android:background="@drawable/white_holo_button"
                 android:layout_margin="15dip"
                 android:text="Add Record"
                 android:textColor="@drawable/btn_holo_text"

@@ -256,7 +256,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
                     @Override
                     public void onResponse(JSONObject response) {
                         VolleyLog.d(TAG, "Response: " + response.toString());
-                        pd.dismiss();
+                        dialogBuilder.getProgressDialog().dismiss();
                         try {
                             if (response.getInt("done") == 1) {
                                 //createAlertDialog("Done!");
@@ -278,7 +278,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
 
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
 
-                pd.dismiss();
+                dialogBuilder.getProgressDialog().dismiss();
                 Toast.makeText(
                         RegistrationCompleteFragment.this.getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();

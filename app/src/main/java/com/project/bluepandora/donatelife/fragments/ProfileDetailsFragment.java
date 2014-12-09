@@ -91,6 +91,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private LinearLayout mHeaderLogo;
     private CustomTextView mHeaderTitle;
     private CustomTextView avatar;
+    private CustomTextView usernameTitle;
     private CustomButton profileButton;
     private ViewSwitcher switcher;
     private CustomButton donationRecordButton;
@@ -98,7 +99,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
     private View rootView;
     private UserDataSource userDatabase;
     private DRDataSource donationDatabase;
-    private ArrayList<UserInfoItem> userInfo;
+    private UserInfoItem userInfo;
     private ArrayList<DRItem> donationInfo;
     private ListView mListView;
     private LinearLayout actionbar;
@@ -163,15 +164,16 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         donationAddDialogBuilder.setView(addDRView);
         donationAddDialog = donationAddDialogBuilder.create();
         userDatabase.open();
-        userInfo = userDatabase.getAllUserItem();
+        userInfo = userDatabase.getAllUserItem().get(0);
         userDatabase.close();
         donationDatabase = new DRDataSource(getActivity());
         donationDatabase.open();
         donationInfo = donationDatabase.getAllDRItem();
         donationDatabase.close();
-        userInfo.get(0).setTotalDonation(donationInfo.size() + "");
-        mHeaderTitle.setText(userInfo.get(0).getFirstName());
-        ((CustomTextView) rootView.findViewById(R.id.username_title)).setText(userInfo.get(0).getFirstName());
+        userInfo.setTotalDonation(donationInfo.size() + "");
+        mHeaderTitle.setText(userInfo.getFirstName());
+        usernameTitle = ((CustomTextView) rootView.findViewById(R.id.username_title));
+        usernameTitle.setText(userInfo.getFirstName());
         origin[1] = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 310 - 48 - 4, getActivity().getResources().getDisplayMetrics());
         change = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
@@ -249,7 +251,12 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         list.add(getActivity().getResources().getString(R.string.total_donation));
         BloodDataSource database = new BloodDataSource(getActivity());
         database.open();
-        avatar.setText(database.getBloodItem(new BloodItem("", userInfo.get(0).getGroupId())).getBloodName());
+        avatar.setText(database.getBloodItem(new BloodItem("", userInfo.getGroupId())).getBloodName());
+        if (avatar.getText().toString().length() > 2) {
+            avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
+        } else {
+            avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 70);
+        }
         database.close();
         profileButton.setSelected(true);
         firstTime = false;
@@ -277,7 +284,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                     params.put(URL.REQUEST_NAME, URL.ADD_DONATIONRECORD_REQUEST);
                     params.put(URL.DONATION_DATE_PARAM, reqTime);
                     params.put(URL.DONATION_DETAILS_PARAM, donationDetails.getText().toString());
-                    params.put(URL.MOBILE_TAG, userInfo.get(0).getMobileNumber());
+                    params.put(URL.MOBILE_TAG, userInfo.getMobileNumber());
                     createProgressDialog();
                     pd.show();
                     addDonationRecord(params);
@@ -306,7 +313,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         }
         mDonationRecordAdapter = new DonationRecordAdapter(getActivity(), donationInfo);
         donationRecordView.setAdapter(mDonationRecordAdapter);
-        mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), userInfo.get(0), list));
+        Log.e("Blood", userInfo.getGroupId() + "");
+        mListView.setAdapter(new ProfileDetailsAdapter(getActivity(), this, userInfo, list));
     }
 
     @Override
@@ -367,7 +375,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                         mMinHeaderTranslation),
                 donationRecordButton.getLeft() + donationRecordButton.getMeasuredWidth(),
                 (origin[1] + donationRecordButton.getMeasuredHeight() + Math.max(-scrollY, mMinHeaderTranslation)));
-        profileButton.layout((int) profileButton.getLeft(), origin[1] + Math.max(-scrollY, mMinHeaderTranslation), (int) profileButton.getX() + profileButton.getMeasuredWidth(), (int) origin[1] + profileButton.getMeasuredHeight() + Math.max(-scrollY, mMinHeaderTranslation));
+        profileButton.layout((int) profileButton.getLeft(), origin[1] + Math.max(-scrollY, mMinHeaderTranslation), (int) profileButton.getLeft() + profileButton.getMeasuredWidth(), (int) origin[1] + profileButton.getMeasuredHeight() + Math.max(-scrollY, mMinHeaderTranslation));
         Log.e("Trans", Math.max(-scrollY, mMinHeaderTranslation) + " " + origin[1]);
         float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
         DonationRecordHelper.interpolate(mHeaderLogo, getActionBarIconView(), sSmoothInterpolator.getInterpolation(ratio));
@@ -452,9 +460,9 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss();
                 if (error.toString().contains("TimeoutError")) {
-                    createAlertDialog(getResources().getString(R.string.TimeoutError));
+                    createAlertDialog(getResources().getString(R.string.timeout_error));
                 } else if (error.toString().contains("UnknownHostException")) {
-                    createAlertDialog(getResources().getString(R.string.NoInternet));
+                    createAlertDialog(getResources().getString(R.string.no_internet));
                 }
             }
         });
@@ -467,6 +475,14 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         pd.setIndeterminate(false);
         pd.setCancelable(false);
         pd.show();
+    }
+
+    public CustomTextView getmHeaderTitle() {
+        return mHeaderTitle;
+    }
+
+    public CustomTextView getUsernameTitle() {
+        return usernameTitle;
     }
 
     private void createAlertDialog(String message) {

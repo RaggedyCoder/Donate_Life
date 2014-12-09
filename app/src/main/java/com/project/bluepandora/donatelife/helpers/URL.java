@@ -51,5 +51,5 @@ public interface URL {
     public static final String GCMREGISTER_PARAM = "gcmUpdate";
     public static final String USERINFOUPDATE_PARAM = "updateUserInfo";
     public static final String BLOODREQUEST_DELETE_PARAM = "deleteBloodRequestInKey";
-
+    public static final String EMERGENCY_SMS_REQUEST = "donatorMobileNumber";
 }

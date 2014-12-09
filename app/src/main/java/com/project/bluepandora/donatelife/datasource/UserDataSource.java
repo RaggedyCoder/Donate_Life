@@ -56,7 +56,6 @@ public class UserDataSource {
         values.put(DataBaseOpenHelper.GROUPID_COLOUMN, groupId);
 
         database.insert(DataBaseOpenHelper.USER_TABLE, null, values);
-
         Cursor cursor = database.query(DataBaseOpenHelper.USER_TABLE,
                 allColumns, DataBaseOpenHelper.MOBILE_NUMBER_COLOUMN
                         + " LIKE '" + mobileNumber + "'", null, null, null,
@@ -86,6 +85,21 @@ public class UserDataSource {
         database.delete(DataBaseOpenHelper.USER_TABLE,
                 DataBaseOpenHelper.MOBILE_NUMBER_COLOUMN + " LIKE '"
                         + mobileNumber + "'", null);
+    }
+
+    public void updateUserInfoitem(UserInfoItem item) {
+        ContentValues values = null;
+
+        values = new ContentValues();
+        values.put(DataBaseOpenHelper.FIRST_NAME_COLOUMN, item.getFirstName());
+        values.put(DataBaseOpenHelper.LAST_NAME_COLOUMN, item.getLastName());
+        values.put(DataBaseOpenHelper.MOBILE_NUMBER_COLOUMN, item.getMobileNumber());
+        values.put(DataBaseOpenHelper.KEY_WORD_COLOUMN, item.getKeyWord());
+        values.put(DataBaseOpenHelper.DISTRICTID_COLOUMN, item.getDistId());
+        values.put(DataBaseOpenHelper.GROUPID_COLOUMN, item.getGroupId());
+
+        database.update(DataBaseOpenHelper.USER_TABLE, values, DataBaseOpenHelper.MOBILE_NUMBER_COLOUMN + " LIKE '"
+                + item.getMobileNumber() + "'", null);
     }
 
     public ArrayList<UserInfoItem> getAllUserItem() {

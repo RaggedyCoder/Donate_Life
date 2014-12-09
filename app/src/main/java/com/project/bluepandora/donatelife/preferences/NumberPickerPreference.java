@@ -54,12 +54,12 @@ public class NumberPickerPreference extends DialogPreference {
         mMin = numberPickerType.getInt(R.styleable.NumberPickerPreference_min, 10);
 
 //        mDefault = dialogType.getInt(com.android.internal.R.styleable.Preference_defaultValue, mMin);
-        mDefault = mMin;
+        mDefault = mMax;
 //        dialogType.recycle();
         setSummary(getContext().getResources().getQuantityString(
                 R.plurals.numbers,
-                PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("pref_key_feed_show_limit", 43),
-                PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("pref_key_feed_show_limit", 43)));
+                PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("pref_key_feed_show_limit", 100),
+                PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("pref_key_feed_show_limit", 100)));
         numberPickerType.recycle();
     }
 

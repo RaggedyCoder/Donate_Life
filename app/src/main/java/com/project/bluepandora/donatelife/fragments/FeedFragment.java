@@ -66,6 +66,7 @@ import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.HospitalDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.project.bluepandora.util.Utils;
@@ -94,14 +95,12 @@ import java.util.List;
  * From this Fragment user can delete his own entry.And also the entry which he doesn't
  * wanted to see.
  */
-@SuppressLint({"InflateParams", "NewApi"})
 public class FeedFragment extends Fragment implements URL {
 
     public static final String TAG = FeedFragment.class.getSimpleName();
     public static boolean firstTime = true;
     public static boolean slideChange = false;
     public JSONObject json;
-    public JSONObject newJsonObject;
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public UserInfoItem userInfo;
     private ListView listView;
@@ -138,19 +137,13 @@ public class FeedFragment extends Fragment implements URL {
         setHasOptionsMenu(true);
         listView = (ListView) rootView.findViewById(R.id.list);
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
-        actionButton = (ImageButton) rootView.findViewById(R.id.imageButton1);
-        progress = (ProgressBar) rootView.findViewById(R.id.progressBar2);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView
-                .findViewById(R.id.swiperefresh);
-
-        mActionBarBackgroundDrawable = getResources().getDrawable(
-                R.drawable.actionbar_background);
-
+        actionButton = (ImageButton) rootView.findViewById(R.id.action_button);
+        progress = (ProgressBar) rootView.findViewById(R.id.progress);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+        mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar_background);
         mActionBarBackgroundDrawable.setAlpha(255);
-
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
-        mCustomView = mInflater.inflate(R.layout.request_feed_actionbar, null);
+        mCustomView = mInflater.inflate(R.layout.request_feed_actionbar, container, false);
         mTitle = (CustomTextView) mCustomView
                 .findViewById(R.id.actionbar_title_text);
         if (firstTime) {
@@ -190,20 +183,7 @@ public class FeedFragment extends Fragment implements URL {
         mSwipeRefreshLayout.setOnRefreshListener(mOnFeedRefresh);
 
         mTitle.setText(R.string.blood_feed);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setBackgroundDrawable(mActionBarBackgroundDrawable);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayShowTitleEnabled(false);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayHomeAsUpEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setHomeButtonEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayShowCustomEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setDisplayShowHomeEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .setCustomView(mCustomView);
+        customizeActionbar();
         jsonObjectRequest();
         final AnimationListener animListener = new AnimationListener() {
 
@@ -275,7 +255,6 @@ public class FeedFragment extends Fragment implements URL {
             @Override
             public void onRefresh() {
                 progress.setVisibility(View.VISIBLE);
-                json = jsonObjectRequest();
                 Handler h = new Handler();
                 h.postDelayed(new Runnable() {
                     @Override
@@ -300,7 +279,6 @@ public class FeedFragment extends Fragment implements URL {
 
                 @Override
                 public void run() {
-                    progress.setVisibility(View.VISIBLE);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }, 4000);
@@ -354,10 +332,9 @@ public class FeedFragment extends Fragment implements URL {
         jsonObjectRequest();
     }
 
-    private JSONObject jsonObjectRequest() {
+    private void jsonObjectRequest() {
 
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
+        HashMap<String, String> params = ParamsBuilder.bloodRequestFeed();
 
         CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
                 new Listener<JSONObject>() {
@@ -367,7 +344,6 @@ public class FeedFragment extends Fragment implements URL {
                         VolleyLog.d(TAG, "Response: " + response.toString());
 
                         writeToMemory(response);
-                        newJsonObject = response;
                         try {
                             if (response.get("message").equals(
                                     "Not Found Any Blood Request")) {
@@ -418,7 +394,6 @@ public class FeedFragment extends Fragment implements URL {
         });
         // Adding request to volley request queue
         AppController.getInstance().addToRequestQueue(jsonReq);
-        return newJsonObject;
     }
 
     private void readFromMemory() {
@@ -428,6 +403,8 @@ public class FeedFragment extends Fragment implements URL {
         } catch (FileNotFoundException e) {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
     }
@@ -447,17 +424,13 @@ public class FeedFragment extends Fragment implements URL {
             Log.e(TAG, e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
 
     }
 
-    @SuppressLint("UseValueOf")
     private void parseJsonFeed(JSONObject response) {
-
-        if (!response.isNull("message")) {
-            Log.d(TAG, "null in feed");
-            jsonObjectRequest();
-        }
         try {
             JSONArray feedArray = response.getJSONArray("bloodRequest");
 
@@ -489,7 +462,7 @@ public class FeedFragment extends Fragment implements URL {
                         .compareTo("1") == 0 ? "yes" : null;
                 item.setEmergency(emergency);
                 BloodItem bi = new BloodItem();
-                bi.setBloodId(new Integer(feedObj.getString("groupId")));
+                bi.setBloodId(Integer.parseInt(feedObj.getString("groupId")));
                 if (groupFiter && userInfo.getGroupId() != bi.getBloodId()) {
                     continue;
                 }
@@ -497,10 +470,10 @@ public class FeedFragment extends Fragment implements URL {
                         .bloodItemToCursor(bi));
                 item.setBloodGroup(exbi.getBloodName());
                 String amount = feedObj.getString("amount");
-                Integer a = new Integer(amount);
+                Integer a = Integer.parseInt(amount);
                 item.setBloodAmount(a);
                 HospitalItem hi = new HospitalItem();
-                hi.setHospitalId(new Integer(feedObj.getString("hospitalId")));
+                hi.setHospitalId(Integer.parseInt(feedObj.getString("hospitalId")));
                 HospitalItem exhi = hospitalDatabase
                         .cursorToHospitalItem(hospitalDatabase
                                 .hospitalItemToCursor(hi));
@@ -509,7 +482,6 @@ public class FeedFragment extends Fragment implements URL {
                 DistrictItem exdi = districtDatabase
                         .cursorToDistrictItem(districtDatabase
                                 .districtItemToCursor(di));
-
                 if (distFilter && userInfo.getDistId() != exdi.getDistId()) {
                     continue;
                 }
@@ -540,5 +512,22 @@ public class FeedFragment extends Fragment implements URL {
                     .show();
         }
         progress.setVisibility(View.GONE);
+    }
+
+    private void customizeActionbar() {
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setBackgroundDrawable(mActionBarBackgroundDrawable);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowTitleEnabled(false);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setHomeButtonEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowCustomEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setDisplayShowHomeEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar()
+                .setCustomView(mCustomView);
     }
 }

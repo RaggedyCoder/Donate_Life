@@ -371,6 +371,7 @@ public class LogInFragment extends Fragment implements URL {
 
         }
     }
+
     private void parseDonationInfo(JSONObject response) {
         DRDataSource drDataSource = new DRDataSource(getActivity());
         drDataSource.open();
@@ -453,7 +454,6 @@ public class LogInFragment extends Fragment implements URL {
                 Toast.makeText(
                         LogInFragment.this.getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
         AppController.getInstance().addToRequestQueue(jsonReq);

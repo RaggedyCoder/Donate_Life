@@ -18,9 +18,18 @@ package com.project.bluepandora.donatelife.exception;
 public class DistrictDatabaseException extends SQliteDataBaseException {
     public static final String DISTRICTDATABASE_EXCEPTION_TAG = "DistrictDatabaseException";
     private static final long serialVersionUID = 8021847091188779832L;
+    private String message = "Problem occurred During Blood Table";
+
+    public DistrictDatabaseException() {
+
+    }
+
+    public DistrictDatabaseException(String message) {
+        this.message = message;
+    }
 
     @Override
     public String getMessage() {
-        return super.getMessage() + "-Problem Occured During District Table";
+        return super.getMessage() + message;
     }
 }

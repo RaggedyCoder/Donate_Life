@@ -34,6 +34,7 @@
         <com.project.bluepandora.donatelife.preferences.NotificationSoundPreference
             android:key="pref_filter_ringtone"
             android:summary="@string/pref_notification_ringtone"
+            android:ringtoneType="notification"
             android:dependency="pref_filter_notification"
             android:title="@string/pref_title_notification_ringtone"
             android:defaultValue="content://settings/system/notification_sound"

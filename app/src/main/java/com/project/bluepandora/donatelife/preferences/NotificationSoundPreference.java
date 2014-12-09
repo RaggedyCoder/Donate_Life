@@ -10,16 +10,18 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.util.AttributeSet;
+import android.util.Log;
 
-/**
- * Created by tuman on 30/11/2014.
- */
 public class NotificationSoundPreference extends RingtonePreference {
+
+    private static final String TAG = NotificationSoundPreference.class.getSimpleName();
+    private static final String DEFAULT_NOTIFICATION_URI = "content://settings/system/notification_sound";
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public NotificationSoundPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String strRingtonePreference = prefs.getString("pref_filter_ringtone", "content://settings/system/notification_sound");
+        String strRingtonePreference = prefs.getString("pref_filter_ringtone", DEFAULT_NOTIFICATION_URI);
         Uri ringtoneUri = Uri.parse(strRingtonePreference);
         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
         String name = ringtone.getTitle(context);
@@ -29,7 +31,7 @@ public class NotificationSoundPreference extends RingtonePreference {
     public NotificationSoundPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String strRingtonePreference = prefs.getString("pref_filter_ringtone", "content://settings/system/notification_sound");
+        String strRingtonePreference = prefs.getString("pref_filter_ringtone", DEFAULT_NOTIFICATION_URI);
         Uri ringtoneUri = Uri.parse(strRingtonePreference);
         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
         String name = ringtone.getTitle(context);
@@ -40,7 +42,7 @@ public class NotificationSoundPreference extends RingtonePreference {
     public NotificationSoundPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String strRingtonePreference = prefs.getString("pref_filter_ringtone", "content://settings/system/notification_sound");
+        String strRingtonePreference = prefs.getString("pref_filter_ringtone", DEFAULT_NOTIFICATION_URI);
         Uri ringtoneUri = Uri.parse(strRingtonePreference);
         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
         String name = ringtone.getTitle(context);
@@ -50,7 +52,7 @@ public class NotificationSoundPreference extends RingtonePreference {
     public NotificationSoundPreference(Context context) {
         super(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String strRingtonePreference = prefs.getString("pref_filter_ringtone", "content://settings/system/notification_sound");
+        String strRingtonePreference = prefs.getString("pref_filter_ringtone", DEFAULT_NOTIFICATION_URI);
         Uri ringtoneUri = Uri.parse(strRingtonePreference);
         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
         String name = ringtone.getTitle(context);
@@ -63,6 +65,7 @@ public class NotificationSoundPreference extends RingtonePreference {
         Ringtone ringtone = RingtoneManager.getRingtone(getContext(), ringtoneUri);
         String name = ringtone.getTitle(getContext());
         setSummary(name);
+        Log.i(TAG, newValue.toString());
         return super.callChangeListener(newValue);
     }
 }

@@ -116,7 +116,7 @@
                 android:layout_marginLeft="50dip"
                 android:layout_marginRight="50dip"
                 android:layout_marginTop="20dip"
-                android:background="@drawable/btn_blue_holo"
+                android:background="@drawable/white_holo_button"
                 android:minHeight="0.0dip"
                 android:text="@string/Ok"
                 android:padding="5dip"

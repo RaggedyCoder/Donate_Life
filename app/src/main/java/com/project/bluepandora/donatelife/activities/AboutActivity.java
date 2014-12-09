@@ -1,12 +1,4 @@
 package com.project.bluepandora.donatelife.activities;
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-
-import com.project.bluepandora.donatelife.R;
-import com.project.bluepandora.donatelife.fragments.AboutFragment;
-
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
  *
@@ -22,12 +14,31 @@ import com.project.bluepandora.donatelife.fragments.AboutFragment;
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+
+import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.fragments.AboutFragment;
+
+/**
+ * A simple Activity {@link ActionBarActivity} to show the user About the apps.
+ * It contains a fragment which shows a list of
+ * Apps version,Terms of services,Privacy policy,Usage Policy,Open source licenses,
+ * Developers name & contacts.
+ */
 public class AboutActivity extends ActionBarActivity {
 
+    // Defines a tag for identifying log entries
     private static final String TAG = AboutActivity.class.getSimpleName();
+
+    // Defines a tag for identifying the fragment from the Bundle
     private static final String FRAGMENT_TAG = "mContent";
+
     private Fragment mContent;
-    private BackPressImp mbackPressImp;
+    private BackPressImp mBackPressImp;
 
     public AboutActivity() {
 
@@ -42,28 +53,32 @@ public class AboutActivity extends ActionBarActivity {
         } else {
             mContent = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_TAG);
         }
-        mbackPressImp = (BackPressImp) mContent;
+        mBackPressImp = (BackPressImp) mContent;
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.container, mContent).commit();
-    }
-
-    public interface BackPressImp {
-        public boolean onBackPressed();
+        Log.i(TAG, "OnCreate method called.");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_TAG, mContent);
+        Log.i(TAG, "onSaveInstanceState method called.");
     }
 
     @Override
     public void onBackPressed() {
-        if (mbackPressImp.onBackPressed()) {
+        if (mBackPressImp.onBackPressed()) {
             finish();
             super.onBackPressed();
-        } else {
-
         }
+        Log.i(TAG, "onBackPressed method called.");
+    }
+
+    /**
+     * An interface for the fragments to detect the back press.
+     */
+    public interface BackPressImp {
+        public boolean onBackPressed();
     }
 }

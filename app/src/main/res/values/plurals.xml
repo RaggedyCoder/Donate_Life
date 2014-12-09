@@ -2,12 +2,17 @@
 <resources>
 
     <plurals name="bags">
-        <item quantity="zero"></item>
-        <item quantity="one">(one Bag)</item>
-        <item quantity="other">(%d Bags)</item>
+        <item quantity="zero">@string/zero_bag_request</item>
+        <item quantity="one">@string/one_bag_request</item>
+        <item quantity="other">@string/other_bag_request</item>
+    </plurals>
+    <plurals name="donation">
+        <item quantity="zero">@string/zero_donation_record</item>
+        <item quantity="one">@string/one_donation_record</item>
+        <item quantity="other">@string/other_donation_record</item>
     </plurals>
 
     <plurals name="numbers">
-        <item quantity="other">%d request feeds at a time</item>
+        <item quantity="other">@string/pref_key_feed_show_limit</item>
     </plurals>
 </resources>

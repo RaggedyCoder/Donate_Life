@@ -43,6 +43,14 @@ import java.util.List;
 public class AboutFragment extends ListFragment implements AboutActivity.BackPressImp {
 
     private static boolean licenseView = false;
+    private static final String THE_DOCTOR_FACEBOOK_URL = "https://www.facebook.com/tumanisdevil";
+    private static final String CODER_BD_FACEBOOK_URL = "https://www.facebook.com/profile.php?id=100000043940885";
+
+    private static final String THE_DOCTOR_MAIL = "sajid.sust.cse@gmail.com";
+    private static final String CODER_BD_MAIL = "biswajit.sust@gmail.com";
+
+    private static final String DEVELOPER_CONTACT_MAIL_SUBJECT = "Donate Life:Contact";
+
     private List<AboutItem> aboutItems;
     private View rootView;
 
@@ -126,14 +134,14 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
         theDoctorFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/tumanisdevil"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(THE_DOCTOR_FACEBOOK_URL));
                 startActivity(browserIntent);
             }
         });
         coderBdFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/profile.php?id=100000043940885"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(CODER_BD_FACEBOOK_URL));
                 startActivity(browserIntent);
             }
         });
@@ -142,8 +150,8 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"sajid.sust.cse@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Donate Life:Contact");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{THE_DOCTOR_MAIL});
+                intent.putExtra(Intent.EXTRA_SUBJECT, DEVELOPER_CONTACT_MAIL_SUBJECT);
                 startActivity(Intent.createChooser(intent, ""));
             }
         });
@@ -152,8 +160,8 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"biswajit.sust@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Donate Life:Contact");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{CODER_BD_MAIL});
+                intent.putExtra(Intent.EXTRA_SUBJECT, DEVELOPER_CONTACT_MAIL_SUBJECT);
                 startActivity(Intent.createChooser(intent, ""));
             }
         });
@@ -161,7 +169,7 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
 
     @Override
     public boolean onBackPressed() {
-        if (wv.getVisibility() == View.VISIBLE) {
+        if (getViewVisibility(wv)) {
             licenseView = false;
             wv.startAnimation(animClose);
         } else {
@@ -194,5 +202,4 @@ public class AboutFragment extends ListFragment implements AboutActivity.BackPre
             }
         };
     }
-
 }
