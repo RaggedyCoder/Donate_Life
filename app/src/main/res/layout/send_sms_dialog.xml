@@ -31,7 +31,7 @@
             android:layout_marginTop="10dip"
             android:gravity="center"
             android:textColor="@android:color/secondary_text_light"
-            android:text="SMS BODY"
+            android:text="@string/sms_body_title"
             android:textSize="25sp"
             app:font="MuseoSansRounded-300.otf" />
 
@@ -58,7 +58,7 @@
                 android:layout_marginTop="10dip"
                 android:gravity="center"
                 android:textColor="@android:color/secondary_text_light"
-                android:text="Send SMS to"
+                android:text="@string/send_sms_to"
                 android:textSize="18sp"
                 app:font="MuseoSansRounded-300.otf" />
 
@@ -72,7 +72,7 @@
                 android:layout_marginEnd="5dip"
                 android:layout_marginBottom="10dip"
                 android:layout_marginTop="10dip"
-                android:hint="Number"
+                android:hint="@string/number"
                 android:inputType="number"
                 android:layout_height="wrap_content" />
 
@@ -83,7 +83,7 @@
                 android:layout_marginTop="10dip"
                 android:gravity="center"
                 android:textColor="@android:color/secondary_text_light"
-                android:text="Person"
+                android:text="@string/person"
                 android:textSize="18sp"
                 app:font="MuseoSansRounded-300.otf" />
         </LinearLayout>
@@ -95,7 +95,7 @@
             android:layout_marginTop="10dip"
             android:gravity="center"
             android:textColor="@android:color/secondary_text_light"
-            android:text="N.B.: This may cost you money."
+            android:text="@string/cost_alert"
             android:textSize="18sp"
             app:font="MuseoSansRounded-700.otf" />
 

@@ -83,7 +83,7 @@
         <activity
             android:name=".activities.AboutActivity"
             android:icon="@null"
-            android:label="About"
+            android:label="@string/about_us"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeAbout" />
         <activity

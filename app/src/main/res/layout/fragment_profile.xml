@@ -183,7 +183,7 @@
             android:background="@drawable/tab_button"
             android:padding="10dip"
             android:selectAllOnFocus="true"
-            android:text="Profile"
+            android:text="@string/profile"
             android:textColor="#e5e5e5"
             app:font="MuseoSansRounded-300.otf" />
 
@@ -197,7 +197,7 @@
             android:layout_toRightOf="@+id/profile_button"
             android:background="@drawable/tab_button"
             android:padding="10dip"
-            android:text="Donation Record"
+            android:text="@string/donation_record"
             android:textColor="#e5e5e5"
             app:font="MuseoSansRounded-300.otf" />
 

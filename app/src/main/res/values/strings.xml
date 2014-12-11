@@ -176,4 +176,11 @@
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="about">About</string>
+    <string name="donation_record">Donation Record</string>
+    <string name="send_sms_to">Send SMS to</string>
+    <string name="person">persons</string>
+    <string name="cost_alert">N.B.: This may cost you money.</string>
+    <string name="number">Number</string>
+    <string name="sms_body_title">SMS BODY</string>
 </resources>

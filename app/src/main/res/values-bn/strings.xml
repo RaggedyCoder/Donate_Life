@@ -12,7 +12,7 @@
     <string name="app_version_code">ভার্সন ১.১.১</string>
     <string name="emergency_text">জরুরী</string>
     <string name="emergency_request">জরুরী সাহায্য</string>
-    <string name="emergency_sms">এসএমএস এর মাধ্যম্যে সাহায্য</string>
+    <string name="emergency_sms">এসএমএস  সাহায্য</string>
     <string name="dummy_name">সিস্টেম</string>
     <string name="dummy_blood_group">প্রয়োজন:</string>
     <string name="blood_group">রক্তের গ্রুপ</string>
@@ -41,7 +41,7 @@
     <string name="register_name_last">শেষ নাম</string>
     <string name="register_password">সংকেত</string>
     <string name="confirm_password">নিশ্চিত সংকেত</string>
-    <string name="confirm">নিশ্চিত করুন</string>
+    <string name="confirm">নিশ্চিত</string>
     <string name="registration">নিবন্ধিত করুন</string>
     <string name="register_name_first">প্রথম নাম</string>
     <string name="spinner_prompt">দেশ নির্বাচিত করুন</string>
@@ -74,7 +74,7 @@
     <string name="register_sms_one_time">ডোনেট লাইফ আপনার মোবাইল আপনার পরীক্ষা করে কেবল নিবন্ধন হয়েছে কিনা দেখতে।</string>
     <string name="register_phone_number_code_confirm">অনুগ্রহ করে আপনার দেশের কোড নিশ্চিত করুন এবং আপনার মোবাইল নম্বর দিন।</string>
     <string name="register_password_confirm">আপনার আইডিটির জন্যে সংকেতটি দিনঃ</string>
-    <string name="register_name_confirm">আপনার পুর্ণ নাম:</string>
+    <string name="register_name_confirm">আপনার নাম:</string>
     <string name="district_confirm">আপনার এলাকাটি নিশ্চিত করুন।</string>
     <string name="blood_group_confirm">আপনার রক্তের গ্রুপটি নিশ্চিত করুন।</string>
     <string name="blood_feed">ব্লাড ফিড</string>
@@ -83,7 +83,7 @@
     <string name="hospital">হাসপাতাল</string>
     <string name="settings">সেটিংস</string>
     <string name="feedback">মতামত</string>
-    <string name="about_us">আমাদের সম্পর্কে</string>
+    <string name="about_us">অ্যাপটির সম্পর্কে</string>
     <string name="loading">লোড হচ্ছে&#8230;</string>
     <string name="processing">আবেদনটি করা হচ্ছে&#8230;</string>
     <string name="timeout_error">আবেদনটি সম্পন্ন হয়নি। আপনার ইন্টারনেট কানেকশনটি পুনরায় দেখুন।</string>
@@ -116,7 +116,7 @@
     <string name="other_bag_request">(%d ব্যাগ)</string>
     <string name="zero_donor_title">এই মুহুর্তে কোনো রক্তদাতা নেই</string>
     <string name="one_donor_title">একজন রকতদাতা পাওয়া গেছে</string>
-    <string name="other_donor_title">মোট %dজন রকতদাতা পাওয়া গেছে</string>
+    <string name="other_donor_title">মোট %dজন রক্তদাতা পাওয়া গেছে</string>
     <string name="donor_zero_grammar_correct">এই মুহুর্তে কোনো রক্তদাতা নেই</string>
     <string name="donor_zero_grammar_error">মোট ০জন রকতদাতা পাওয়া গেছে</string>
     <string name="zero_grammar_error">০ বার</string>
@@ -156,4 +156,11 @@
     <string name="ok">ওকে।</string>
     <string name="yes">হ্যা</string>
     <string name="no">না</string>
+    <string name="about">অ্যাপটির সম্পর্কে</string>
+    <string name="donation_record">রক্তদানের তথ্য</string>
+    <string name="send_sms_to">এসএমএসটি</string>
+    <string name="cost_alert">বিঃদ্রঃ এর জন্যে আপনাকে অর্থ দিতে হতে পারে।</string>
+    <string name="person">জনকে পাঠান</string>
+    <string name="number">সংখ্যা</string>
+    <string name="sms_body_title">এসএমএস</string>
 </resources>

@@ -210,7 +210,16 @@
                     custom:font="MuseoSansRounded-700.otf" />
             </RelativeLayout>
 
-            <LinearLayout
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+        <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/emergency_checkBox_holder"
@@ -230,13 +239,6 @@
 
 
             </LinearLayout>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-
             <com.widget.CustomButton
                 android:id="@id/done_button"
                 style="@style/MuseoSansRounded_700_button"

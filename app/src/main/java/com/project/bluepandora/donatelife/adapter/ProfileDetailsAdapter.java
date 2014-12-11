@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.BloodItem;
 import com.project.bluepandora.donatelife.data.DistrictItem;
@@ -82,6 +84,7 @@ public class ProfileDetailsAdapter extends BaseAdapter {
     private Dialog editProfileDialog;
     private DialogBuilder dialogBuilder;
     private View editProfile;
+    private boolean banglaFilter;
 
     public ProfileDetailsAdapter(
             Activity activity,
@@ -111,6 +114,9 @@ public class ProfileDetailsAdapter extends BaseAdapter {
         resources = activity.getResources();
         editProfileDialogBuilder = new ProgressDialog.Builder(activity);
         dialogBuilder = new DialogBuilder(activity, "");
+        banglaFilter = PreferenceManager.getDefaultSharedPreferences(
+                activity).getBoolean(SettingsActivity.LANGUAGE_TAG, false);
+
     }
 
     @Override
@@ -217,9 +223,19 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             case MOBILE:
                 return infoItem.getMobileNumber();
             case DISTRICT:
-                return distItem.getDistName();
+                if (banglaFilter) {
+                    return distItem.getBanglaDistName();
+                } else {
+                    return distItem.getDistName();
+                }
+
             case GROUP:
-                return bloodItem.getBloodName();
+                if (banglaFilter) {
+                    return bloodItem.getBanglaBloodName();
+                } else {
+                    return bloodItem.getBloodName();
+                }
+
             case RECORD:
                 int amount = Integer.parseInt(infoItem.getTotalDonation());
                 String quantity = resources.getQuantityString(R.plurals.donation, amount, amount);
