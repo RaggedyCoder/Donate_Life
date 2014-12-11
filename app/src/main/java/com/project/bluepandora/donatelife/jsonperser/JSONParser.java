@@ -52,8 +52,9 @@ public class JSONParser {
                 int groupId = Integer.parseInt(temp.getString("groupId"));
 
                 String groupName = temp.getString("groupName");
+                String banglaGroupName = temp.getString("groupBName");
                 try {
-                    bloodDatabase.createBloodItem(groupId, groupName);
+                    bloodDatabase.createBloodItem(groupId, groupName, banglaGroupName);
                 } catch (BloodDatabaseException e) {
                     Log.e(BloodDatabaseException.BLOODDATABASEEXCEPTION_TAG,
                             e.getMessage());
@@ -75,8 +76,9 @@ public class JSONParser {
                 JSONObject temp = (JSONObject) feedArray.get(i);
                 int distId = Integer.parseInt(temp.getString("distId"));
                 String distName = temp.getString("distName");
+                String banglaDistName = temp.getString("distBName");
                 try {
-                    districtDatabase.createDistrictItem(distId, distName);
+                    districtDatabase.createDistrictItem(distId, distName, banglaDistName);
                 } catch (DistrictDatabaseException e) {
                     Log.e(DistrictDatabaseException.DISTRICTDATABASE_EXCEPTION_TAG,
                             e.getMessage());
@@ -101,9 +103,10 @@ public class JSONParser {
                 int distId = Integer.parseInt(temp.getString("distId"));
                 int hospitalId = Integer.parseInt(temp.getString("hospitalId"));
                 String hospitalName = temp.getString("hospitalName");
+                String banglaHospitalName = temp.getString("hospitalBName");
                 try {
                     hospitalDatabase.createHospitalItem(distId, hospitalId,
-                            hospitalName);
+                            hospitalName, banglaHospitalName);
                 } catch (HospitalDatabaseException e) {
 
                     Log.e(HospitalDatabaseException.HOSPITALDATABASE_EXCEPTION_TAG,

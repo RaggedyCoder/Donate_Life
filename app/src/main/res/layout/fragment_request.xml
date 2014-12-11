@@ -241,12 +241,9 @@
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/abc_action_bar_default_height_material"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"
-                android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+                android:layout_margin="10dip"
                 android:background="@drawable/btn_blue"
-                android:text="@string/request"
+                android:text="@string/request_server"
                 android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>

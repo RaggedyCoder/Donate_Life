@@ -19,14 +19,16 @@ public class BloodItem implements Item {
 
     private int bloodId;
     private String bloodName;
+    private String banglaBloodName;
 
     public BloodItem() {
 
     }
 
-    public BloodItem(String bloodName, int bloodId) {
+    public BloodItem(String bloodName, String banglaBloodName, int bloodId) {
         this.bloodId = bloodId;
         this.bloodName = bloodName;
+        this.banglaBloodName = banglaBloodName;
     }
 
     public int getBloodId() {
@@ -43,5 +45,13 @@ public class BloodItem implements Item {
 
     public void setBloodName(String bloodName) {
         this.bloodName = bloodName;
+    }
+
+    public String getBanglaBloodName() {
+        return banglaBloodName;
+    }
+
+    public void setBanglaBloodName(String banglaBloodName) {
+        this.banglaBloodName = banglaBloodName;
     }
 }

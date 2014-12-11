@@ -184,7 +184,7 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                textCounter.setText("" + (400 - feedback.getText().toString().trim().length()));
+                textCounter.setText(Integer.toString((400 - feedback.getText().toString().trim().length())));
                 if (feedback.getText().toString().trim().length() == 0) {
                     sendFeedback.setEnabled(false);
                 } else {
@@ -201,22 +201,8 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
         sendFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                 * Tags and Values for Feedback Request
-                 *
-                 * static final TAG->requestName.  static final Value->feedback
-                 *
-                 * static final TAG->subject.      Value will be taken from the subjectSpinner
-                 *                                  selected item.
-                 *
-                 * static final TAG->idUser.       Value will be taken from the UserDataSource table
-                 *
-                 * static final TAG->comment.      Value will be taken from feedback CustomTextView.
-                 *                                 If the subject is New Hospital Suggestion an
-                 *                                 additional data will be taken from the
-                 *                                 districtSpinner selected item.
-                 */
-                HashMap<String, String> params = new HashMap<String, String>();
+
+                HashMap<String, String> params;
                 if (subjectSpinner.getSelectedItem().equals("Hospital Suggestion")) {
                     DistrictItem item = (DistrictItem) districtSpinnerAdapter.getItem(
                             districtSpinner.getSelectedItemPosition());
@@ -241,8 +227,8 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
                                 try {
                                     if (response.getInt("done") == 1) {
                                         mDialogBuilder.createAlertDialog(
-                                                "Info",
-                                                getResources().getString(R.string.feedback_thank_you),
+                                                getString(R.string.info),
+                                                getString(R.string.feedback_thank_you),
                                                 mOnClickListener);
                                     }
                                 } catch (JSONException e) {
@@ -251,10 +237,18 @@ public class FeedbackActivity extends ActionBarActivity implements URL {
                             }
                         }, new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError volleyError) {
+                    public void onErrorResponse(VolleyError error) {
                         mDialogBuilder.getProgressDialog().dismiss();
-                        mDialogBuilder.createAlertDialog("Something went wrong!");
-                        VolleyLog.e("Feedback", volleyError.getMessage());
+                        if (error.toString().contains("TimeoutError")) {
+                            mDialogBuilder.createAlertDialog(
+                                    getString(R.string.alert),
+                                    getString(R.string.timeout_error));
+                        } else if (error.toString().contains("UnknownHostException")) {
+                            mDialogBuilder.createAlertDialog(
+                                    getString(R.string.alert),
+                                    getString(R.string.no_internet));
+                        }
+                        VolleyLog.e(TAG, error.getMessage());
                     }
                 });
                 AppController.getInstance().addToRequestQueue(customRequest);

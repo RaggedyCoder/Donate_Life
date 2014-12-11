@@ -33,7 +33,12 @@ public class SignUpActivity extends ActionBarActivity {
     /**
      * Defines a tag for identifying log entries
      */
+    private static final int MOBILE_VERIFICATION = 0;
+    private static final int PASSWORD_VERIFICATION = 1;
+    private static final int NAME_VERIFICATION = 2;
+    private static final int REGISTRATION_COMPLETE = 3;
     private static final String TAG = SignUpActivity.class.getSimpleName();
+    private static final String FRAGMENT_TAG = "mContent";
     private static int currentFragmentTrackNumber;
     private Fragment mContent;
     private ArrayList<Fragment> fragments;
@@ -48,7 +53,7 @@ public class SignUpActivity extends ActionBarActivity {
         setContentView(R.layout.signup);
         if (savedInstanceState != null) {
             mContent = getSupportFragmentManager().getFragment(
-                    savedInstanceState, "regContent");
+                    savedInstanceState, FRAGMENT_TAG);
         }
         if (fragments == null) {
             fragments = new ArrayList<Fragment>();
@@ -66,30 +71,38 @@ public class SignUpActivity extends ActionBarActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getSupportFragmentManager().putFragment(outState, "regContent",
+        getSupportFragmentManager().putFragment(outState, FRAGMENT_TAG,
                 mContent);
     }
 
     public void changeFragment(Bundle bundle, int number) {
-        if (number == 1) {
-            if (fragments.size() == 1) {
-                fragments.add(1, PasswordVerificationFragment.newInstance(bundle));
+        switch (number) {
+            case MOBILE_VERIFICATION:
+                break;
+            case PASSWORD_VERIFICATION:
+                if (fragments.size() == 1) {
+                    fragments.add(1, PasswordVerificationFragment.newInstance(bundle));
 
-            } else {
-                fragments.set(1, PasswordVerificationFragment.newInstance(bundle));
-            }
-        } else if (number == 2) {
-            if (fragments.size() == 2) {
-                fragments.add(2, NameVerificationFragment.newInstance(bundle));
-            } else {
-                fragments.set(2, NameVerificationFragment.newInstance(bundle));
-            }
-        } else if (number == 3) {
-            if (fragments.size() == 3) {
-                fragments.add(3, RegistrationCompleteFragment.newInstance(bundle));
-            } else {
-                fragments.set(3, RegistrationCompleteFragment.newInstance(bundle));
-            }
+                } else {
+                    fragments.set(1, PasswordVerificationFragment.newInstance(bundle));
+                }
+                break;
+            case NAME_VERIFICATION:
+                if (fragments.size() == 2) {
+                    fragments.add(2, NameVerificationFragment.newInstance(bundle));
+                } else {
+                    fragments.set(2, NameVerificationFragment.newInstance(bundle));
+                }
+                break;
+            case REGISTRATION_COMPLETE:
+                if (fragments.size() == 3) {
+                    fragments.add(3, RegistrationCompleteFragment.newInstance(bundle));
+                } else {
+                    fragments.set(3, RegistrationCompleteFragment.newInstance(bundle));
+                }
+                break;
+            default:
+                break;
         }
         Log.i(TAG, fragments.size() + "");
         currentFragmentTrackNumber = number;

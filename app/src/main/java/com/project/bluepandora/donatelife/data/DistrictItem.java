@@ -19,14 +19,16 @@ public class DistrictItem implements Item {
 
     private int distId;
     private String distName;
+    private String banglaDistName;
 
     public DistrictItem() {
 
     }
 
-    public DistrictItem(int distId, String distName) {
+    public DistrictItem(int distId, String distName, String banglaDistName) {
         this.distId = distId;
         this.distName = distName;
+        this.banglaDistName = banglaDistName;
     }
 
     public int getDistId() {
@@ -47,5 +49,13 @@ public class DistrictItem implements Item {
 
     public String toString() {
         return distName;
+    }
+
+    public String getBanglaDistName() {
+        return banglaDistName;
+    }
+
+    public void setBanglaDistName(String banglaDistName) {
+        this.banglaDistName = banglaDistName;
     }
 }

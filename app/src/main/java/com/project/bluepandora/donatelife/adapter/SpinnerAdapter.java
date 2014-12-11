@@ -17,12 +17,14 @@ package com.project.bluepandora.donatelife.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.data.BloodItem;
 import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.HospitalItem;
@@ -36,42 +38,31 @@ public class SpinnerAdapter extends BaseAdapter {
     private ArrayList<Item> items;
     private LayoutInflater inflater;
     private Activity activity;
+    private boolean banglaFilter;
+
 
     public SpinnerAdapter(Activity activity, ArrayList<Item> items) {
         this.items = items;
         this.activity = activity;
         inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        banglaFilter = PreferenceManager.getDefaultSharedPreferences(
+                activity).getBoolean(SettingsActivity.LANGUAGE_TAG, false);
+
     }
 
-    /**
-     * How many items are in the data set represented by this Adapter.
-     *
-     * @return Count of items.
-     */
     @Override
     public int getCount() {
         return items.size();
     }
 
-    /**
-     * Get the data item associated with the specified position in the data set.
-     *
-     * @param position Position of the item whose data we want within the adapter's
-     *                 data set.
-     * @return The data at the specified position.
-     */
+
     @Override
     public Object getItem(int position) {
         return items.get(position);
     }
 
-    /**
-     * Get the row id associated with the specified position in the list.
-     *
-     * @param position The position of the item within the adapter's data set whose row id we want.
-     * @return The id of the item at the specified position.
-     */
+
     @Override
     public long getItemId(int position) {
         Item item = items.get(position);
@@ -113,24 +104,6 @@ public class SpinnerAdapter extends BaseAdapter {
         return -1;
     }
 
-    /**
-     * Get a View that displays the data at the specified position in the data set. You can either
-     * create a View manually or inflate it from an XML layout file. When the View is inflated, the
-     * parent View (GridView, ListView...) will apply default layout parameters unless you use
-     * {@link android.view.LayoutInflater#inflate(int, android.view.ViewGroup, boolean)}
-     * to specify a root view and to prevent attachment to the root.
-     *
-     * @param position    The position of the item within the adapter's data set of the item whose view
-     *                    we want.
-     * @param convertView The old view to reuse, if possible. Note: You should check that this view
-     *                    is non-null and of an appropriate type before using. If it is not possible to convert
-     *                    this view to display the correct data, this method can create a new view.
-     *                    Heterogeneous lists can specify their number of view types, so that this View is
-     *                    always of the right type (see {@link #getViewTypeCount()} and
-     *                    {@link #getItemViewType(int)}).
-     * @param parent      The parent that this view will eventually be attached to
-     * @return A View corresponding to the data at the specified position.
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
@@ -139,7 +112,7 @@ public class SpinnerAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.spinner_item, null);
+            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
             holder = new ViewHolder();
             holder.spinnerItemName = (CustomTextView) convertView.findViewById(R.id.spinner_item_name);
             convertView.setTag(holder);
@@ -147,15 +120,24 @@ public class SpinnerAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Item item = items.get(position);
-        if (item instanceof DistrictItem) {
-            String districtName = ((DistrictItem) item).getDistName();
-
-            holder.spinnerItemName.setText(districtName);
-        } else if (item instanceof HospitalItem) {
-            holder.spinnerItemName.setText(((HospitalItem) item).getHospitalName());
-        } else if (item instanceof BloodItem) {
-            holder.spinnerItemName.setText(((BloodItem) item).getBloodName());
+        if (banglaFilter) {
+            if (item instanceof DistrictItem) {
+                holder.spinnerItemName.setText(((DistrictItem) item).getBanglaDistName());
+            } else if (item instanceof HospitalItem) {
+                holder.spinnerItemName.setText(((HospitalItem) item).getBanglaHospitalName());
+            } else if (item instanceof BloodItem) {
+                holder.spinnerItemName.setText(((BloodItem) item).getBanglaBloodName());
+            }
+        } else {
+            if (item instanceof DistrictItem) {
+                holder.spinnerItemName.setText(((DistrictItem) item).getDistName());
+            } else if (item instanceof HospitalItem) {
+                holder.spinnerItemName.setText(((HospitalItem) item).getHospitalName());
+            } else if (item instanceof BloodItem) {
+                holder.spinnerItemName.setText(((BloodItem) item).getBloodName());
+            }
         }
+
         return convertView;
     }
 

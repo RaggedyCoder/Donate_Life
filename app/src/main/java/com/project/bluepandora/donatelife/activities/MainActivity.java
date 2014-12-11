@@ -29,7 +29,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -70,31 +69,22 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static boolean backPressed = false;
-    public static ArrayList<Fragment> fragments;
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
-            // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
-            /**
-             * Take appropriate action on this message
-             * depending upon your app requirement
-             * For now i am just displaying it on the screen
-             * */
             Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
-            // Releasing wake lock
             WakeLocker.release();
         }
     };
-    public ActionBar act;
-    public Fragment mContent;
-    public int prevPos = 0;
-    protected DrawerSlideListeners mDrawerSlideListeners;
     DrawerLayout mDrawerLayout;
     ListView mDrawerListView;
     ActionBarDrawerToggle mActionBarDrawerToggle;
     AsyncTask<Void, Void, Void> mRegisterTask;
+    private Fragment mContent;
+    private int prevPos = 0;
+    private DrawerSlideListeners mDrawerSlideListeners;
     private SlideMenuAdapter listAdapter;
     private List<Item> slideItems;
 
@@ -103,7 +93,6 @@ public class MainActivity extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        act = getSupportActionBar();
         if (savedInstanceState != null) {
             mContent = getSupportFragmentManager().getFragment(
                     savedInstanceState, "mContent");
@@ -113,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
         registerReceiver(mHandleMessageReceiver, new IntentFilter(
                 CommonUtilities.DISPLAY_MESSAGE_ACTION));
         final String regId = GCMRegistrar.getRegistrationId(this);
-        Log.e(TAG, regId + " here");
+        Log.e(TAG, "GCM ID for this mobile-" + regId);
         if (regId.equals("")) {
             // Registration is not present, register now with GCM
             GCMRegistrar.register(this, SENDER_ID);
@@ -121,7 +110,7 @@ public class MainActivity extends ActionBarActivity {
         } else {
             if (GCMRegistrar.isRegisteredOnServer(this)) {
                 // Skips registration.
-                Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
+                Log.i(TAG, "GCM Registration message" + "Already registered with GCM");
             } else {
                 // Try to register again, but not in the UI thread.
                 // It's also necessary to cancel the thread onDestroy(),
@@ -145,25 +134,19 @@ public class MainActivity extends ActionBarActivity {
                     protected void onPostExecute(Void result) {
                         mRegisterTask = null;
                     }
-
                 };
                 mRegisterTask.execute(null, null, null);
             }
         }
         if (mContent == null) {
-            fragments = new ArrayList<Fragment>();
-            fragments.add(new FeedFragment());
-            fragments.add(new RequestFragment());
-            fragments.add(new ProfileDetailsFragment());
-            mContent = fragments.get(0);
+            mContent = new FeedFragment();
         }
         mDrawerListView = (ListView) findViewById(R.id.list_slidermenu);
-        slideItems = new ArrayList<Item>();
-
+        createSlidingMenu();
         listAdapter = new SlideMenuAdapter(this, slideItems);
         mDrawerListView.setAdapter(listAdapter);
         if (mContent instanceof RequestFragment) {
-            mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
+            mDrawerSlideListeners = (DrawerSlideListeners) mContent;
         }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -182,11 +165,28 @@ public class MainActivity extends ActionBarActivity {
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 if (mContent instanceof RequestFragment) {
-                    ((DrawerSlideListeners) mContent).onDrawerSlide(slideOffset);
+                    mDrawerSlideListeners.onDrawerSlide(slideOffset);
                 }
                 Log.d(TAG, "" + slideOffset);
             }
         };
+        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+        mDrawerListView.setOnItemClickListener(new ListItemListner());
+        listAdapter.notifyDataSetInvalidated();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, mContent).commit();
+        if (mContent instanceof FeedFragment) {
+            listAdapter.setSelected(0);
+            prevPos = 0;
+        } else if (mContent instanceof RequestFragment) {
+            mDrawerSlideListeners = (DrawerSlideListeners) mContent;
+            listAdapter.setSelected(1);
+            prevPos = 1;
+        }
+    }
+
+    private void createSlidingMenu() {
+        slideItems = new ArrayList<Item>();
         String[] names = getResources()
                 .getStringArray(R.array.nav_drawer_items);
         TypedArray icons = getResources().obtainTypedArray(
@@ -194,7 +194,6 @@ public class MainActivity extends ActionBarActivity {
         TypedArray backgrounds = getResources().obtainTypedArray(
                 R.array.nav_drawer_backgrounds);
 
-        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
         SlideItem item;
         for (int i = 0; i < names.length; i++) {
@@ -207,18 +206,6 @@ public class MainActivity extends ActionBarActivity {
         }
         icons.recycle();
         backgrounds.recycle();
-        mDrawerListView.setOnItemClickListener(new ListItemListner());
-        listAdapter.notifyDataSetInvalidated();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, mContent).commit();
-        if (mContent instanceof FeedFragment) {
-            listAdapter.setSelected(0);
-            prevPos = 0;
-        } else if (mContent instanceof RequestFragment) {
-            mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
-            listAdapter.setSelected(1);
-            prevPos = 1;
-        }
     }
 
     @Override
@@ -271,7 +258,7 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_logout) {
             final ProgressDialog pd = new ProgressDialog(this);
             pd.setCancelable(true);
-            pd.setTitle("Logging out.");
+            pd.setTitle(getString(R.string.log_out_message));
             pd.show();
             deleteFile("feed.json");
             final ConnectionManager con = new ConnectionManager(this);
@@ -292,7 +279,7 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     if (!con.isConnectingToInternet()) {
-                        Toast.makeText(MainActivity.this, "Check Your internet Connection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
                         return;
                     }
                     for (UserInfoItem i : items) {
@@ -337,15 +324,14 @@ public class MainActivity extends ActionBarActivity {
             finish();
             AppController.getInstance().getRequestQueue().getCache()
                     .remove(URL.URL);
+            backPressed = false;
             MainActivity.this.overridePendingTransition(R.anim.slide_in_left,
                     R.anim.slide_out_right);
-            backPressed = false;
             FeedFragment.firstTime = true;
             finish();
-            super.onBackPressed();
         } else {
 
-            Toast.makeText(this, "Press Back again to Exit", Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.exit_notice, Toast.LENGTH_SHORT)
                     .show();
             backPressed = true;
             Handler h = new Handler();
@@ -360,11 +346,11 @@ public class MainActivity extends ActionBarActivity {
     public void switchContent() {
         prevPos = 1;
         listAdapter.setSelected(1);
-        mContent = fragments.get(1);
+        mContent = new RequestFragment();
         mDrawerListView.setItemChecked(1, true);
         mDrawerListView.setSelection(1);
         mDrawerLayout.closeDrawer(mDrawerListView);
-        mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
+        mDrawerSlideListeners = (DrawerSlideListeners) mContent;
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.grow, R.anim.dim)
                 .replace(R.id.frame_container, mContent).commit();
@@ -379,44 +365,46 @@ public class MainActivity extends ActionBarActivity {
             return;
         }
         if ((mContent instanceof RequestFragment)
-                && (fragments.get(pos) instanceof RequestFragment)) {
-            Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
+                && (pos == 1)) {
+            Log.i(TAG, "Fragment Change" + "returned to previous fragment without create a new one");
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
         } else if ((mContent instanceof FeedFragment)
-                && (fragments.get(pos) instanceof FeedFragment)) {
-            Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
+                && (pos == 0)) {
+            Log.i(TAG, "Fragment Change" + "returned to previous fragment without create a new one");
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
         } else if ((mContent instanceof ProfileDetailsFragment)
-                && (fragments.get(pos) instanceof ProfileDetailsFragment)) {
-            Toast.makeText(this, "returned", Toast.LENGTH_SHORT).show();
+                && (pos == 2)) {
+            Log.i(TAG, "Fragment Change" + "returned to previous fragment without create a new one");
             mDrawerLayout.closeDrawer(mDrawerListView);
             return;
         }
         FeedFragment.slideChange = true;
-        if (pos == 1) {
-            mDrawerSlideListeners = (DrawerSlideListeners) fragments.get(1);
+        if (pos == 0) {
+            mContent = new FeedFragment();
+        } else if (pos == 1) {
+            mContent = new RequestFragment();
+            mDrawerSlideListeners = (DrawerSlideListeners) mContent;
+        } else if (pos == 2) {
+            mContent = new ProfileDetailsFragment();
         }
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_left,
-                        R.anim.slide_out_right)
-                .replace(R.id.frame_container, fragments.get(pos)).commit();
-        mContent = fragments.get(pos);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.frame_container, mContent).commit();
         mDrawerListView.setItemChecked(pos, true);
         mDrawerListView.setSelection(pos);
         mDrawerLayout.closeDrawer(mDrawerListView);
-    }
-
-    public interface DrawerSlideListeners {
-        public void onDrawerSlide(float offset);
     }
 
     @Override
     protected void onPause() {
         AppController.getInstance().cancelPendingRequests();
         super.onPause();
+    }
+
+    public interface DrawerSlideListeners {
+        public void onDrawerSlide(float offset);
     }
 
     private class ListItemListner implements ListView.OnItemClickListener {
@@ -428,6 +416,7 @@ public class MainActivity extends ActionBarActivity {
             if (position == 4) {
                 Intent intent =
                         new Intent(MainActivity.this, SettingsActivity.class);
+                finish();
                 startActivity(intent);
                 mDrawerLayout.closeDrawer(mDrawerListView);
                 return;

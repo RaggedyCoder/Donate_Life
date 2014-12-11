@@ -10,13 +10,15 @@
     <string name="app_info">Info</string>
     <string name="app_copyright">2014 Blue Pandora Inc</string>
     <string name="app_version_code">Version 1.1.1</string>
-    <string name="the_doctor">The Doctor</string>
-    <string name="the_doctor_email">sajid.sust.cse@gmail.com</string>
-    <string name="coder_bd">coder.bd</string>
-    <string name="coder_bd_email">biswajit.sust@gmail.com</string>
+    <string name="the_doctor" translatable="false">The Doctor</string>
+    <string name="the_doctor_email" translatable="false">sajid.sust.cse@gmail.com</string>
+    <string name="the_doctor_facebook" translatable="false">https://www.facebook.com/tumanisdevil</string>
+    <string name="coder_bd" translatable="false">coder.bd</string>
+    <string name="coder_bd_email" translatable="false">biswajit.sust@gmail.com</string>
+    <string name="coder_bd_facebook" translatable="false">https://www.facebook.com/profile.php?id=100000043940885</string>
     <string name="emergency_text">EMERGENCY</string>
     <string name="non_emergency_text"> </string>
-    <string name="emergency_char">E</string>
+    <string name="emergency_char" translatable="false">E</string>
     <string name="emergency_request">EMERGENCY REQUEST</string>
     <string name="emergency_sms">SMS REQUEST</string>
     <string name="dummy_name">System</string>
@@ -28,7 +30,8 @@
     <string name="sign_up">Sign Up</string>
     <string name="refresh">refresh</string>
     <string name="refresh_notice">Pull Down to Refresh</string>
-    <string name="request">Request for Blood</string>
+    <string name="request_server">Add to feed</string>
+    <string name="request_sms">Send SMS Request</string>
     <string name="profile_details">Profile Details</string>
     <string name="profile_edit">Edit</string>
     <string name="password_field">Pass</string>
@@ -92,32 +95,35 @@
     <string name="settings">Settings</string>
     <string name="feedback">Feedback</string>
     <string name="about_us">About Us</string>
-    <string name="loading">Loading...</string>
-    <string name="processing">Request on Process...</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="processing">Request on Process&#8230;</string>
     <string name="timeout_error">Request not proceed.Check your Internet Connection.</string>
     <string name="no_internet">Check your Internet connection.</string>
-    <string name="availability">Checking Availability...</string>
+    <string name="availability">Checking Availability&#8230;</string>
     <string name="delete_request">Delete Request</string>
-    <string name="progressing">Progressing...</string>
+    <string name="progressing">Progressing&#8230;</string>
     <string name="title_activity_main">Push Notifications</string>
-    <string name="error_config">Please set the %1$s constant and recompile the app.</string>
+    <string name="error_config" translatable="false">Please set the %1$s constant and recompile the app.</string>
     <string name="already_registered">Device is already registered on server.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
-    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Demo Server.</string>
-    <string name="server_registered">From Demo Server: successfully added device!</string>
-    <string name="server_unregistered">From Demo Server: successfully removed device!</string>
-    <string name="server_register_error">Could not register device on Demo Server after %1$d attempts.</string>
-    <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).</string>
+    <string name="gcm_registered" translatable="false">From GCM: device successfully registered!</string>
+    <string name="gcm_unregistered" translatable="false">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message" translatable="false">From GCM: you got message!</string>
+    <string name="gcm_error" translatable="false">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error" translatable="false">From GCM: recoverable error (%1$s).</string>
+    <string name="gcm_deleted" translatable="false">From GCM: server deleted %1$d pending messages!</string>
+    <string name="server_registering" translatable="false">Trying (attempt %1$d/%2$d) to register device on Demo Server.</string>
+    <string name="server_registered" translatable="false">From Demo Server: successfully added device!</string>
+    <string name="server_unregistered" translatable="false">From Demo Server: successfully removed device!</string>
+    <string name="server_register_error" translatable="false">Could not register device on Demo Server after %1$d attempts.</string>
+    <string name="server_unregister_error" translatable="false">Could not unregister device on Demo Server (%1$s).</string>
     <string name="options_register">Register</string>
     <string name="options_unregister">Unregister</string>
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
     <string name="pref_request_feed">Feed Option and Filtering</string>
+    <string name="pref_language">Language Settings</string>
+    <string name="pref_title_app_language">Bangla Language</string>
+    <string name="pref_summary_app_language">Switch to Bangla</string>
     <string name="pref_notification">Notification Options</string>
     <string name="pref_key_feed_show_limit">%d request feeds at a time</string>
     <string name="pref_title_feed_show">Feed Limit</string>
@@ -137,10 +143,21 @@
     <string name="zero_bag_request"> </string>
     <string name="one_bag_request">(one Bag)</string>
     <string name="other_bag_request">(%d Bags)</string>
+    <string name="zero_donor_title">No donor available</string>
+    <string name="one_donor_title">one donor available</string>
+    <string name="other_donor_title">Total %d donors available</string>
+    <string name="sms_body" translatable="false">\"Please Help Need (one Bag) A+ in AD-DIN WOMEN\'S MEDICAL COLLEGE. \n -Donate Life\"</string>
+    <string name="donor_zero_grammar_correct">No donor available</string>
+    <string name="donor_zero_grammar_error">Total 0 donors available</string>
     <string name="zero_grammar_error">0 Times</string>
     <string name="about_version_bulid_code">Version 1.1.1 | build 20141128</string>
     <string name="about_usage_policy">Donate Life is for personal and non-commercial use only.</string>
     <string name="about_legal_license">legal information about licenses</string>
     <string name="name_and_contact">Name and contact</string>
     <string name="feedback_thank_you">Thank you for your feedback</string>
+    <string name="alert">Alert!</string>
+    <string name="log_out_message">Logging out&#8230;</string>
+    <string name="exit_notice">Press Back again to Exit</string>
+    <string name="info">Info</string>
+    <string name="unknown_server_error">Something has gone wrong&#8230;   Try again in a few minutes.</string>
 </resources>

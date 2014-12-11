@@ -1,18 +1,5 @@
 package com.project.bluepandora.donatelife.datasource;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.project.bluepandora.donatelife.data.DistrictItem;
-import com.project.bluepandora.donatelife.data.Item;
-import com.project.bluepandora.donatelife.database.DataBaseOpenHelper;
-import com.project.bluepandora.donatelife.exception.DistrictDatabaseException;
-
-import java.util.ArrayList;
-
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
  *
@@ -28,24 +15,41 @@ import java.util.ArrayList;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.project.bluepandora.donatelife.data.DistrictItem;
+import com.project.bluepandora.donatelife.data.Item;
+import com.project.bluepandora.donatelife.database.DataBaseOpenHelper;
+import com.project.bluepandora.donatelife.exception.DistrictDatabaseException;
+
+import java.util.ArrayList;
+
 public class DistrictDataSource {
 
-    private String[] allColumns = {DataBaseOpenHelper.DISTRICTID_COLOUMN,
-            DataBaseOpenHelper.DISTRICTNAME_COLOUMN};
     protected Context context;
     protected SQLiteDatabase database;
     protected DataBaseOpenHelper dbHelper;
+    private String[] allColumns = {
+            DataBaseOpenHelper.DISTRICTID_COLOUMN,
+            DataBaseOpenHelper.DISTRICTNAME_COLOUMN,
+            DataBaseOpenHelper.BANGLA_DISTRICTNAME_COLOUMN};
 
     public DistrictDataSource(Context context) {
         dbHelper = new DataBaseOpenHelper(context);
         this.context = context;
     }
 
-    public DistrictItem createDistrictItem(int distId, String distName)
+    public DistrictItem createDistrictItem(int distId, String distName, String banglaDistName)
             throws DistrictDatabaseException {
         ContentValues values = new ContentValues();
         values.put(DataBaseOpenHelper.DISTRICTID_COLOUMN, distId);
         values.put(DataBaseOpenHelper.DISTRICTNAME_COLOUMN, distName);
+        values.put(DataBaseOpenHelper.BANGLA_DISTRICTNAME_COLOUMN, banglaDistName);
         database.insert(DataBaseOpenHelper.DISTRICT_TABLE, null, values);
         Cursor cursor = database.query(DataBaseOpenHelper.DISTRICT_TABLE,
                 allColumns, DataBaseOpenHelper.DISTRICTID_COLOUMN + " = "
@@ -89,6 +93,8 @@ public class DistrictDataSource {
                 .getColumnIndex(DataBaseOpenHelper.DISTRICTID_COLOUMN)));
         item.setDistName(cursor.getString(cursor
                 .getColumnIndex(DataBaseOpenHelper.DISTRICTNAME_COLOUMN)));
+        item.setBanglaDistName(cursor.getString(cursor
+                .getColumnIndex(DataBaseOpenHelper.BANGLA_DISTRICTNAME_COLOUMN)));
         return item;
     }
 

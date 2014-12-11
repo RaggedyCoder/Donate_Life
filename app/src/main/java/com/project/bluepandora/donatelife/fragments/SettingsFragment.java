@@ -17,6 +17,7 @@ package com.project.bluepandora.donatelife.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.activities.MainActivity;
 
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -55,7 +57,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        actionbar.setTitle("Settings");
+        actionbar.setTitle(R.string.settings);
         actionbar.setTitleTextColor(Color.WHITE);
         actionbar.setNavigationOnClickListener(mOnClickListener);
         actionbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
@@ -67,7 +69,10 @@ public class SettingsFragment extends PreferenceFragment {
         mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 getActivity().finish();
+                startActivity(intent);
+
             }
         };
     }

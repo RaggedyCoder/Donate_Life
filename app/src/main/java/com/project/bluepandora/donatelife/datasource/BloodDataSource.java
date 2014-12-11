@@ -33,21 +33,24 @@ public class BloodDataSource {
     protected Context context;
     protected SQLiteDatabase database;
     protected DataBaseOpenHelper dbHelper;
-    private String[] allColumns = {DataBaseOpenHelper.GROUPID_COLOUMN,
-            DataBaseOpenHelper.GROUPNAME_COLOUMN};
+    private String[] allColumns = {
+            DataBaseOpenHelper.GROUPID_COLOUMN,
+            DataBaseOpenHelper.GROUPNAME_COLOUMN,
+            DataBaseOpenHelper.BANGLA_GROUPNAME_COLOUMN};
 
     public BloodDataSource(Context context) {
         dbHelper = new DataBaseOpenHelper(context);
         this.context = context;
     }
 
-    public BloodItem createBloodItem(int bloodId, String bloodName)
+    public BloodItem createBloodItem(int bloodId, String bloodName, String banglaBloodName)
             throws BloodDatabaseException {
         ContentValues values = null;
 
         values = new ContentValues();
         values.put(DataBaseOpenHelper.GROUPID_COLOUMN, bloodId);
         values.put(DataBaseOpenHelper.GROUPNAME_COLOUMN, bloodName);
+        values.put(DataBaseOpenHelper.BANGLA_GROUPNAME_COLOUMN, banglaBloodName);
 
         database.insert(DataBaseOpenHelper.BLOOD_TABLE, null, values);
 
@@ -63,13 +66,12 @@ public class BloodDataSource {
             throws BloodDatabaseException {
 
         BloodItem returnItem = createBloodItem(item.getBloodId(),
-                item.getBloodName());
+                item.getBloodName(), item.getBanglaBloodName());
         return returnItem;
     }
 
     public BloodItem getBloodItem(BloodItem item) {
-
-        BloodItem returnItem = new BloodItem();
+        BloodItem returnItem;
         Cursor cursor = database.query(DataBaseOpenHelper.BLOOD_TABLE,
                 allColumns, DataBaseOpenHelper.GROUPID_COLOUMN + " = " + item.getBloodId(), null, null, null, null);
         cursor.moveToFirst();
@@ -109,6 +111,9 @@ public class BloodDataSource {
                 .getColumnIndex(DataBaseOpenHelper.GROUPID_COLOUMN)));
         item.setBloodName(cursor.getString(cursor
                 .getColumnIndex(DataBaseOpenHelper.GROUPNAME_COLOUMN)));
+        item.setBanglaBloodName(cursor.getString(cursor
+                .getColumnIndex(DataBaseOpenHelper.BANGLA_GROUPNAME_COLOUMN)));
+
         return item;
     }
 

@@ -15,4 +15,11 @@
     <plurals name="numbers">
         <item quantity="other">@string/pref_key_feed_show_limit</item>
     </plurals>
+
+    <plurals name="donor_title">
+        <item quantity="zero">@string/zero_donor_title</item>
+        <item quantity="one">@string/one_donor_title</item>
+        <item quantity="other">@string/other_donor_title</item>
+    </plurals>
+
 </resources>

@@ -20,6 +20,8 @@ public class HospitalItem implements Item {
     private int distId;
     private int hospitalId;
     private String hospitalName;
+    private String banglaHospitalName;
+
 
     public int getDistId() {
         return distId;
@@ -45,4 +47,11 @@ public class HospitalItem implements Item {
         this.hospitalName = hospitalName;
     }
 
+    public String getBanglaHospitalName() {
+        return banglaHospitalName;
+    }
+
+    public void setBanglaHospitalName(String banglaHospitalName) {
+        this.banglaHospitalName = banglaHospitalName;
+    }
 }

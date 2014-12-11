@@ -1,4 +1,4 @@
-package com.project.bluepandora.receiver;
+package com.project.bluepandora.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

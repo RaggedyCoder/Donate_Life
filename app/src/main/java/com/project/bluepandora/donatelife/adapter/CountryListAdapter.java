@@ -24,22 +24,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.project.bluepandora.donatelife.R;
-import com.project.bluepandora.donatelife.data.BloodItem;
 import com.widget.CustomTextView;
 
 import java.util.ArrayList;
 
 public class CountryListAdapter extends BaseAdapter {
 
-    // private Activity activity;
+    private Activity activity;
     private ArrayList<String> items;
     private LayoutInflater inflater;
-    BloodItem bitem;
-
     public CountryListAdapter(Activity activity, ArrayList<String> items) {
 
         this.items = items;
-        // this.activity = activity;
+        this.activity = activity;
         inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -68,13 +65,13 @@ public class CountryListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.spinner_item, null);
+            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
         }
         CustomTextView textView = (CustomTextView) convertView
                 .findViewById(R.id.spinner_item_name);
 
-        String bitem = items.get(position);
-        textView.setText(bitem);
+        String countryName = items.get(position);
+        textView.setText(countryName);
 
         textView.setSelected(true);
         return convertView;

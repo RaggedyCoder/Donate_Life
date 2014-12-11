@@ -17,13 +17,17 @@ package com.project.bluepandora.donatelife.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class StartActivity extends Activity {
 
@@ -32,6 +36,25 @@ public class StartActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean banglaMode = PreferenceManager.getDefaultSharedPreferences(this).
+                getBoolean(SettingsActivity.LANGUAGE_TAG, false);
+        final Locale locale;
+        if (banglaMode) {
+            String languageToLoad = "bn";
+            locale = new Locale(languageToLoad);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config, null);
+        } else {
+            if (Utils.hasGingerbread()) {
+                locale = Locale.ROOT;
+            } else {
+                locale = Locale.ENGLISH;
+            }
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config, null);
+        }
         UserDataSource userDatabase = new UserDataSource(this);
         ArrayList<UserInfoItem> items = null;
         userDatabase.open();

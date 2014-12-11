@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/holo_gray_light"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/holo_gray_light"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.widget.CustomTextView
+            android:id="@+id/donor_finder_text_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:textColor="@android:color/secondary_text_light"
+            android:text="@string/other_donor_title"
+            android:textSize="25sp"
+            app:font="MuseoSansRounded-300.otf" />
+
+        <com.widget.CustomTextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:textColor="@android:color/secondary_text_light"
+            android:text="SMS BODY"
+            android:textSize="25sp"
+            app:font="MuseoSansRounded-300.otf" />
+
+        <com.widget.CustomTextView
+            android:id="@+id/donor_sms_body_text_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:textColor="@color/holo_red_dark"
+            android:text="@string/sms_body"
+            android:textSize="18sp"
+            app:font="MuseoSansRounded-300.otf" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <com.widget.CustomTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="10dip"
+                android:gravity="center"
+                android:textColor="@android:color/secondary_text_light"
+                android:text="Send SMS to"
+                android:textSize="18sp"
+                app:font="MuseoSansRounded-300.otf" />
+
+            <com.widget.CustomEditText
+                android:id="@+id/donor_number_edit_text"
+                android:layout_width="wrap_content"
+                app:font="MuseoSansRounded-300.otf"
+                android:layout_marginLeft="5dip"
+                android:layout_marginStart="5dip"
+                android:layout_marginRight="5dip"
+                android:layout_marginEnd="5dip"
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
+                android:hint="Number"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+
+            <com.widget.CustomTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
+                android:gravity="center"
+                android:textColor="@android:color/secondary_text_light"
+                android:text="Person"
+                android:textSize="18sp"
+                app:font="MuseoSansRounded-300.otf" />
+        </LinearLayout>
+
+        <com.widget.CustomTextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
+            android:gravity="center"
+            android:textColor="@android:color/secondary_text_light"
+            android:text="N.B.: This may cost you money."
+            android:textSize="18sp"
+            app:font="MuseoSansRounded-700.otf" />
+
+        <com.widget.CustomButton
+            android:id="@+id/confirm_sms_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dip"
+            android:background="@drawable/white_holo_button"
+            android:text="@string/confirm"
+            android:textColor="@drawable/btn_holo_text" />
+    </LinearLayout>
+
+</LinearLayout>

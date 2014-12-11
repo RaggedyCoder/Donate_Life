@@ -259,7 +259,7 @@ public class ProfileDetailsAdapter extends BaseAdapter {
                         infoItem.setLastName(params.get("lastName"));
                         infoItem.setDistId(Integer.parseInt(params.get("distId")));
                         districtDatabase.open();
-                        distItem = districtDatabase.cursorToDistrictItem(districtDatabase.districtItemToCursor(new DistrictItem(infoItem.getDistId(), "")));
+                        distItem = districtDatabase.cursorToDistrictItem(districtDatabase.districtItemToCursor(new DistrictItem(infoItem.getDistId(), "", "")));
                         UserDataSource userDataBase = new UserDataSource(activity);
                         userDataBase.open();
                         userDataBase.open();

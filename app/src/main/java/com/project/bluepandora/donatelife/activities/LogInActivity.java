@@ -60,7 +60,7 @@ public class LogInActivity extends ActionBarActivity {
             finish();
             super.onBackPressed();
         } else
-            Toast.makeText(this, "Press Back again to Exit", Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.exit_notice, Toast.LENGTH_SHORT)
                     .show();
         backPressed = true;
         Handler h = new Handler();

@@ -1,12 +1,13 @@
 package com.project.bluepandora.donatelife.activities;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.project.bluepandora.donatelife.R;
@@ -28,12 +29,13 @@ import com.project.bluepandora.util.Utils;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String DISTRICT_FILTER_TAG = "pref_filter_district";
     public static final String GROUP_FILTER_TAG = "pref_filter_blood_group";
     public static final String VIBRATION_TAG = "pref_filter_vibration";
     public static final String NOTIFICATION_TAG = "pref_filter_notification";
+    public static final String LANGUAGE_TAG = "pref_app_language";
 
     public SettingsActivity() {
 
@@ -43,10 +45,8 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Settings");
+        setTitle(R.string.settings);
         if (Utils.hasHoneycomb()) {
-            Log.e("Settings", PreferenceManager.getDefaultSharedPreferences(
-                    this).getBoolean(SettingsActivity.NOTIFICATION_TAG, true) + "");
             getFragmentManager().beginTransaction()
                     .replace(android.R.id.content, new SettingsFragment()).commit();
         } else {
@@ -56,16 +56,39 @@ public class SettingsActivity extends PreferenceActivity {
             actionbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                     finish();
+                    startActivity(intent);
                 }
             });
             addPreferencesFromResource(R.xml.settings);
         }
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
         finish();
+        startActivity(intent);
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(LANGUAGE_TAG)) {
+            restartActivity();
+        }
     }
 }

@@ -40,10 +40,13 @@ public class DataBaseOpenHelper extends SQLiteOpenHelper {
     public static final String DONATION_RECORD_TABLE = "donner";
     public static final String HOSPITALID_COLOUMN = "hospital_id";
     public static final String HOSPITALNAME_COLOUMN = "hospital_name";
+    public static final String BANGLA_HOSPITALNAME_COLOUMN = "bangla_hospital_name";
     public static final String DISTRICTID_COLOUMN = "district_id";
     public static final String DISTRICTNAME_COLOUMN = "district_name";
+    public static final String BANGLA_DISTRICTNAME_COLOUMN = "bangla_district_name";
     public static final String GROUPID_COLOUMN = "group_id";
     public static final String GROUPNAME_COLOUMN = "group_name";
+    public static final String BANGLA_GROUPNAME_COLOUMN = "bangla_group_name";
     public static final String MOBILE_NUMBER_COLOUMN = "mobile_number";
     public static final String KEY_WORD_COLOUMN = "key_word";
     public static final String FIRST_NAME_COLOUMN = "first_name";
@@ -56,17 +59,20 @@ public class DataBaseOpenHelper extends SQLiteOpenHelper {
             + IF_NOT_EXISTS + " " + HOSPITAL_TABLE + "(" + " "
             + DISTRICTID_COLOUMN + " " + INTEGER + "," + HOSPITALID_COLOUMN
             + " " + INTEGER + "," + HOSPITALNAME_COLOUMN + " " + VARCHAR + ","
+            + BANGLA_HOSPITALNAME_COLOUMN + " " + VARCHAR + ","
             + PRIMARY_KEY + "(" + HOSPITALID_COLOUMN + ")" + "," + FOREIGN_KEY
             + "(" + DISTRICTID_COLOUMN + ")" + " " + REFERENCES + " "
             + DISTRICT_TABLE + "(" + DISTRICTID_COLOUMN + ")" + ");";
     private static final String DISTRICT_CREATE = CREATE + " " + TABLE + " "
             + IF_NOT_EXISTS + " " + DISTRICT_TABLE + "(" + " "
             + DISTRICTID_COLOUMN + " " + INTEGER + "," + DISTRICTNAME_COLOUMN
+            + " " + VARCHAR + "," + BANGLA_DISTRICTNAME_COLOUMN
             + " " + VARCHAR + "," + PRIMARY_KEY + "(" + DISTRICTID_COLOUMN
             + ")" + ");";
     private static final String BLOOD_CREATE = CREATE + " " + TABLE + " "
             + IF_NOT_EXISTS + " " + BLOOD_TABLE + "(" + " " + GROUPID_COLOUMN
             + " " + INTEGER + "," + GROUPNAME_COLOUMN + " " + VARCHAR + ","
+            + BANGLA_GROUPNAME_COLOUMN + " " + VARCHAR + ","
             + PRIMARY_KEY + "(" + GROUPID_COLOUMN + ")" + ");";
     private static final String USER_CREATE = CREATE + " " + TABLE + " "
             + IF_NOT_EXISTS + " " + USER_TABLE + "(" + " " + FIRST_NAME_COLOUMN

@@ -33,9 +33,11 @@ public class HospitalDataSource {
     protected Context context;
     protected SQLiteDatabase database;
     protected DataBaseOpenHelper dbHelper;
-    private String[] allColumns = {DataBaseOpenHelper.DISTRICTID_COLOUMN,
+    private String[] allColumns = {
+            DataBaseOpenHelper.DISTRICTID_COLOUMN,
             DataBaseOpenHelper.HOSPITALID_COLOUMN,
-            DataBaseOpenHelper.HOSPITALNAME_COLOUMN};
+            DataBaseOpenHelper.HOSPITALNAME_COLOUMN,
+            DataBaseOpenHelper.BANGLA_HOSPITALNAME_COLOUMN};
 
     public HospitalDataSource(Context context) {
         dbHelper = new DataBaseOpenHelper(context);
@@ -43,11 +45,12 @@ public class HospitalDataSource {
     }
 
     public HospitalItem createHospitalItem(int distId, int hospitalId,
-                                           String hospitalName) {
+                                           String hospitalName, String banglaHospitalName) {
         ContentValues values = new ContentValues();
         values.put(DataBaseOpenHelper.DISTRICTID_COLOUMN, distId);
         values.put(DataBaseOpenHelper.HOSPITALID_COLOUMN, hospitalId);
         values.put(DataBaseOpenHelper.HOSPITALNAME_COLOUMN, hospitalName);
+        values.put(DataBaseOpenHelper.BANGLA_HOSPITALNAME_COLOUMN, banglaHospitalName);
         database.insert(DataBaseOpenHelper.HOSPITAL_TABLE, null, values);
         Cursor cursor = database.query(DataBaseOpenHelper.HOSPITAL_TABLE,
                 allColumns, DataBaseOpenHelper.HOSPITALID_COLOUMN + " = "
@@ -110,6 +113,9 @@ public class HospitalDataSource {
                 .getColumnIndex(DataBaseOpenHelper.HOSPITALID_COLOUMN)));
         item.setHospitalName(cursor.getString(cursor
                 .getColumnIndex(DataBaseOpenHelper.HOSPITALNAME_COLOUMN)));
+        item.setBanglaHospitalName(cursor.getString(cursor
+                .getColumnIndex(DataBaseOpenHelper.BANGLA_HOSPITALNAME_COLOUMN)));
+
         return item;
     }
 

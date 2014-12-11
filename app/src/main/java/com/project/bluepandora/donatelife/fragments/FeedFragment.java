@@ -450,6 +450,8 @@ public class FeedFragment extends Fragment implements URL {
                         getActivity()).getBoolean(SettingsActivity.DISTRICT_FILTER_TAG, false);
                 boolean groupFiter = PreferenceManager.getDefaultSharedPreferences(
                         getActivity()).getBoolean(SettingsActivity.GROUP_FILTER_TAG, false);
+                boolean banglaFilter = PreferenceManager.getDefaultSharedPreferences(
+                        getActivity()).getBoolean(SettingsActivity.LANGUAGE_TAG, false);
                 FeedItem item = new FeedItem();
                 String mobile = feedObj.getString("mobileNumber");
                 item.setContact(mobile);
@@ -468,7 +470,6 @@ public class FeedFragment extends Fragment implements URL {
                 }
                 BloodItem exbi = bloodDatabase.cursorToBloodItem(bloodDatabase
                         .bloodItemToCursor(bi));
-                item.setBloodGroup(exbi.getBloodName());
                 String amount = feedObj.getString("amount");
                 Integer a = Integer.parseInt(amount);
                 item.setBloodAmount(a);
@@ -485,8 +486,16 @@ public class FeedFragment extends Fragment implements URL {
                 if (distFilter && userInfo.getDistId() != exdi.getDistId()) {
                     continue;
                 }
-                item.setHospital(exhi.getHospitalName());
-                item.setArea(exdi.getDistName());
+                if (banglaFilter) {
+                    item.setBloodGroup(exbi.getBanglaBloodName());
+                    item.setHospital(exhi.getBanglaHospitalName());
+                    item.setArea(exdi.getBanglaDistName());
+
+                } else {
+                    item.setBloodGroup(exbi.getBloodName());
+                    item.setHospital(exhi.getHospitalName());
+                    item.setArea(exdi.getDistName());
+                }
                 feedItems.add(item);
             }
             bloodDatabase.close();

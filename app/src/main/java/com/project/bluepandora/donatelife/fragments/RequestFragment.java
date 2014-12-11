@@ -17,6 +17,8 @@ package com.project.bluepandora.donatelife.fragments;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -25,6 +27,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,6 +50,7 @@ import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.activities.MainActivity;
 import com.project.bluepandora.donatelife.adapter.SpinnerAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
+import com.project.bluepandora.donatelife.data.BloodItem;
 import com.project.bluepandora.donatelife.data.DistrictItem;
 import com.project.bluepandora.donatelife.data.HospitalItem;
 import com.project.bluepandora.donatelife.data.Item;
@@ -59,11 +66,13 @@ import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.project.bluepandora.util.Utils;
 import com.widget.CustomButton;
 import com.widget.CustomCheckBox;
+import com.widget.CustomEditText;
 import com.widget.CustomScrollView;
 import com.widget.CustomScrollView.OnScrollChangedListener;
 import com.widget.CustomSwitch;
 import com.widget.CustomTextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -105,6 +114,14 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private SpinnerAdapter bloodAdapter;
     private SpinnerAdapter districtAdapter;
     private SpinnerAdapter hospitalAdapter;
+    private ArrayList<String> mobileNumber;
+    private ProgressDialog.Builder sendSmsDialogBuilder;
+    private Dialog sendSmsDialog;
+    private CustomTextView donorFinderTextView;
+    private CustomEditText donorNumberEditText;
+    private CustomTextView donorSmsBodyTextView;
+    private CustomButton confirmSmsButton;
+    private View sendSmsDialogView;
 
 
     private DialogBuilder dialogBuilder;
@@ -131,26 +148,32 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         doneButton = (CustomButton) rootView.findViewById(R.id.done_button);
         CustomScrollView sc = (CustomScrollView) rootView.findViewById(R.id.scrollview);
         emergencyCheck = (CustomCheckBox) rootView.findViewById(R.id.emergency_checkBox);
+        sendSmsDialogBuilder = new ProgressDialog.Builder(getActivity());
+        sendSmsDialogView = inflater.inflate(R.layout.send_sms_dialog, container, false);
+        donorSmsBodyTextView = (CustomTextView) sendSmsDialogView.findViewById(R.id.donor_sms_body_text_view);
+        donorFinderTextView = (CustomTextView) sendSmsDialogView.findViewById(R.id.donor_finder_text_view);
+        donorNumberEditText = (CustomEditText) sendSmsDialogView.findViewById(R.id.donor_number_edit_text);
+        confirmSmsButton = (CustomButton) sendSmsDialogView.findViewById(R.id.confirm_sms_button);
+        sendSmsDialogBuilder.setView(sendSmsDialogView);
+        sendSmsDialog = sendSmsDialogBuilder.create();
         if (Utils.hasICS()) {
             emergencySmsSwitch = (CustomSwitch) rootView.findViewById(R.id.emergency_sms_switch);
         } else {
             emergencySmsCheckBox = (CustomCheckBox) rootView.findViewById(R.id.emergency_sms_checkbox);
         }
         userInfoItems = new ArrayList<UserInfoItem>();
-
         userDatase = new UserDataSource(getActivity());
         userDatase.open();
         userInfoItems = userDatase.getAllUserItem();
         userDatase.close();
-
         bloodDatabase = new BloodDataSource(getActivity());
         bloodDatabase.open();
         bloodItems = bloodDatabase.getAllBloodItem();
         bloodDatabase.close();
 
         amounts = new ArrayList<String>();
-        for (int i = 1; i <= 6; i++) {
-            amounts.add("" + i);
+        for (int i = 1; i <= 12; i++) {
+            amounts.add(Integer.toString(i));
         }
         amountAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.spinner_item, amounts);
@@ -242,7 +265,67 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        confirmSmsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (donorNumberEditText.length() == 0) {
+                    dialogBuilder.createAlertDialog("You must add 1 donor.");
+                } else {
+                    for (int i = 0; i < Integer.parseInt(donorNumberEditText.getText().toString()); i++) {
+                        SmsManager.getDefault().sendTextMessage(mobileNumber.get(i),
+                                null, donorSmsBodyTextView.getText().toString().trim(), null, null);
+                    }
+                }
+            }
+        });
+        donorNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    int number = Integer.parseInt(s.toString());
+                    if (number == 0) {
+                        donorNumberEditText.setText("1");
+                    } else if (number > mobileNumber.size()) {
+                        donorNumberEditText.setText(Integer.toString(mobileNumber.size()));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         dialogBuilder = new DialogBuilder(getActivity(), TAG);
+        if (Utils.hasICS()) {
+            emergencySmsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.e("", "" + isChecked);
+                    if (isChecked) {
+                        doneButton.setText(getResources().getString(R.string.request_sms));
+                    } else {
+                        doneButton.setText(getResources().getString(R.string.request_server));
+                    }
+                }
+            });
+        } else {
+            emergencySmsCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        doneButton.setText(getResources().getString(R.string.request_sms));
+                    } else {
+                        doneButton.setText(getResources().getString(R.string.request_server));
+                    }
+                }
+            });
+        }
         doneButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -254,7 +337,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                             Toast.LENGTH_SHORT).show();
 
                 } else {
-                    DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+                    DialogInterface.OnClickListener serverPositiveClickListener = new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog,
@@ -263,12 +346,26 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                             dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
                         }
                     };
+                    DialogInterface.OnClickListener smsPositiveClickListener = new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                            int which) {
+                            HashMap<String, String> params = ParamsBuilder.donatorMobileNumber(
+                                    Long.toString(hospital.getSelectedItemId()),
+                                    Long.toString(blood.getSelectedItemId()),
+                                    userInfoItems.get(0).getMobileNumber(),
+                                    userInfoItems.get(0).getKeyWord());
+                            bloodRequest(params);
+                            dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
+                        }
+                    };
                     if (isSmsRequest()) {
-                        dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request and for the sms request?",
-                                positiveClickListener, null);
+                        dialogBuilder.createAlertDialog("Alert!", "Are you sure about the sms request?",
+                                smsPositiveClickListener, null);
                     } else {
                         dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request?",
-                                positiveClickListener, null);
+                                serverPositiveClickListener, null);
                     }
                 }
             }
@@ -319,23 +416,33 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
 
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        Log.e("TAG", response.toString());
                         dialogBuilder.getProgressDialog().dismiss();
                         try {
                             if (response.getString("requestName").equals("addBloodRequest")) {
                                 dialogBuilder.createAlertDialog(response.getString("message"));
-                                if (isSmsRequest()) {
-                                    HashMap<String, String> params = ParamsBuilder.donatorMobileNumber(
-                                            Long.toString(hospital.getSelectedItemId()),
-                                            Long.toString(blood.getSelectedItemId()),
-                                            userInfoItems.get(0).getMobileNumber(),
-                                            userInfoItems.get(0).getKeyWord());
-                                    Log.e("TAG", response.toString());
-                                    bloodRequest(params);
-                                }
                             } else if (response.getString("requestName").equals("donatorMobileNumber")) {
-                                Log.e("TAG", response.toString());
-                                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_SHORT).show();
+                                if (response.getInt("done") == 1) {
+                                    getMobileNumber(response);
+                                    if (mobileNumber.size() == 0) {
+                                        dialogBuilder.createAlertDialog("Sorry!No donor is available at this moment");
+                                    } else {
+                                        int bloodAmount = Integer.parseInt(((String) amount.getSelectedItem()));
+                                        String bloodGroup = ((BloodItem) blood.getSelectedItem()).getBloodName();
+                                        String hospitalName = ((HospitalItem) hospital.getSelectedItem()).getHospitalName();
+                                        final String smsBody = "Please Help Need "
+                                                + getResources().getQuantityString(R.plurals.bags, bloodAmount, bloodAmount) + " "
+                                                + bloodGroup + " in " + hospitalName + "\n-Donate Life";
+                                        String title = getResources().getQuantityString(R.plurals.donor_title, mobileNumber.size(), mobileNumber.size());
+                                        if (title.equals(getString(R.string.donor_zero_grammar_error))) {
+                                            title = getString(R.string.donor_zero_grammar_correct);
+                                        }
+                                        donorSmsBodyTextView.setText(smsBody);
+                                        donorFinderTextView.setText(title);
+                                        donorNumberEditText.setText(String.valueOf(mobileNumber.size()));
+                                        sendSmsDialog.show();
+                                    }
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -345,7 +452,6 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                dialogBuilder.getProgressDialog().dismiss();
                 if (error.toString().contains("TimeoutError")) {
                     dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.timeout_error));
                 } else if (error.toString().contains("UnknownHostException")) {
@@ -354,6 +460,20 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             }
         });
         AppController.getInstance().addToRequestQueue(jsonReq);
+    }
+
+    private void getMobileNumber(JSONObject response) {
+
+        mobileNumber = new ArrayList<String>();
+        try {
+            JSONArray numbers = response.getJSONArray("number");
+            for (int i = 0; i < numbers.length(); i++) {
+                JSONObject number = numbers.getJSONObject(i);
+                mobileNumber.add(number.getString("mobileNumber"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createHospitalList(int distId) {

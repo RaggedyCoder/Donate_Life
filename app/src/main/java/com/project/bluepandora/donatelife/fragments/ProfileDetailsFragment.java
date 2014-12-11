@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -46,6 +47,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.adapter.DonationRecordAdapter;
 import com.project.bluepandora.donatelife.adapter.ProfileDetailsAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
@@ -251,7 +253,13 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
         list.add(getActivity().getResources().getString(R.string.total_donation));
         BloodDataSource database = new BloodDataSource(getActivity());
         database.open();
-        avatar.setText(database.getBloodItem(new BloodItem("", userInfo.getGroupId())).getBloodName());
+        boolean banglaFilter = PreferenceManager.getDefaultSharedPreferences(
+                getActivity()).getBoolean(SettingsActivity.LANGUAGE_TAG, false);
+        if (banglaFilter) {
+            avatar.setText(database.getBloodItem(new BloodItem("", "", userInfo.getGroupId())).getBanglaBloodName());
+        } else {
+            avatar.setText(database.getBloodItem(new BloodItem("", "", userInfo.getGroupId())).getBloodName());
+        }
         if (avatar.getText().toString().length() > 2) {
             avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
         } else {
