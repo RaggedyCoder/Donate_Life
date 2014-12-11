@@ -90,9 +90,9 @@ public class PasswordVerificationFragment extends Fragment {
                 if (passwordField.getText().toString().length() == 0) {
                     createAlertDialog("Please confirm your Password.");
                 } else if (confirmPasswordField.getText().toString().length() == 0) {
-                    createAlertDialog("Please enter your Password.");
+                    createAlertDialog(getString(R.string.Warning_enter_a_password));
                 } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())) {
-                    createAlertDialog("Both Password didn't matched.");
+                    createAlertDialog(getString(R.string.Warning_password_not_matched));
                 } else {
                     Bundle bundle = PasswordVerificationFragment.this.getArguments();
                     bundle.putString("password", passwordField.getText().toString());
@@ -106,7 +106,7 @@ public class PasswordVerificationFragment extends Fragment {
 
     private void createAlertDialog(String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
+        alertDialog.setTitle(getString(R.string.alert));
         alertDialog.setMessage(message);
         alertDialog.setNeutralButton("Ok", null);
         alertDialog.show();

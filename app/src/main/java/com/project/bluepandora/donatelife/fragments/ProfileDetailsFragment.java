@@ -285,7 +285,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                 String reqTime = "" + donationDate.getYear() + "-" + donationDate.getMonth() + "-"
                         + donationDate.getDayOfMonth() + " " + "00:00:00";
                 if (DonationRecordHelper.search(donationInfo, reqTime)) {
-                    createAlertDialog("Impossible");
+                    createAlertDialog(getString(R.string.donation_rule));
                     return;
                 } else {
                     HashMap<String, String> params = new HashMap<String, String>();
@@ -495,7 +495,7 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
 
     private void createAlertDialog(String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
+        alertDialog.setTitle(getString(R.string.alert));
         alertDialog.setMessage(message);
         alertDialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
             @Override

@@ -88,9 +88,9 @@ public class NameVerificationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (firstNameField.getText().toString().length() == 0) {
-                    createAlertDialog("First Name can't be empty");
+                    createAlertDialog(getString(R.string.first_name_rule));
                 } else if (lastNameField.getText().toString().length() == 0) {
-                    createAlertDialog("last Name can't be empty");
+                    createAlertDialog(getString(R.string.last_name_rule));
                 } else {
                     Bundle bundle = NameVerificationFragment.this.getArguments();
                     bundle.putString("firstName", firstNameField.getText().toString());
@@ -105,7 +105,7 @@ public class NameVerificationFragment extends Fragment {
 
     private void createAlertDialog(String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
+        alertDialog.setTitle(getString(R.string.alert));
         alertDialog.setMessage(message);
         alertDialog.setNeutralButton("Ok", null);
         alertDialog.show();

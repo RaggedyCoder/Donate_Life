@@ -228,9 +228,9 @@ public class MobileVerificationFragment extends Fragment implements URL {
 
     private void createAlertDialog(String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Alert");
+        alertDialog.setTitle(getString(R.string.alert));
         alertDialog.setMessage(message);
-        alertDialog.setNeutralButton("Ok", null);
+        alertDialog.setNeutralButton(getString(R.string.ok), null);
         alertDialog.show();
     }
 
@@ -245,7 +245,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
                         pd.dismiss();
                         try {
                             if (response.getInt("reg") == 1) {
-                                createAlertDialog("This Mobile is already Registered");
+                                createAlertDialog(getString(R.string.already_registered));
                             } else {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("mobileNumber", 0 + mobileNumber.getText().toString());

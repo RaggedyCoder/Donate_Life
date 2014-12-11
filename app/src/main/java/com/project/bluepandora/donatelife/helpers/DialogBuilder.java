@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import com.project.bluepandora.donatelife.R;
+
 
 public class DialogBuilder {
 
@@ -25,7 +27,7 @@ public class DialogBuilder {
     }
 
     public void createAlertDialog(String message) {
-        createAlertDialog("Alert!", message);
+        createAlertDialog(activity.getString(R.string.alert), message);
     }
 
     public void createAlertDialog(String title, String message) {
@@ -34,13 +36,13 @@ public class DialogBuilder {
 
     public void createAlertDialog(String title, String message,
                                   DialogInterface.OnClickListener neutralClickListener) {
-        createAlertDialog(title, message, null, null, neutralClickListener, null, null, "ok");
+        createAlertDialog(title, message, null, null, neutralClickListener, null, null, activity.getString(R.string.ok));
     }
 
     public void createAlertDialog(String title, String message,
                                   DialogInterface.OnClickListener yesClickListener,
                                   DialogInterface.OnClickListener noClickListener) {
-        createAlertDialog(title, message, yesClickListener, noClickListener, null, "yes", "no", null);
+        createAlertDialog(title, message, yesClickListener, noClickListener, null, activity.getString(R.string.yes), activity.getString(R.string.no), null);
     }
 
     public void createAlertDialog(String title, String message,

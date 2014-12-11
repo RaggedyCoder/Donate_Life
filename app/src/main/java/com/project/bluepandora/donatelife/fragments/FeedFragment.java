@@ -371,7 +371,7 @@ public class FeedFragment extends Fragment implements URL {
                             if (feedArray != null && (listAdapter.getCount() == feedArray
                                     .length())) {
                                 Toast.makeText(getActivity(),
-                                        "Feed up to Date.",
+                                        R.string.no_update,
                                         Toast.LENGTH_LONG).show();
 
                             } else {

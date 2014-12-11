@@ -104,7 +104,7 @@
     <string name="progressing">Progressing&#8230;</string>
     <string name="title_activity_main">Push Notifications</string>
     <string name="error_config" translatable="false">Please set the %1$s constant and recompile the app.</string>
-    <string name="already_registered">Device is already registered on server.</string>
+    <string name="already_registered">Mobile number is already registered on server.</string>
     <string name="gcm_registered" translatable="false">From GCM: device successfully registered!</string>
     <string name="gcm_unregistered" translatable="false">From GCM: device successfully unregistered!</string>
     <string name="gcm_message" translatable="false">From GCM: you got message!</string>
@@ -160,4 +160,20 @@
     <string name="exit_notice">Press Back again to Exit</string>
     <string name="info">Info</string>
     <string name="unknown_server_error">Something has gone wrong&#8230;   Try again in a few minutes.</string>
+    <string name="no_update">Feed up to Date.</string>
+    <string name="own_request_delete">Your own request has been deleted.</string>
+    <string name="no_donor_availibility">Sorry!No donor is available at this moment</string>
+    <string name="donation_record_delete">Donation Record has been deleted</string>
+    <string name="no_hospital_tag">Sorry No Hospital Name is available for this City</string>
+    <string name="sms_alert">Are you sure about the sms request?</string>
+    <string name="request_alert">Are you sure about sending the request?</string>
+    <string name="request_not_possible">Sorry Blood Request is not available for your city.You can use SMS request.</string>
+    <string name="one_donor_must">You must send SMS to 1 person.</string>
+    <string name="done">Done!</string>
+    <string name="donation_rule">New Donation Record conflict with previous Record.</string>
+    <string name="first_name_rule">First Name can\'t be empty</string>
+    <string name="last_name_rule">First Name can\'t be empty</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,6 +27,7 @@ import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.widget.CustomTextView;
@@ -57,12 +59,14 @@ import java.util.HashMap;
 public class DonationRecordAdapter extends BaseAdapter {
 
 
+    private static final String TAG = DonationRecordAdapter.class.getSimpleName();
     ArrayList<DRItem> items;
     private Activity activity;
     private LayoutInflater inflater;
     private SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private SimpleDateFormat showFormat = new SimpleDateFormat("dd-MMM-yyyy");
     private UserInfoItem userInfoItem;
+    private DialogBuilder mDialogBuilder;
 
 
     public DonationRecordAdapter(Activity activity, ArrayList<DRItem> items) {
@@ -71,6 +75,7 @@ public class DonationRecordAdapter extends BaseAdapter {
         UserDataSource database = new UserDataSource(activity);
         database.open();
         userInfoItem = database.getAllUserItem().get(0);
+        mDialogBuilder = new DialogBuilder(this.activity, TAG);
         database.close();
     }
 
@@ -179,9 +184,9 @@ public class DonationRecordAdapter extends BaseAdapter {
                         e.printStackTrace();
                     }
                     ((CustomTextView) detailsView.findViewById(R.id.donation_details)).setText(value.getDonationDetails());
-                    ProgressDialog.Builder donationDetailsview = new ProgressDialog.Builder(activity);
-                    donationDetailsview.setView(detailsView);
-                    donationDetailsview.show();
+                    ProgressDialog.Builder donationDetailsView = new ProgressDialog.Builder(activity);
+                    donationDetailsView.setView(detailsView);
+                    donationDetailsView.show();
                     return true;
                 } else if (item.getItemId() == R.id.action_delete) {
                     HashMap<String, String> params = new HashMap<String, String>();
@@ -189,6 +194,7 @@ public class DonationRecordAdapter extends BaseAdapter {
                     params.put(URL.MOBILE_TAG, userInfoItem.getMobileNumber());
                     params.put(URL.DONATION_DATE_PARAM, value.getDonationTime().replace(".0", ""));
                     Log.e("params", params.toString());
+                    mDialogBuilder.createProgressDialog(activity.getString(R.string.processing));
                     removeRequest(params, value);
                 }
                 return false;
@@ -202,6 +208,7 @@ public class DonationRecordAdapter extends BaseAdapter {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        mDialogBuilder.getProgressDialog().dismiss();
                         try {
                             Log.e("res", response.toString(1));
                             if (response.getInt("done") == 1) {
@@ -211,7 +218,9 @@ public class DonationRecordAdapter extends BaseAdapter {
                                 database.close();
                                 items.remove(item);
                                 DonationRecordAdapter.this.notifyDataSetChanged();
+                                Toast.makeText(activity, R.string.donation_record_delete, Toast.LENGTH_LONG).show();
                             } else {
+                                mDialogBuilder.createAlertDialog(activity.getString(R.string.alert), activity.getString(R.string.timeout_error));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -221,6 +230,12 @@ public class DonationRecordAdapter extends BaseAdapter {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                mDialogBuilder.getProgressDialog().dismiss();
+                if (error.toString().contains("TimeoutError")) {
+                    mDialogBuilder.createAlertDialog(activity.getString(R.string.alert), activity.getString(R.string.timeout_error));
+                } else if (error.toString().contains("UnknownHostException")) {
+                    mDialogBuilder.createAlertDialog(activity.getString(R.string.alert), activity.getString(R.string.no_internet));
+                }
             }
         });
         // Adding request to volley request queue

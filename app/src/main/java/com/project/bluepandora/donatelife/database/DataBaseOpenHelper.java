@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 /*
  * Copyright (C) 2014 The Blue Pandora Project Group
@@ -103,33 +102,31 @@ public class DataBaseOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             db.execSQL(DISTRICT_CREATE);
-            Toast.makeText(context, "Created District", Toast.LENGTH_SHORT)
-                    .show();
+            Log.i("Database Create", "Created District");
         } catch (Exception e) {
             Log.e("Database Create", e.getMessage());
         }
         try {
             db.execSQL(HOSPITAL_CREATE);
-            Toast.makeText(context, "Created Hospital", Toast.LENGTH_SHORT)
-                    .show();
+            Log.i("Database Create", "Created hospital");
         } catch (Exception e) {
             Log.e("Database Create", e.getMessage());
         }
         try {
             db.execSQL(BLOOD_CREATE);
-            Toast.makeText(context, "Created Blood", Toast.LENGTH_SHORT).show();
+            Log.i("Database Create", "Created Blood");
         } catch (Exception e) {
             Log.e("Database Create", e.getMessage());
         }
         try {
             db.execSQL(USER_CREATE);
-            Toast.makeText(context, "Created User", Toast.LENGTH_SHORT).show();
+            Log.i("Database Create", "Created info");
         } catch (Exception e) {
             Log.e("Database Create", e.getMessage());
         }
         try {
             db.execSQL(DONATION_RECORD_CREATE);
-            Toast.makeText(context, "Created Donation Record", Toast.LENGTH_SHORT).show();
+            Log.i("Database Create", "Created donner.");
         } catch (Exception e) {
             Log.e("Database Create", e.getMessage());
         }
@@ -139,20 +136,37 @@ public class DataBaseOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            db.execSQL(DROP + " " + TABLE + " " + IF_NOT_EXISTS + " "
+            db.execSQL(DROP + " " + TABLE + " "
                     + DISTRICT_TABLE);
+            Log.i("Database Create", "Dropped District");
         } catch (Exception e) {
             Log.e("Database Drop", e.getMessage());
         }
         try {
-            db.execSQL(DROP + " " + TABLE + " " + IF_NOT_EXISTS + " "
+            db.execSQL(DROP + " " + TABLE + " "
                     + HOSPITAL_TABLE);
+            Log.i("Database Create", "Dropped Hospital");
         } catch (Exception e) {
             Log.e("Database Drop", e.getMessage());
         }
         try {
-            db.execSQL(DROP + " " + TABLE + " " + IF_NOT_EXISTS + " "
+            db.execSQL(DROP + " " + TABLE + " "
                     + BLOOD_TABLE);
+            Log.i("Database Create", "Dropped Blood");
+        } catch (Exception e) {
+            Log.e("Database Drop", e.getMessage());
+        }
+        try {
+            db.execSQL(DROP + " " + TABLE + " "
+                    + USER_TABLE);
+            Log.i("Database Create", "Dropped info");
+        } catch (Exception e) {
+            Log.e("Database Drop", e.getMessage());
+        }
+        try {
+            db.execSQL(DROP + " " + TABLE + " "
+                    + DONATION_RECORD_TABLE);
+            Log.i("Database Create", "Dropped Donation Record");
         } catch (Exception e) {
             Log.e("Database Drop", e.getMessage());
         }

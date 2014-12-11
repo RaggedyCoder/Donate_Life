@@ -63,19 +63,6 @@ import java.util.TimeZone;
 @SuppressLint("NewApi")
 public class FeedListAdapter extends BaseAdapter {
 
-    public static class ViewHolder {
-        public boolean needInflate;
-        CustomTextView timestamp;
-        CustomTextView emergency;
-        CustomTextView bloodGroup;
-        CustomTextView bloodAmount;
-        CustomTextView hospital;
-        CustomTextView contact;
-        CustomTextView area;
-        ImageButton button1;
-        PopupMenu popupMenu;
-    }
-
     private Activity activity;
     private LayoutInflater inflater;
     private List<Item> feedItems;
@@ -287,13 +274,10 @@ public class FeedListAdapter extends BaseAdapter {
                                         feedItems, FeedListAdapter.this,
                                         activity);
                                 Toast.makeText(activity,
-                                        "Your own request has been deleted.",
-                                        Toast.LENGTH_LONG).show();
+                                        R.string.own_request_delete, Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
                             } else {
-                                Toast.makeText(activity,
-                                        "Something went wrong.",
-                                        Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, R.string.unknown_server_error, Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         } catch (JSONException e) {
@@ -303,11 +287,24 @@ public class FeedListAdapter extends BaseAdapter {
                 }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(activity, "Something went wrong.", Toast.LENGTH_SHORT);
+                Toast.makeText(activity, R.string.unknown_server_error, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
         // Adding request to volley request queue
         AppController.getInstance().addToRequestQueue(jsonReq);
+    }
+
+    public static class ViewHolder {
+        public boolean needInflate;
+        CustomTextView timestamp;
+        CustomTextView emergency;
+        CustomTextView bloodGroup;
+        CustomTextView bloodAmount;
+        CustomTextView hospital;
+        CustomTextView contact;
+        CustomTextView area;
+        ImageButton button1;
+        PopupMenu popupMenu;
     }
 }

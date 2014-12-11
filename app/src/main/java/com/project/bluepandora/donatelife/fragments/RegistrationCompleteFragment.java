@@ -260,11 +260,10 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
                         try {
                             if (response.getInt("done") == 1) {
                                 //createAlertDialog("Done!");
-                                dialogBuilder.createAlertDialog(null, "Done!", mOnClickListener);
+                                dialogBuilder.createAlertDialog(null, getString(R.string.done), mOnClickListener);
 
                             } else {
-                                //createAlertDialog("Sorry! something went wrong.");
-                                dialogBuilder.createAlertDialog("Sorry!something went wrong.");
+                                dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
                             }
                         } catch (JSONException e) {
                             Log.e(TAG, e.getMessage());

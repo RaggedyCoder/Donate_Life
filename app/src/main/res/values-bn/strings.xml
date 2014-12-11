@@ -125,7 +125,7 @@
     <string name="about_legal_license">লাইসেন্সের লিগ্যাল তথ্য</string>
     <string name="name_and_contact">নাম এবং যোগাযোগ</string>
     <string name="feedback_thank_you">আপনার ফিডব্যাকটির জন্যে ধন্যবাদ</string>
-    <string name="already_registered">সার্ভারের সাথে ইতিমধ্যে রেজিস্ট্রেশন করা</string>
+    <string name="already_registered">নাম্বারটি নিবন্ধিত।</string>
     <string name="title_activity_main">পুশ নোটিফিকেশন</string>
     <string name="send_feedback">পাঠান</string>
     <string name="edit_password">এডিট নিশ্চিত এর জন্যে পাসওয়ার্ড </string>
@@ -140,4 +140,20 @@
     <string name="exit_notice">বাহির হওয়ার জন্যে পুনরায় ব্যাক বাটনটি চাপুন</string>
     <string name="info">তথ্য</string>
     <string name="unknown_server_error">কিছু একটা সমস্যা দেখা দিয়েছে&#8230;   কিছুক্ষন পর আবার চেস্টা করুন।</string>
+    <string name="no_update">ফিড আপ টু ডেট</string>
+    <string name="own_request_delete">আপনার নিজস্ব অনুরোধটি মুছে ফেলা হয়েছে।</string>
+    <string name="no_donor_availibility">দুঃক্ষিত এই মুহুর্থে কোনো রক্তদাতা নেই।</string>
+    <string name="donation_record_delete">রক্তদানের তথ্যটি মুছে ফেলা হয়েছে</string>
+    <string name="no_hospital_tag">দুঃক্ষিত! এই শহরের জন্যে কোনো হাসপাতাল রেকর্ডে নেই।</string>
+    <string name="sms_alert">আপনিকি এসএমএস অনুরোধটির ব্যাপারে নিশ্চিত?</string>
+    <string name="request_alert">আপনি কি অনুরোধটির ব্যাপারে নিশ্চিত?</string>
+    <string name="request_not_possible">দুঃক্ষিত আপনার শহরের জন্যে এই মুহুর্তে রক্তের জন্যে আবেদন করা সম্ভব নয়।আপনি চাইলে এসএমএস এর আবেদন করতে পারেন।</string>
+    <string name="one_donor_must">আপনাকে অবশ্যই একজনকে এসএমএস পাঠাতে হবে।</string>
+    <string name="done">আবেদনটি নিশ্চিত করা হয়েছে</string>
+    <string name="donation_rule">নতুন ডোনেশন এর তথ্যটি পুর্বের কোনো তথ্যের সাথে সাংঘর্ষিক</string>
+    <string name="first_name_rule">নামের প্রথম অংশের ঘরটি খালি অবশ্যই পূরন করতে হবে।</string>
+    <string name="last_name_rule">নামের শেষ অংশের ঘরটি অবশ্যই পূরণ করতে হবে।</string>
+    <string name="ok">ওকে।</string>
+    <string name="yes">হ্যা</string>
+    <string name="no">না</string>
 </resources>

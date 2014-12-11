@@ -41,7 +41,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
@@ -86,7 +85,6 @@ import java.util.HashMap;
 public class RequestFragment extends Fragment implements MainActivity.DrawerSlideListeners, URL {
 
     private static final String TAG = RequestFragment.class.getSimpleName();
-    private static final String NO_HOSPITAL_TAG = "Sorry No Hospital Name is available for this City";
     private Spinner district;
     private Spinner blood;
     private Spinner hospital;
@@ -192,7 +190,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         mTitle = (CustomTextView) mCustomView.findViewById(R.id.actionbar_title_text);
         mTitle.setText(R.string.blood_request);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
-                "Blood Request");
+                R.string.blood_request);
 
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setBackgroundDrawable(mActionBarBackgroundDrawable);
@@ -269,7 +267,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             @Override
             public void onClick(View v) {
                 if (donorNumberEditText.length() == 0) {
-                    dialogBuilder.createAlertDialog("You must add 1 donor.");
+                    dialogBuilder.createAlertDialog(getString(R.string.one_donor_must));
                 } else {
                     for (int i = 0; i < Integer.parseInt(donorNumberEditText.getText().toString()); i++) {
                         SmsManager.getDefault().sendTextMessage(mobileNumber.get(i),
@@ -331,11 +329,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             @Override
             public void onClick(View v) {
                 if (hospital.getSelectedItemId() == -1) {
-                    Toast.makeText(
-                            getActivity(),
-                            "Sorry Blood Request is not available for your city.",
-                            Toast.LENGTH_SHORT).show();
-
+                    dialogBuilder.createProgressDialog(getString(R.string.request_not_possible));
                 } else {
                     DialogInterface.OnClickListener serverPositiveClickListener = new DialogInterface.OnClickListener() {
 
@@ -361,10 +355,10 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                         }
                     };
                     if (isSmsRequest()) {
-                        dialogBuilder.createAlertDialog("Alert!", "Are you sure about the sms request?",
+                        dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.sms_alert),
                                 smsPositiveClickListener, null);
                     } else {
-                        dialogBuilder.createAlertDialog("Alert!", "Are you sure about sending the request?",
+                        dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.request_alert),
                                 serverPositiveClickListener, null);
                     }
                 }
@@ -425,7 +419,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                                 if (response.getInt("done") == 1) {
                                     getMobileNumber(response);
                                     if (mobileNumber.size() == 0) {
-                                        dialogBuilder.createAlertDialog("Sorry!No donor is available at this moment");
+                                        dialogBuilder.createAlertDialog(getString(R.string.no_donor_availibility));
                                     } else {
                                         int bloodAmount = Integer.parseInt(((String) amount.getSelectedItem()));
                                         String bloodGroup = ((BloodItem) blood.getSelectedItem()).getBloodName();
@@ -453,9 +447,9 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error.toString().contains("TimeoutError")) {
-                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.timeout_error));
+                    dialogBuilder.createAlertDialog(getString(R.string.alert), getResources().getString(R.string.timeout_error));
                 } else if (error.toString().contains("UnknownHostException")) {
-                    dialogBuilder.createAlertDialog("Alert", getResources().getString(R.string.no_internet));
+                    dialogBuilder.createAlertDialog(getString(R.string.alert), getResources().getString(R.string.no_internet));
                 }
             }
         });
@@ -485,7 +479,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         } catch (Exception e) {
             hospitalItems = new ArrayList<Item>();
             HospitalItem item = new HospitalItem();
-            item.setHospitalName(NO_HOSPITAL_TAG);
+            item.setHospitalName(getString(R.string.no_hospital_tag));
             item.setHospitalId(-1);
             hospitalItems.add(item);
             hospitalAdapter = new SpinnerAdapter(getActivity(),
