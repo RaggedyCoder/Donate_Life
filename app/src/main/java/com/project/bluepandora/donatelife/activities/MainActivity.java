@@ -68,6 +68,13 @@ import static com.project.bluepandora.util.CommonUtilities.SENDER_ID;
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int FEED_FRAGMENT = 0;
+    private static final int REQUEST_FRAGMENT = 1;
+    private static final int PROFILE_FRAGMENT = 2;
+    private static final int HOSPITAL_FRAGMENT = 3;
+    private static final int SETTINGS_ACTIVITY = 4;
+    private static final int FEEDBACK_ACTIVITY = 5;
+    private static final int ABOUT_ACTIVITY = 6;
     public static boolean backPressed = false;
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -78,10 +85,10 @@ public class MainActivity extends ActionBarActivity {
             WakeLocker.release();
         }
     };
-    DrawerLayout mDrawerLayout;
-    ListView mDrawerListView;
-    ActionBarDrawerToggle mActionBarDrawerToggle;
-    AsyncTask<Void, Void, Void> mRegisterTask;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerListView;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private AsyncTask<Void, Void, Void> mRegisterTask;
     private Fragment mContent;
     private int prevPos = 0;
     private DrawerSlideListeners mDrawerSlideListeners;
@@ -104,24 +111,16 @@ public class MainActivity extends ActionBarActivity {
         final String regId = GCMRegistrar.getRegistrationId(this);
         Log.e(TAG, "GCM ID for this mobile-" + regId);
         if (regId.equals("")) {
-            // Registration is not present, register now with GCM
             GCMRegistrar.register(this, SENDER_ID);
             Toast.makeText(this, "" + GCMRegistrar.getRegistrationId(this), Toast.LENGTH_LONG).show();
         } else {
             if (GCMRegistrar.isRegisteredOnServer(this)) {
-                // Skips registration.
                 Log.i(TAG, "GCM Registration message" + "Already registered with GCM");
             } else {
-                // Try to register again, but not in the UI thread.
-                // It's also necessary to cancel the thread onDestroy(),
-                // hence the use of AsyncTask instead of a raw thread.
                 final Context context = this;
                 mRegisterTask = new AsyncTask<Void, Void, Void>() {
-
                     @Override
                     protected Void doInBackground(Void... params) {
-                        // Register on our server
-                        // On server creates a new user
                         UserDataSource database = new UserDataSource(context);
                         database.open();
                         UserInfoItem userInfoItem = database.getAllUserItem().get(0);
@@ -141,6 +140,8 @@ public class MainActivity extends ActionBarActivity {
         if (mContent == null) {
             mContent = new FeedFragment();
         }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, mContent).commit();
         mDrawerListView = (ListView) findViewById(R.id.list_slidermenu);
         createSlidingMenu();
         listAdapter = new SlideMenuAdapter(this, slideItems);
@@ -171,10 +172,8 @@ public class MainActivity extends ActionBarActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-        mDrawerListView.setOnItemClickListener(new ListItemListner());
+        mDrawerListView.setOnItemClickListener(new ListItemListener());
         listAdapter.notifyDataSetInvalidated();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, mContent).commit();
         if (mContent instanceof FeedFragment) {
             listAdapter.setSelected(0);
             prevPos = 0;
@@ -356,45 +355,45 @@ public class MainActivity extends ActionBarActivity {
                 .replace(R.id.frame_container, mContent).commit();
     }
 
-    public void switchContent(int pos) {
+    public void switchContent(int position) {
 
+
+        Intent intent;
         AppController.getInstance().cancelPendingRequests();
+        switch (position) {
+            case FEED_FRAGMENT:
+                mContent = new FeedFragment();
+                break;
+            case REQUEST_FRAGMENT:
+                mContent = new RequestFragment();
+                mDrawerSlideListeners = (DrawerSlideListeners) mContent;
+                break;
+            case PROFILE_FRAGMENT:
+                mContent = new ProfileDetailsFragment();
+                break;
+            case HOSPITAL_FRAGMENT:
+                break;
+            case SETTINGS_ACTIVITY:
+                intent = new Intent(MainActivity.this, SettingsActivity.class);
+                finish();
+                startActivity(intent);
+                return;
+            case FEEDBACK_ACTIVITY:
+                intent = new Intent(MainActivity.this, FeedbackActivity.class);
+                startActivity(intent);
+                return;
+            case ABOUT_ACTIVITY:
+                intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
+                return;
+        }
         backPressed = false;
-        if (pos == 3) {
-            mDrawerLayout.closeDrawer(mDrawerListView);
-            return;
-        }
-        if ((mContent instanceof RequestFragment)
-                && (pos == 1)) {
-            Log.i(TAG, "Fragment Change" + "returned to previous fragment without create a new one");
-            mDrawerLayout.closeDrawer(mDrawerListView);
-            return;
-        } else if ((mContent instanceof FeedFragment)
-                && (pos == 0)) {
-            Log.i(TAG, "Fragment Change" + "returned to previous fragment without create a new one");
-            mDrawerLayout.closeDrawer(mDrawerListView);
-            return;
-        } else if ((mContent instanceof ProfileDetailsFragment)
-                && (pos == 2)) {
-            Log.i(TAG, "Fragment Change" + "returned to previous fragment without create a new one");
-            mDrawerLayout.closeDrawer(mDrawerListView);
-            return;
-        }
         FeedFragment.slideChange = true;
-        if (pos == 0) {
-            mContent = new FeedFragment();
-        } else if (pos == 1) {
-            mContent = new RequestFragment();
-            mDrawerSlideListeners = (DrawerSlideListeners) mContent;
-        } else if (pos == 2) {
-            mContent = new ProfileDetailsFragment();
-        }
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.frame_container, mContent).commit();
-        mDrawerListView.setItemChecked(pos, true);
-        mDrawerListView.setSelection(pos);
-        mDrawerLayout.closeDrawer(mDrawerListView);
+        getSupportFragmentManager().beginTransaction().
+                setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right).
+                replace(R.id.frame_container, mContent).commit();
+        mDrawerListView.setItemChecked(position, true);
+        mDrawerListView.setSelection(position);
     }
 
     @Override
@@ -407,43 +406,21 @@ public class MainActivity extends ActionBarActivity {
         public void onDrawerSlide(float offset);
     }
 
-    private class ListItemListner implements ListView.OnItemClickListener {
+    private class ListItemListener implements ListView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             listAdapter.setSelected(position);
-            if (position == 4) {
-                Intent intent =
-                        new Intent(MainActivity.this, SettingsActivity.class);
-                finish();
-                startActivity(intent);
-                mDrawerLayout.closeDrawer(mDrawerListView);
-                return;
-            }
-            if (position == 5) {
-                Intent intent =
-                        new Intent(MainActivity.this, FeedbackActivity.class);
-                startActivity(intent);
-                mDrawerLayout.closeDrawer(mDrawerListView);
-                return;
-            }
-            if (position == 6) {
-                Intent intent =
-                        new Intent(MainActivity.this, AboutActivity.class);
-                startActivity(intent);
-                mDrawerLayout.closeDrawer(mDrawerListView);
-                return;
-            }
-            if (position > 3) {
-                mDrawerLayout.closeDrawer(mDrawerListView);
-                return;
-            }
             if (prevPos != position) {
+                mDrawerLayout.closeDrawer(mDrawerListView);
+                if (position < 4) {
+                    prevPos = position;
+                }
                 switchContent(position);
-                prevPos = position;
             } else {
                 mDrawerLayout.closeDrawer(mDrawerListView);
+                Log.i(TAG, "Returned to previous fragment without creating a new one");
             }
         }
     }

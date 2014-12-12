@@ -22,7 +22,7 @@
 
 
     <string-array name="about_list_body">
-        <item>@string/about_version_bulid_code</item>
+        <item>@string/about_version_build_code</item>
         <item> </item>
         <item> </item>
         <item>@string/about_usage_policy</item>
@@ -48,5 +48,4 @@
         <item>@drawable/transparent</item>
         <item>@drawable/transparent</item>
     </array>
-
 </resources>

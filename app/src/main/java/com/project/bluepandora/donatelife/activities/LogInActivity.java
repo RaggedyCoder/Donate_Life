@@ -19,12 +19,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.fragments.LogInFragment;
 
 public class LogInActivity extends ActionBarActivity {
+
+    private static final String TAG = LogInActivity.class.getSimpleName();
+    private static final String FRAGMENT_TAG = "mContent";
     public static boolean backPressed = false;
     private Fragment mContent;
 
@@ -34,30 +38,33 @@ public class LogInActivity extends ActionBarActivity {
         setContentView(R.layout.login);
         if (savedInstanceState != null) {
             mContent = getSupportFragmentManager().getFragment(
-                    savedInstanceState, "regContent");
+                    savedInstanceState, FRAGMENT_TAG);
         }
         if (mContent == null) {
             mContent = new LogInFragment();
         }
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.login_container, mContent).commit();
+        Log.i(TAG, "OnCreate method called.");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getSupportFragmentManager().putFragment(outState, "regContent",
+        getSupportFragmentManager().putFragment(outState, FRAGMENT_TAG,
                 mContent);
+        Log.i(TAG, "onSaveInstanceState method called.");
     }
 
     @Override
     public void onBackPressed() {
-
+        Log.i(TAG, "onBackPressed method called.");
         if (backPressed) {
             finish();
             LogInActivity.this.overridePendingTransition(
                     R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
+            Log.i(TAG, "LogInActivity finished");
             super.onBackPressed();
         } else
             Toast.makeText(this, R.string.exit_notice, Toast.LENGTH_SHORT)

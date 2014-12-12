@@ -150,7 +150,7 @@
     <string name="donor_zero_grammar_correct">No donor available</string>
     <string name="donor_zero_grammar_error">Total 0 donors available</string>
     <string name="zero_grammar_error">0 Times</string>
-    <string name="about_version_bulid_code">Version 1.1.1 | build 20141128</string>
+    <string name="about_version_build_code">Version 1.1.1 | build 20141128</string>
     <string name="about_usage_policy">Donate Life is for personal and non-commercial use only.</string>
     <string name="about_legal_license">legal information about licenses</string>
     <string name="name_and_contact">Name and contact</string>
@@ -183,4 +183,7 @@
     <string name="cost_alert">N.B.: This may cost you money.</string>
     <string name="number">Number</string>
     <string name="sms_body_title">SMS BODY</string>
+    <string name="mobile_number_must">Enter Your Mobile Number</string>
+    <string name="password_combination">Enter a combination of at least six digits which must contain numbers,upper case letters and lower case letters.</string>
+    <string name="password_must">Create a Password</string>
 </resources>

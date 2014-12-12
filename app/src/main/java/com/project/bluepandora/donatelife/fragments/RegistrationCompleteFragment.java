@@ -16,10 +16,8 @@ package com.project.bluepandora.donatelife.fragments;
  */
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -67,16 +65,15 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
      */
     protected View rootView;
     /**
-     * A {@link Spinner} for showing the district's list
+     * A database{@link ArrayList} for retrieve the stored district list.
      */
-    private Spinner districtSpinner;
+    DistrictDataSource districtDatabase;
     /**
-     * A {@link android.widget.Spinner} for showing the blood group's list
+     * A database{@link ArrayList} for retrieve the stored blood group list.
      */
-    private Spinner bloodSpinner;
-
+    BloodDataSource bloodDatabase;
     /**
-     * A Custom BaseAdapter{@link SpinnerAdapter} for the bloodSpinner.
+     * A Custom BaseAdapter{@link SpinnerAdapter} for the bloodGroupSpinner.
      */
 
     private SpinnerAdapter bloodAdapter;
@@ -88,10 +85,6 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
     private SpinnerAdapter districtAdapter;
 
     /**
-     * A {@link CustomButton} for the Registration
-     */
-    private CustomButton registrationButton;
-    /**
      * An {@link ArrayList} for storing the Name of the District only for this Fragment.
      */
     private ArrayList<Item> distItems;
@@ -101,24 +94,9 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
     private ArrayList<Item> bloodItems;
 
     /**
-     * A database{@link ArrayList} for retrieve the stored district list.
+     * An item selection listener for the bloodGroupSpinner.
      */
-    private DistrictDataSource districtDatabase;
-
-    /**
-     * A database{@link ArrayList} for retrieve the stored blood group list.
-     */
-    private BloodDataSource bloodDatabase;
-
-    /**
-     * A TextField{@link CustomTextView} for showing the blood group of the registering user.
-     */
-    private CustomTextView avatar;
-
-    /**
-     * An item selection listener for the bloodSpinner.
-     */
-    private OnItemSelectedListener mbloodSpinnerItemSelectedListener;
+    private OnItemSelectedListener mbloodGroupSpinnerItemSelectedListener;
     /**
      * An item selection listener for the districtSpinner.
      */
@@ -127,14 +105,28 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
      * A click detection listener for the Registration Button.
      */
     private View.OnClickListener mRegistrationListener;
-    /**
-     * A {@link android.app.ProgressDialog} for showing the user background work is going on.
-     */
-    private ProgressDialog pd;
-
     private DialogInterface.OnClickListener mOnClickListener;
 
     private DialogBuilder dialogBuilder;
+
+    private MainViewHolder mainViewHolder;
+
+    private CustomRequest regCompleteRequest;
+    /**
+     * An ErrorListener{@link Response.ErrorListener} for the regCompleteRequest.
+     * If there is any problem making a request to the server or during of it, mErrorListener
+     * will receive the error message.
+     */
+    private Response.ErrorListener mErrorListener;
+
+    /**
+     * A Listener{@link Response.Listener<JSONObject>} for the regCompleteRequest.
+     * After making a successful request to the server,server will send a {@link JSONObject}.
+     * mJsonObjectListener will receive that JSONObject.
+     */
+    private Response.Listener<JSONObject> mJsonObjectListener;
+
+    private HashMap<String, String> params;
 
     public RegistrationCompleteFragment() {
 
@@ -151,58 +143,65 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate method called.");
-        districtDatabase = new DistrictDataSource(getActivity());
         bloodDatabase = new BloodDataSource(getActivity());
+        bloodDatabase.open();
+        bloodItems = bloodDatabase.getAllBloodItem();
+        bloodDatabase.close();
 
+        districtDatabase = new DistrictDataSource(getActivity());
+        districtDatabase.open();
+        distItems = districtDatabase.getAllDistrictItem();
+        districtDatabase.close();
+
+        bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
+        districtAdapter = new SpinnerAdapter(getActivity(), distItems);
+        dialogBuilder = new DialogBuilder(getActivity(), TAG);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.i(TAG, "onCreateView method called.");
-        rootView = inflater.inflate(R.layout.fragment_registrationcomplete, container, false);
-        bloodSpinner = (Spinner) rootView.findViewById(R.id.blood_group_spinner);
-        districtSpinner = (Spinner) rootView.findViewById(R.id.district_spinner);
-        registrationButton = (CustomButton) rootView.findViewById(R.id.registration);
-        avatar = (CustomTextView) rootView.findViewById(R.id.avatar);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_registrationcomplete, container, false);
+            mainViewHolder = new MainViewHolder();
+            mainViewHolder.bloodGroupSpinner = (Spinner) rootView.findViewById(R.id.blood_group_spinner);
+            mainViewHolder.districtSpinner = (Spinner) rootView.findViewById(R.id.district_spinner);
+            mainViewHolder.registrationButton = (CustomButton) rootView.findViewById(R.id.registration_button);
+            mainViewHolder.avatar = (CustomTextView) rootView.findViewById(R.id.avatar);
+
+            rootView.setTag(mainViewHolder);
+        } else {
+            mainViewHolder = (MainViewHolder) rootView.getTag();
+        }
         return rootView;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated method called.");
-        bloodDatabase.open();
-        districtDatabase.open();
-        bloodItems = bloodDatabase.getAllBloodItem();
-        distItems = districtDatabase.getAllDistrictItem();
-        bloodDatabase.close();
-        districtDatabase.close();
-        bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
-        districtAdapter = new SpinnerAdapter(getActivity(), distItems);
-        dialogBuilder = new DialogBuilder(getActivity(), TAG);
-        bloodSpinner.setAdapter(bloodAdapter);
-        districtSpinner.setAdapter(districtAdapter);
-        bloodAdapter.notifyDataSetChanged();
-        districtAdapter.notifyDataSetChanged();
-        bloodSpinner.setOnItemSelectedListener(mbloodSpinnerItemSelectedListener);
-        districtSpinner.setOnItemSelectedListener(mDistrictItemSelectedListener);
-        registrationButton.setOnClickListener(mRegistrationListener);
+        mainViewHolder.bloodGroupSpinner.setAdapter(bloodAdapter);
+        mainViewHolder.districtSpinner.setAdapter(districtAdapter);
+        mainViewHolder.bloodGroupSpinner.setOnItemSelectedListener(mbloodGroupSpinnerItemSelectedListener);
+        mainViewHolder.districtSpinner.setOnItemSelectedListener(mDistrictItemSelectedListener);
+        mainViewHolder.registrationButton.setOnClickListener(mRegistrationListener);
+        regCompleteRequest = new CustomRequest(Request.Method.POST, URL, params, mJsonObjectListener, mErrorListener);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.i(TAG, "onAttach method called.");
-        mbloodSpinnerItemSelectedListener = new OnItemSelectedListener() {
+        mbloodGroupSpinnerItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                BloodItem item = (BloodItem) bloodItems.get(bloodSpinner.getSelectedItemPosition());
-                avatar.setText(item.getBloodName());
-                if (avatar.getText().toString().length() > 2) {
-                    avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
+                BloodItem item = (BloodItem) bloodItems.get(mainViewHolder.bloodGroupSpinner.getSelectedItemPosition());
+                mainViewHolder.avatar.setText(item.getBloodName());
+                if (mainViewHolder.avatar.getText().toString().length() > 2) {
+                    mainViewHolder.avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
                 } else {
-                    avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 70);
+                    mainViewHolder.avatar.setTextSize(TypedValue.COMPLEX_UNIT_SP, 70);
                 }
             }
 
@@ -230,52 +229,48 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
             @Override
             public void onClick(View v) {
 
-                String distId = Integer.toString(
-                        ((DistrictItem) distItems.get(districtSpinner.getSelectedItemPosition())).getDistId());
-                String groupId = Integer.toString(
-                        ((BloodItem) bloodItems.get(bloodSpinner.getSelectedItemPosition())).getBloodId());
+                DistrictItem districtItem = ((DistrictItem) distItems.get(mainViewHolder.districtSpinner.getSelectedItemPosition()));
+                String distId = Integer.toString(districtItem.getDistId());
+                BloodItem bloodItem = ((BloodItem) bloodItems.get(mainViewHolder.bloodGroupSpinner.getSelectedItemPosition()));
+                String groupId = Integer.toString(bloodItem.getBloodId());
 
-                HashMap<String, String> params = ParamsBuilder.registerRequest(
+                params = ParamsBuilder.registerRequest(
                         getArguments().getString("firstName"),
                         getArguments().getString("lastName"),
                         distId,
                         groupId,
                         getArguments().getString("mobileNumber"),
                         getArguments().getString("password"));
+                regCompleteRequest.setParams(params);
                 dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
-                getJsonData(params);
+                AppController.getInstance().addToRequestQueue(regCompleteRequest);
             }
         };
-    }
+        mJsonObjectListener = new Response.Listener<JSONObject>() {
 
-    private void getJsonData(final HashMap<String, String> params) {
+            @Override
+            public void onResponse(JSONObject response) {
+                VolleyLog.d(TAG, "Response: " + response.toString());
+                dialogBuilder.getProgressDialog().dismiss();
+                try {
+                    if (response.getInt("done") == 1) {
+                        dialogBuilder.createAlertDialog(null, getString(R.string.done), mOnClickListener);
 
-        CustomRequest jsonReq = new CustomRequest(Request.Method.POST, URL, params,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        VolleyLog.d(TAG, "Response: " + response.toString());
-                        dialogBuilder.getProgressDialog().dismiss();
-                        try {
-                            if (response.getInt("done") == 1) {
-                                //createAlertDialog("Done!");
-                                dialogBuilder.createAlertDialog(null, getString(R.string.done), mOnClickListener);
-
-                            } else {
-                                dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
+                    } else {
+                        dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
                     }
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
 
-                }, new Response.ErrorListener() {
+        };
+        mErrorListener = new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.e(TAG, "Error: " + error.getMessage());
 
                 dialogBuilder.getProgressDialog().dismiss();
                 Toast.makeText(
@@ -283,7 +278,25 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
                         error.getMessage(), Toast.LENGTH_LONG).show();
 
             }
-        });
-        AppController.getInstance().addToRequestQueue(jsonReq);
+        };
+    }
+
+    private static class MainViewHolder {
+        /**
+         * A {@link Spinner} for showing the district's list
+         */
+        private Spinner districtSpinner;
+        /**
+         * A {@link android.widget.Spinner} for showing the blood group's list
+         */
+        private Spinner bloodGroupSpinner;
+        /**
+         * A {@link CustomButton} for the Registration
+         */
+        private CustomButton registrationButton;
+        /**
+         * A TextField{@link CustomTextView} for showing the blood group of the registering user.
+         */
+        private CustomTextView avatar;
     }
 }

@@ -54,6 +54,10 @@ public class CustomRequest extends Request<JSONObject> {
         }
     }
 
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
+
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
 

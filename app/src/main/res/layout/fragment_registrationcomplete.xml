@@ -107,13 +107,13 @@
             </LinearLayout>
 
             <com.widget.CustomButton
-                android:id="@+id/registration"
+                android:id="@+id/registration_button"
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dip"
                 android:layout_marginRight="50dip"
-                android:textColor="@color/holo_blue_dark"
+                android:textColor="@drawable/btn_holo_text"
                 android:layout_marginTop="20dip"
                 android:background="@drawable/white_holo_button"
                 android:minHeight="0.0dip"

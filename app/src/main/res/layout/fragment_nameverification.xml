@@ -28,8 +28,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/register_name_confirm"
-                android:textColor="#111111"
-                android:textSize="20sp" />
+                android:textColor="@color/holo_red_light"
+                android:textSize="25sp" />
 
             <LinearLayout
                 android:id="@+id/registration_fields"
@@ -86,7 +86,7 @@
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/holo_blue_dark"
+                android:textColor="@drawable/btn_holo_text"
                 android:layout_marginLeft="50dip"
                 android:layout_marginRight="50dip"
                 android:layout_marginTop="20dip"

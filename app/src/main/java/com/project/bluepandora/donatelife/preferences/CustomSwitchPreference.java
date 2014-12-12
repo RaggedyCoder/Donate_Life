@@ -48,7 +48,7 @@ public class CustomSwitchPreference extends SwitchPreference {
 
 
         } else {
-            Locale locale = Locale.ROOT;
+            Locale locale = Locale.ENGLISH;
             Configuration config = new Configuration();
             config.locale = locale;
             getContext().getResources().updateConfiguration(config, null);

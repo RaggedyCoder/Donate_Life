@@ -30,13 +30,12 @@ import java.util.ArrayList;
 
 public class SignUpActivity extends ActionBarActivity {
 
-    /**
-     * Defines a tag for identifying log entries
-     */
+
     private static final int MOBILE_VERIFICATION = 0;
     private static final int PASSWORD_VERIFICATION = 1;
     private static final int NAME_VERIFICATION = 2;
     private static final int REGISTRATION_COMPLETE = 3;
+    //Defines a tag for identifying log entries
     private static final String TAG = SignUpActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG = "mContent";
     private static int currentFragmentTrackNumber;

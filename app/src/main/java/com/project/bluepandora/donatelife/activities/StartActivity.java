@@ -24,7 +24,6 @@ import android.util.Log;
 
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
-import com.project.bluepandora.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -46,11 +45,7 @@ public class StartActivity extends Activity {
             config.locale = locale;
             getBaseContext().getResources().updateConfiguration(config, null);
         } else {
-            if (Utils.hasGingerbread()) {
-                locale = Locale.ROOT;
-            } else {
-                locale = Locale.ENGLISH;
-            }
+            locale = Locale.ENGLISH;
             Configuration config = new Configuration();
             config.locale = locale;
             getBaseContext().getResources().updateConfiguration(config, null);

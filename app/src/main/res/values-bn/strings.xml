@@ -39,8 +39,8 @@
     <string name="Warning_remove_the_password">নিবন্ধনের জন্যে গোপন সংকেতটি মুছে মেলুন।</string>
     <string name="register_name_info">প্রথম শেষ</string>
     <string name="register_name_last">শেষ নাম</string>
-    <string name="register_password">সংকেত</string>
-    <string name="confirm_password">নিশ্চিত সংকেত</string>
+    <string name="register_password">গোপন সংকেত</string>
+    <string name="confirm_password">নিশ্চিত গোপন সংকেত</string>
     <string name="confirm">নিশ্চিত</string>
     <string name="registration">নিবন্ধিত করুন</string>
     <string name="register_name_first">প্রথম নাম</string>
@@ -120,7 +120,7 @@
     <string name="donor_zero_grammar_correct">এই মুহুর্তে কোনো রক্তদাতা নেই</string>
     <string name="donor_zero_grammar_error">মোট ০জন রকতদাতা পাওয়া গেছে</string>
     <string name="zero_grammar_error">০ বার</string>
-    <string name="about_version_bulid_code">ভার্সন ১.১.১ | নির্মান ২০১৪১১২৮</string>
+    <string name="about_version_build_code">ভার্সন ১.১.১ | নির্মান ২০১৪১১২৮</string>
     <string name="about_usage_policy">ডোনেট লাইফ কেবল পার্সোনাল এবং নন-কমার্সিয়াল ব্যবহারের জন্যে।</string>
     <string name="about_legal_license">লাইসেন্সের লিগ্যাল তথ্য</string>
     <string name="name_and_contact">নাম এবং যোগাযোগ</string>
@@ -163,4 +163,7 @@
     <string name="person">জনকে পাঠান</string>
     <string name="number">সংখ্যা</string>
     <string name="sms_body_title">এসএমএস</string>
+    <string name="mobile_number_must">আপনার মোবাইল নম্বর লিখুন</string>
+    <string name="password_must">গোপন সংকেত তৈরি করুন</string>
+    <string name="password_combination">ইংরেজি বর্ণের ছোট অক্ষর,বড় অক্ষর এবং নম্বরের সমন্বয়ে কমপক্ষে ৬ ডিজিটের গোপন সংকেতটি বানান</string>
 </resources>
