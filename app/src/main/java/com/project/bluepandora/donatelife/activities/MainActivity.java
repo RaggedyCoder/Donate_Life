@@ -257,7 +257,7 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_logout) {
             final ProgressDialog pd = new ProgressDialog(this);
             pd.setCancelable(true);
-            pd.setTitle(getString(R.string.log_out_message));
+            pd.setMessage(getString(R.string.log_out_message));
             pd.show();
             deleteFile("feed.json");
             final ConnectionManager con = new ConnectionManager(this);
