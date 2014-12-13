@@ -199,6 +199,7 @@ public class FeedBackFragment extends Fragment implements URL {
         }
         mainViewHolder.mobileNumberTextView.setText(userInfo.getMobileNumber());
         mainViewHolder.sendFeedbackButton.setEnabled(false);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
