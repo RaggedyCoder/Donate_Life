@@ -104,7 +104,7 @@
     <string name="progressing">Progressing&#8230;</string>
     <string name="title_activity_main">Push Notifications</string>
     <string name="error_config" translatable="false">Please set the %1$s constant and recompile the app.</string>
-    <string name="already_registered">Mobile number is already registered on server.</string>
+    <string name="already_registered">ID is already registered.Please sign in with correct password.</string>
     <string name="gcm_registered" translatable="false">From GCM: device successfully registered!</string>
     <string name="gcm_unregistered" translatable="false">From GCM: device successfully unregistered!</string>
     <string name="gcm_message" translatable="false">From GCM: you got message!</string>
@@ -186,4 +186,6 @@
     <string name="mobile_number_must">Enter Your Mobile Number</string>
     <string name="password_combination">Enter a combination of at least six digits which must contain numbers,upper case letters and lower case letters.</string>
     <string name="password_must">Create a Password</string>
+    <string name="invalid_username_password">Invalid ID or Password.You can remove the password and press SIGN IN to check whether the ID is registered or not.</string>
+    <string name="not_registered">ID is not registered yet.Please press SIGN UP and complete the registration</string>
 </resources>

@@ -27,6 +27,7 @@ import com.project.bluepandora.donatelife.activities.MainActivity;
  */
 public class Utils {
 
+
     // Prevents instantiation.
     private Utils() {
     }
@@ -134,4 +135,9 @@ public class Utils {
     public static boolean hasJB() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     }
+
+    public static boolean hasJB_MR1() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+    }
+
 }

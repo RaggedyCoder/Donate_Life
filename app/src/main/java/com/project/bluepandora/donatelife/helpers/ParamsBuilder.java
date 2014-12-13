@@ -145,6 +145,37 @@ public final class ParamsBuilder implements URL {
     }
 
     /**
+     * Get the parameter of is the userInfo whom are already registered the for the application.
+     * If the user is not registered or the password/userName was entered wrong a message
+     * "USER NOT FOUND OR INVALID ID or PASSWORD!" will be send back
+     * <p/>
+     * The parameter will be send to the server.
+     *
+     * @param mobileNumber The Mobile Number of the user.this will be taken from the mobileNumberEditText
+     *                     from the LogInFragment MainViewHolder.
+     * @param keyWord      The Password of the user profile.this will be taken from the passwordEditText
+     *                     from the LogInFragment MainViewHolder.
+     * @return The params which is hash mapped.
+     */
+    public static HashMap<String, String> userInfoRequest(String mobileNumber, String keyWord) {
+        /*
+        * Tags and Values for Registered User Check  Request
+        *
+        * static final TAG->requestName.  static final Value->isRegistered
+        *
+        * static final TAG->mobileNumber.  Value will be determined by the user
+        *
+        * static final TAG->keyWord.  Value will be determined by the user
+        */
+        params = new HashMap<String, String>();
+        params.put(REQUEST_NAME, USER_INFO);
+        params.put(MOBILE_TAG, mobileNumber);
+        params.put(PASSWORD_TAG, keyWord);
+        Log.i("ParamBuilder", params.toString());
+        return params;
+    }
+
+    /**
      * Get the parameter of donation record of the user who is already registered.
      * The parameter will be send to the server.
      *
@@ -293,6 +324,25 @@ public final class ParamsBuilder implements URL {
         params.put(GROUPID_TAG, groupId);
         params.put(PASSWORD_TAG, password);
         Log.i("ParamBuilder", "feedbackRequest:" + params.toString());
+        return params;
+    }
+
+    public static HashMap<String, String> bloodRequest(String mobileNumber,
+                                                       String groupId,
+                                                       String amount,
+                                                       String hospitalID,
+                                                       String emergency,
+                                                       String keyWord,
+                                                       String reqTime) {
+        params = new HashMap<String, String>();
+        params.put(REQUEST_NAME, ADD_BLOODREQUEST_PARAM);
+        params.put(MOBILE_TAG, mobileNumber);
+        params.put(GROUPID_TAG, groupId);
+        params.put(AMOUNT_TAG, amount);
+        params.put(HOSPITALID_TAG, hospitalID);
+        params.put(EMERGENCY_TAG, emergency);
+        params.put(PASSWORD_TAG, keyWord);
+        params.put(REQUESTTIME_TAG, reqTime);
         return params;
     }
 }

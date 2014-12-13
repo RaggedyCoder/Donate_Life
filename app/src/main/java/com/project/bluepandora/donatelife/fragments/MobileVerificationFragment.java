@@ -77,15 +77,15 @@ public class MobileVerificationFragment extends Fragment implements URL {
     /**
      * A TextField{@link =CustomTextView} for showing the country code of the user
      */
-    private CustomTextView countryCode;
+    private CustomTextView countryCodeTextView;
     /**
      * A EditTextField{@link CustomEditText} for the registered user to enter their mobile number.
      */
-    private CustomEditText mobileNumber;
+    private CustomEditText mobileNumberEditText;
     /**
      * An {@link ArrayList} for storing the country codes only for this Fragment.
      */
-    private ArrayList<String> countryCodes;
+    private ArrayList<String> countryCodeTextViews;
 
     /**
      * An {@link ArrayList} for storing the Name of the Country only for this Fragment.
@@ -94,7 +94,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
     /**
      * A Button {@link CustomButton} for the un registered user to sign up.
      */
-    private CustomButton verificationButton;
+    private CustomButton mobileVerificationButton;
     /**
      * A {@link ProgressDialog} for showing the user background work is going on.
      */
@@ -104,7 +104,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
      */
     private OnItemSelectedListener mOnItemSelectedListener;
     /**
-     * A {@link TextWatcher} for the mobileNumber EditTextField.
+     * A {@link TextWatcher} for the mobileNumberEditText EditTextField.
      */
     private TextWatcher mobileTextWatcher;
     /**
@@ -123,7 +123,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        countryCodes = new ArrayList<String>();
+        countryCodeTextViews = new ArrayList<String>();
         categories = new ArrayList<String>();
         countryListAdapter = new CountryListAdapter(getActivity(), categories);
 
@@ -132,11 +132,11 @@ public class MobileVerificationFragment extends Fragment implements URL {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_mobileverification, container, false);
+        rootView = inflater.inflate(R.layout.fragment_mobile_verification, container, false);
         countryNameSpinner = (Spinner) rootView.findViewById(R.id.country_spinner);
-        mobileNumber = (CustomEditText) rootView.findViewById(R.id.signup_phone);
-        countryCode = (CustomTextView) rootView.findViewById(R.id.country_code);
-        verificationButton = (CustomButton) rootView.findViewById(R.id.mobile_verification);
+        mobileNumberEditText = (CustomEditText) rootView.findViewById(R.id.mobile_number_edit_text);
+        countryCodeTextView = (CustomTextView) rootView.findViewById(R.id.country_code_text_view);
+        mobileVerificationButton = (CustomButton) rootView.findViewById(R.id.mobile_verification_button);
         return rootView;
     }
 
@@ -148,15 +148,15 @@ public class MobileVerificationFragment extends Fragment implements URL {
         categories.add("Select a Country");
         categories.add("Bangladesh");
 
-        countryCodes.add("");
-        countryCodes.add("880");
+        countryCodeTextViews.add("");
+        countryCodeTextViews.add("880");
 
         countryNameSpinner.setAdapter(countryListAdapter);
         countryListAdapter.notifyDataSetChanged();
 
-        mobileNumber.addTextChangedListener(mobileTextWatcher);
+        mobileNumberEditText.addTextChangedListener(mobileTextWatcher);
         countryNameSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
-        verificationButton.setOnClickListener(mVerificationListener);
+        mobileVerificationButton.setOnClickListener(mVerificationListener);
 
 
     }
@@ -172,7 +172,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count > 0 && (s.charAt(0) != '1')) {
-                    mobileNumber.setText("");
+                    mobileNumberEditText.setText("");
                 }
             }
 
@@ -185,8 +185,8 @@ public class MobileVerificationFragment extends Fragment implements URL {
         mOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                countryCode.setText(countryCodes.get(position));
-                countryCode.setError(null);
+                countryCodeTextView.setText(countryCodeTextViews.get(position));
+                countryCodeTextView.setError(null);
             }
 
             @Override
@@ -197,10 +197,10 @@ public class MobileVerificationFragment extends Fragment implements URL {
         mVerificationListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mobileNumber.getText().length() == 0) {
+                if (mobileNumberEditText.getText().length() == 0) {
                     createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
                     return;
-                } else if (mobileNumber.getText().length() < 10) {
+                } else if (mobileNumberEditText.getText().length() < 10) {
                     createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
                     return;
                 }
@@ -208,11 +208,11 @@ public class MobileVerificationFragment extends Fragment implements URL {
                 /**
                  * Tags and Value for Registration Request
                  * static final TAG->requestName.  static final Value->isRegistered
-                 * static final TAG->mobileNumber. Value will be determined by the user.
+                 * static final TAG->mobileNumberEditText. Value will be determined by the user.
                  */
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put(REQUEST_NAME, REGISTER_CHECK);
-                params.put(MOBILE_TAG, "0" + mobileNumber.getText().toString());
+                params.put(MOBILE_TAG, "0" + mobileNumberEditText.getText().toString());
                 getJsonData(params);
             }
         };
@@ -248,7 +248,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
                                 createAlertDialog(getString(R.string.already_registered));
                             } else {
                                 Bundle bundle = new Bundle();
-                                bundle.putString("mobileNumber", 0 + mobileNumber.getText().toString());
+                                bundle.putString("mobileNumberEditText", 0 + mobileNumberEditText.getText().toString());
                                 SignUpActivity signUpActivity = (SignUpActivity) getActivity();
                                 signUpActivity.changeFragment(bundle, 1);
                             }

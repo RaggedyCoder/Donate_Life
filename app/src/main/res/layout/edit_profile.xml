@@ -32,7 +32,7 @@
                 android:orientation="horizontal">
 
                 <com.widget.CustomEditText
-                    android:id="@+id/first_name"
+                    android:id="@id/first_name_edit_text"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -49,7 +49,7 @@
                     app:font="MuseoSansRounded-300.otf" />
 
                 <com.widget.CustomEditText
-                    android:id="@+id/last_name"
+                    android:id="@id/last_name_edit_text"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,7 +92,7 @@
                 android:orientation="vertical">
 
                 <Spinner
-                    android:id="@+id/district_spinner"
+                    android:id="@id/district_spinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -150,7 +150,7 @@
                 android:orientation="vertical">
 
                 <com.widget.CustomButton
-                    android:id="@+id/confirm_button"
+                    android:id="@id/confirm_button"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dip"

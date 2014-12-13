@@ -71,10 +71,10 @@ public class MainActivity extends ActionBarActivity {
     private static final int FEED_FRAGMENT = 0;
     private static final int REQUEST_FRAGMENT = 1;
     private static final int PROFILE_FRAGMENT = 2;
-    private static final int HOSPITAL_FRAGMENT = 3;
-    private static final int SETTINGS_ACTIVITY = 4;
-    private static final int FEEDBACK_ACTIVITY = 5;
-    private static final int ABOUT_ACTIVITY = 6;
+    //private static final int HOSPITAL_FRAGMENT = 3;
+    private static final int SETTINGS_ACTIVITY = 3;
+    private static final int FEEDBACK_ACTIVITY = 4;
+    private static final int ABOUT_ACTIVITY = 5;
     public static boolean backPressed = false;
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -371,8 +371,8 @@ public class MainActivity extends ActionBarActivity {
             case PROFILE_FRAGMENT:
                 mContent = new ProfileDetailsFragment();
                 break;
-            case HOSPITAL_FRAGMENT:
-                break;
+            // case HOSPITAL_FRAGMENT:
+            //   break;
             case SETTINGS_ACTIVITY:
                 intent = new Intent(MainActivity.this, SettingsActivity.class);
                 finish();
@@ -414,7 +414,7 @@ public class MainActivity extends ActionBarActivity {
             listAdapter.setSelected(position);
             if (prevPos != position) {
                 mDrawerLayout.closeDrawer(mDrawerListView);
-                if (position < 4) {
+                if (position < 3) {
                     prevPos = position;
                 }
                 switchContent(position);

@@ -15,8 +15,8 @@ package com.project.bluepandora.donatelife.fragments;
  * limitations under the License.
  */
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -42,7 +42,7 @@ import android.widget.CompoundButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 
-import com.android.volley.Request.Method;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
@@ -61,6 +61,7 @@ import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
+import com.project.bluepandora.donatelife.jsonperser.JSONParser;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.project.bluepandora.util.Utils;
 import com.widget.CustomButton;
@@ -71,7 +72,6 @@ import com.widget.CustomScrollView.OnScrollChangedListener;
 import com.widget.CustomSwitch;
 import com.widget.CustomTextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,47 +80,59 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-@SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class RequestFragment extends Fragment implements MainActivity.DrawerSlideListeners, URL {
 
     private static final String TAG = RequestFragment.class.getSimpleName();
-    private Spinner district;
-    private Spinner blood;
-    private Spinner hospital;
-    private Spinner amount;
-
-    private CustomButton doneButton;
-    private CustomCheckBox emergencyCheck;
-    private CustomCheckBox emergencySmsCheckBox;
-    private CustomSwitch emergencySmsSwitch;
-
-
-    private ArrayList<Item> distItems;
-    private ArrayList<Item> bloodItems;
+    HospitalDataSource hospitalDatabase;
+    DistrictDataSource districtDatabase;
+    BloodDataSource bloodDatabase;
+    UserDataSource userDatabase;
+    ArrayList<String> amounts;
     private ArrayList<Item> hospitalItems;
-    private ArrayList<UserInfoItem> userInfoItems;
-    private ArrayList<String> amounts;
-
+    private ArrayList<Item> distItems;
+    private UserInfoItem userInfoItem;
     private ArrayAdapter<String> amountAdapter;
-
-    private HospitalDataSource hospitalDatabase;
-    private DistrictDataSource districtDatabase;
-    private BloodDataSource bloodDatabase;
-    private UserDataSource userDatase;
-
     private SpinnerAdapter bloodAdapter;
     private SpinnerAdapter districtAdapter;
+
     private SpinnerAdapter hospitalAdapter;
     private ArrayList<String> mobileNumber;
-    private ProgressDialog.Builder sendSmsDialogBuilder;
-    private Dialog sendSmsDialog;
-    private CustomTextView donorFinderTextView;
-    private CustomEditText donorNumberEditText;
-    private CustomTextView donorSmsBodyTextView;
-    private CustomButton confirmSmsButton;
     private View sendSmsDialogView;
+    private View rootView;
+    private View mCustomView;
+    private ButtonOnClickListener buttonOnClickListener;
 
+    private MainViewHolder mainViewHolder;
+    private DialogViewHolder dialogViewHolder;
+    /**
+     * A CustomRequest{@link CustomRequest} for the server.This is for sending the user blood request to
+     * the sever.If the server receive the request.It will send a JSONObject.
+     */
+    private CustomRequest bloodRequest;
+    /**
+     * An ErrorListener{@link Response.ErrorListener} for the bloodRequest.
+     * If there is any problem making a request to the server or during of it, mErrorListener
+     * will receive the error message.
+     */
+    private Response.ErrorListener mErrorListener;
+
+    /**
+     * A Listener{@link Response.Listener<JSONObject>} for the bloodRequest.
+     * After making a successful request to the server,server will send a {@link JSONObject}.
+     * mJsonObjectListener will receive that JSONObject.
+     */
+    private Response.Listener<JSONObject> mJsonObjectListener;
+
+    private DialogInterface.OnClickListener smsPositiveClickListener;
+    private DialogInterface.OnClickListener serverPositiveClickListener;
+
+    private OnScrollChangedListener mOnScrollChangedListener;
+    private OnItemSelectedListener mDistrictItemSelectedListener;
+    private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener;
+    private Callback mDrawableCallback;
+
+    private TextWatcher numberTextWatcher;
 
     private DialogBuilder dialogBuilder;
 
@@ -128,70 +140,95 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private CustomTextView mTitle;
     private int currentAlpha;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        getActivity().setTheme(R.style.ThemeFeed);
-        super.onCreate(savedInstanceState);
-    }
+    private JSONParser jsonParser;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_request,
-                container, false);
-        district = (Spinner) rootView.findViewById(R.id.district_spinner);
-        blood = (Spinner) rootView.findViewById(R.id.blood_group_spinner);
-        hospital = (Spinner) rootView.findViewById(R.id.hospital_spinner);
-        amount = (Spinner) rootView.findViewById(R.id.amount_spinner);
-        doneButton = (CustomButton) rootView.findViewById(R.id.done_button);
-        CustomScrollView sc = (CustomScrollView) rootView.findViewById(R.id.scrollview);
-        emergencyCheck = (CustomCheckBox) rootView.findViewById(R.id.emergency_checkBox);
-        sendSmsDialogBuilder = new ProgressDialog.Builder(getActivity());
-        sendSmsDialogView = inflater.inflate(R.layout.send_sms_dialog, container, false);
-        donorSmsBodyTextView = (CustomTextView) sendSmsDialogView.findViewById(R.id.donor_sms_body_text_view);
-        donorFinderTextView = (CustomTextView) sendSmsDialogView.findViewById(R.id.donor_finder_text_view);
-        donorNumberEditText = (CustomEditText) sendSmsDialogView.findViewById(R.id.donor_number_edit_text);
-        confirmSmsButton = (CustomButton) sendSmsDialogView.findViewById(R.id.confirm_sms_button);
-        sendSmsDialogBuilder.setView(sendSmsDialogView);
-        sendSmsDialog = sendSmsDialogBuilder.create();
-        if (Utils.hasICS()) {
-            emergencySmsSwitch = (CustomSwitch) rootView.findViewById(R.id.emergency_sms_switch);
-        } else {
-            emergencySmsCheckBox = (CustomCheckBox) rootView.findViewById(R.id.emergency_sms_checkbox);
-        }
-        userInfoItems = new ArrayList<UserInfoItem>();
-        userDatase = new UserDataSource(getActivity());
-        userDatase.open();
-        userInfoItems = userDatase.getAllUserItem();
-        userDatase.close();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        dialogBuilder = new DialogBuilder(getActivity(), TAG);
+        userInfoItem = new UserInfoItem();
+        userDatabase = new UserDataSource(getActivity());
+        userDatabase.open();
+        userInfoItem = userDatabase.getAllUserItem().get(0);
+        userDatabase.close();
+
         bloodDatabase = new BloodDataSource(getActivity());
         bloodDatabase.open();
+        ArrayList<Item> bloodItems;
         bloodItems = bloodDatabase.getAllBloodItem();
         bloodDatabase.close();
+        bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
 
         amounts = new ArrayList<String>();
         for (int i = 1; i <= 12; i++) {
             amounts.add(Integer.toString(i));
         }
-        amountAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_item, amounts);
-        amount.setAdapter(amountAdapter);
-        bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
-        blood.setAdapter(bloodAdapter);
+        amountAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, amounts);
+
         districtDatabase = new DistrictDataSource(getActivity());
         districtDatabase.open();
         distItems = districtDatabase.getAllDistrictItem();
         districtDatabase.close();
+        districtAdapter = new SpinnerAdapter(getActivity(), distItems);
+
+        hospitalItems = new ArrayList<Item>();
+        hospitalAdapter = new SpinnerAdapter(getActivity(), hospitalItems);
+        jsonParser = new JSONParser(getActivity(), TAG);
+        buttonOnClickListener = new ButtonOnClickListener();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_request,
+                    container, false);
+            mainViewHolder = new MainViewHolder();
+            mainViewHolder.districtSpinner = (Spinner) rootView.findViewById(R.id.district_spinner);
+            mainViewHolder.bloodSpinner = (Spinner) rootView.findViewById(R.id.blood_group_spinner);
+            mainViewHolder.hospitalSpinner = (Spinner) rootView.findViewById(R.id.hospital_spinner);
+            mainViewHolder.amountSpinner = (Spinner) rootView.findViewById(R.id.amount_spinner);
+            mainViewHolder.doneButton = (CustomButton) rootView.findViewById(R.id.done_button);
+            mainViewHolder.scrollView = (CustomScrollView) rootView.findViewById(R.id.scrollview);
+            mainViewHolder.emergencyCheck = (CustomCheckBox) rootView.findViewById(R.id.emergency_checkBox);
+            if (Utils.hasICS()) {
+                mainViewHolder.emergencySmsSwitch = (CustomSwitch) rootView.findViewById(R.id.emergency_sms_switch);
+            } else {
+                mainViewHolder.emergencySmsCheckBox = (CustomCheckBox) rootView.findViewById(R.id.emergency_sms_checkbox);
+            }
+            rootView.setTag(mainViewHolder);
+        } else {
+            mainViewHolder = (MainViewHolder) rootView.getTag();
+        }
+        if (sendSmsDialogView == null) {
+            sendSmsDialogView = inflater.inflate(R.layout.send_sms_dialog, container, false);
+            dialogViewHolder = new DialogViewHolder();
+            dialogViewHolder.donorSmsBodyTextView = (CustomTextView) sendSmsDialogView.findViewById(R.id.donor_sms_body_text_view);
+            dialogViewHolder.donorFinderTextView = (CustomTextView) sendSmsDialogView.findViewById(R.id.donor_finder_text_view);
+            dialogViewHolder.donorNumberEditText = (CustomEditText) sendSmsDialogView.findViewById(R.id.donor_number_edit_text);
+            dialogViewHolder.confirmSmsButton = (CustomButton) sendSmsDialogView.findViewById(R.id.confirm_sms_button);
+            sendSmsDialogView.setTag(dialogViewHolder);
+        } else {
+            dialogViewHolder = (DialogViewHolder) sendSmsDialogView.getTag();
+        }
+        dialogViewHolder.sendSmsDialogBuilder = new ProgressDialog.Builder(getActivity());
+        dialogViewHolder.sendSmsDialogBuilder.setView(sendSmsDialogView);
+        dialogViewHolder.sendSmsDialog = dialogViewHolder.sendSmsDialogBuilder.create();
         mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar_background);
+        mCustomView = inflater.inflate(R.layout.request_feed_actionbar, container, false);
         currentAlpha = 255;
         mActionBarBackgroundDrawable.setAlpha(currentAlpha);
-        LayoutInflater mInflater = LayoutInflater.from(getActivity());
-        View mCustomView = mInflater.inflate(R.layout.request_feed_actionbar, null);
         mTitle = (CustomTextView) mCustomView.findViewById(R.id.actionbar_title_text);
         mTitle.setText(R.string.blood_request);
+        customizeActionbar();
+        mainViewHolder.scrollView.setOnScrollChangedListener(mOnScrollChangedListener);
+        return rootView;
+    }
+
+    private void customizeActionbar() {
         ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
                 R.string.blood_request);
-
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setBackgroundDrawable(mActionBarBackgroundDrawable);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
@@ -206,8 +243,193 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                 .setDisplayShowCustomEnabled(true);
         ((ActionBarActivity) getActivity()).getSupportActionBar()
                 .setCustomView(mCustomView);
+    }
 
-        sc.setOnScrollChangedListener(new OnScrollChangedListener() {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mainViewHolder.amountSpinner.setAdapter(amountAdapter);
+        mainViewHolder.bloodSpinner.setAdapter(bloodAdapter);
+        mainViewHolder.districtSpinner.setAdapter(districtAdapter);
+        mainViewHolder.hospitalSpinner.setAdapter(hospitalAdapter);
+        int selectedItemId = districtAdapter.getItemPosition(userInfoItem.getDistId());
+        mainViewHolder.districtSpinner.setSelection(selectedItemId);
+        DistrictItem districtItem = ((DistrictItem) mainViewHolder.districtSpinner.getSelectedItem());
+        createHospitalList(districtItem.getDistId());
+        if (!Utils.hasJB_MR1()) {
+            mActionBarBackgroundDrawable.setCallback(mDrawableCallback);
+        }
+        dialogViewHolder.donorNumberEditText.addTextChangedListener(numberTextWatcher);
+        if (Utils.hasICS()) {
+            mainViewHolder.emergencySmsSwitch.setOnCheckedChangeListener(mOnCheckedChangeListener);
+        } else {
+            mainViewHolder.emergencySmsCheckBox.setOnCheckedChangeListener(mOnCheckedChangeListener);
+        }
+        mainViewHolder.doneButton.setOnClickListener(buttonOnClickListener);
+        dialogViewHolder.confirmSmsButton.setOnClickListener(buttonOnClickListener);
+        mainViewHolder.districtSpinner.setOnItemSelectedListener(mDistrictItemSelectedListener);
+        bloodRequest = new CustomRequest(Request.Method.POST, URL, mJsonObjectListener, mErrorListener);
+    }
+
+    private boolean getViewEquals(View view1, View view2) {
+        return view1.equals(view2);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.e("", "" + isChecked);
+                if (isChecked) {
+                    mainViewHolder.doneButton.setText(getResources().getString(R.string.request_sms));
+                } else {
+                    mainViewHolder.doneButton.setText(getResources().getString(R.string.request_server));
+                }
+            }
+        };
+        mErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialogBuilder.getProgressDialog().dismiss();
+                if (error.toString().contains("TimeoutError")) {
+                    dialogBuilder.createAlertDialog(getString(R.string.alert), getResources().getString(R.string.timeout_error));
+                } else if (error.toString().contains("UnknownHostException")) {
+                    dialogBuilder.createAlertDialog(getString(R.string.alert), getResources().getString(R.string.no_internet));
+                }
+            }
+        };
+        mJsonObjectListener = new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("TAG", response.toString());
+                dialogBuilder.getProgressDialog().dismiss();
+                try {
+                    if (response.getString("requestName").equals("addBloodRequest")) {
+                        dialogBuilder.createAlertDialog(response.getString("message"));
+                    } else if (response.getString("requestName").equals("donatorMobileNumber")) {
+                        if (response.getInt("done") == 1) {
+                            mobileNumber = jsonParser.getMobileNumber(response);
+                            if (mobileNumber.size() == 0) {
+                                dialogBuilder.createAlertDialog(getString(R.string.no_donor_availibility));
+                            } else {
+                                showSmsDialog();
+                            }
+                        } else {
+                            dialogBuilder.createAlertDialog(getString(R.string.no_donor_availibility));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        numberTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    int number = Integer.parseInt(s.toString());
+                    if (number == 0) {
+                        dialogViewHolder.donorNumberEditText.setText("1");
+                    } else if (number > mobileNumber.size()) {
+                        dialogViewHolder.donorNumberEditText.setText(Integer.toString(mobileNumber.size()));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        mDrawableCallback = new Callback() {
+
+            @Override
+            public void unscheduleDrawable(Drawable who, Runnable what) {
+
+            }
+
+            @Override
+            public void scheduleDrawable(Drawable who, Runnable what,
+                                         long when) {
+
+            }
+
+            @Override
+            public void invalidateDrawable(Drawable who) {
+                ((ActionBarActivity) getActivity()).getSupportActionBar()
+                        .setBackgroundDrawable(who);
+            }
+        };
+        serverPositiveClickListener = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog,
+                                int which) {
+                SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                final String mobileNumber = userInfoItem.getMobileNumber();
+                final String bloodId = Long.toString(mainViewHolder.bloodSpinner.getSelectedItemId());
+                final String amount = (String) mainViewHolder.amountSpinner.getSelectedItem();
+                final String hospitalId = Long.toString(mainViewHolder.hospitalSpinner.getSelectedItemId());
+                final String emergency = mainViewHolder.emergencyCheck.isChecked() ? "1" : "0";
+                final String keyWord = userInfoItem.getKeyWord();
+                Date dateNow = new Date();
+                String reqTime = isoFormat.format(dateNow);
+                HashMap<String, String> params = ParamsBuilder.bloodRequest(
+                        mobileNumber,
+                        bloodId,
+                        amount,
+                        hospitalId,
+                        emergency,
+                        keyWord,
+                        reqTime
+                );
+                bloodRequest.setParams(params);
+                AppController.getInstance().addToRequestQueue(bloodRequest);
+                dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
+            }
+        };
+        smsPositiveClickListener = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog,
+                                int which) {
+                final String hospitalId = Long.toString(mainViewHolder.hospitalSpinner.getSelectedItemId());
+                final String bloodId = Long.toString(mainViewHolder.bloodSpinner.getSelectedItemId());
+                final String mobileNumber = userInfoItem.getMobileNumber();
+                final String keyWord = userInfoItem.getKeyWord();
+                HashMap<String, String> params = ParamsBuilder.donatorMobileNumber(
+                        hospitalId,
+                        bloodId,
+                        mobileNumber,
+                        keyWord);
+                bloodRequest.setParams(params);
+                AppController.getInstance().addToRequestQueue(bloodRequest);
+                dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
+            }
+        };
+        mDistrictItemSelectedListener = new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                createHospitalList(((DistrictItem) distItems.get(
+                        mainViewHolder.districtSpinner.getSelectedItemPosition())).getDistId());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+        mOnScrollChangedListener = new OnScrollChangedListener() {
 
             @Override
             public void onScrollChanged(ScrollView who, int l, int t, int oldl,
@@ -223,282 +445,55 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                         headerHeight) / headerHeight);
                 Log.d(RequestFragment.class.getSimpleName(), "" + ratio);
                 final int newAlpha = (int) (ratio * 255);
-                final int newAlphatext = (int) (ratio * 255);
+                final int newAlphaText = (int) (ratio * 255);
                 currentAlpha = newAlpha;
                 mActionBarBackgroundDrawable.setAlpha(newAlpha);
-                mTitle.setTextColor(Color.argb(newAlphatext, 0xff, 0xff, 0xff));
+                mTitle.setTextColor(Color.argb(newAlphaText, 0xff, 0xff, 0xff));
             }
-        });
+        };
+    }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mActionBarBackgroundDrawable.setCallback(new Callback() {
-
-                @Override
-                public void unscheduleDrawable(Drawable who, Runnable what) {
-
-                }
-
-                @Override
-                public void scheduleDrawable(Drawable who, Runnable what,
-                                             long when) {
-
-                }
-
-                @Override
-                public void invalidateDrawable(Drawable who) {
-                    ((ActionBarActivity) getActivity()).getSupportActionBar()
-                            .setBackgroundDrawable(who);
-                }
-            });
+    private void showSmsDialog() {
+        int bloodAmount = Integer.parseInt(((String) mainViewHolder.amountSpinner.getSelectedItem()));
+        String bloodGroup = ((BloodItem) mainViewHolder.bloodSpinner.getSelectedItem()).getBloodName();
+        String hospitalName = ((HospitalItem) mainViewHolder.hospitalSpinner.getSelectedItem()).getHospitalName();
+        final String smsBody = "Please Help Need "
+                + ((bloodAmount == 1) ? "" : "(one Bag)" + "(" + bloodAmount + " Bags)")
+                + bloodGroup + " in " + hospitalName + "\n-Donate Life";
+        String title = getResources().getQuantityString(R.plurals.donor_title, mobileNumber.size(), mobileNumber.size());
+        if (title.equals(getString(R.string.donor_zero_grammar_error))) {
+            title = getString(R.string.donor_zero_grammar_correct);
         }
-        districtAdapter = new SpinnerAdapter(getActivity(), distItems);
-        district.setAdapter(districtAdapter);
-        district.setSelection(districtAdapter.getItemPosition(userInfoItems
-                .get(0).getDistId()));
-        createHospitalList(((DistrictItem) distItems.get(district.getSelectedItemPosition()))
-                .getDistId());
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        confirmSmsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (donorNumberEditText.length() == 0) {
-                    dialogBuilder.createAlertDialog(getString(R.string.one_donor_must));
-                } else {
-                    for (int i = 0; i < Integer.parseInt(donorNumberEditText.getText().toString()); i++) {
-                        SmsManager.getDefault().sendTextMessage(mobileNumber.get(i),
-                                null, donorSmsBodyTextView.getText().toString().trim(), null, null);
-                    }
-                }
-            }
-        });
-        donorNumberEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    int number = Integer.parseInt(s.toString());
-                    if (number == 0) {
-                        donorNumberEditText.setText("1");
-                    } else if (number > mobileNumber.size()) {
-                        donorNumberEditText.setText(Integer.toString(mobileNumber.size()));
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        dialogBuilder = new DialogBuilder(getActivity(), TAG);
-        if (Utils.hasICS()) {
-            emergencySmsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.e("", "" + isChecked);
-                    if (isChecked) {
-                        doneButton.setText(getResources().getString(R.string.request_sms));
-                    } else {
-                        doneButton.setText(getResources().getString(R.string.request_server));
-                    }
-                }
-            });
-        } else {
-            emergencySmsCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        doneButton.setText(getResources().getString(R.string.request_sms));
-                    } else {
-                        doneButton.setText(getResources().getString(R.string.request_server));
-                    }
-                }
-            });
-        }
-        doneButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (hospital.getSelectedItemId() == -1) {
-                    dialogBuilder.createProgressDialog(getString(R.string.request_not_possible));
-                } else {
-                    DialogInterface.OnClickListener serverPositiveClickListener = new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog,
-                                            int which) {
-                            bloodRequest(createParams());
-                            dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
-                        }
-                    };
-                    DialogInterface.OnClickListener smsPositiveClickListener = new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog,
-                                            int which) {
-                            HashMap<String, String> params = ParamsBuilder.donatorMobileNumber(
-                                    Long.toString(hospital.getSelectedItemId()),
-                                    Long.toString(blood.getSelectedItemId()),
-                                    userInfoItems.get(0).getMobileNumber(),
-                                    userInfoItems.get(0).getKeyWord());
-                            bloodRequest(params);
-                            dialogBuilder.createProgressDialog(getResources().getString(R.string.processing));
-                        }
-                    };
-                    if (isSmsRequest()) {
-                        dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.sms_alert),
-                                smsPositiveClickListener, null);
-                    } else {
-                        dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.request_alert),
-                                serverPositiveClickListener, null);
-                    }
-                }
-            }
-        });
-        district.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                createHospitalList(((DistrictItem) distItems.get(
-                        district.getSelectedItemPosition())).getDistId());
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    private HashMap<String, String> createParams() {
-        // mobileNumber(String)
-        // groupId(Integer)
-        // amount(Integer)
-        // hospitalId(Integer)
-        // emergency(Integer 0,1)
-        // keyWord(String only A-Z, a-z, 0-9)
-        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date dateNow = new Date();
-        String reqTime = isoFormat.format(dateNow);
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put(REQUEST_NAME, ADD_BLOODREQUEST_PARAM);
-        params.put(MOBILE_TAG, userInfoItems.get(0).getMobileNumber());
-        params.put(GROUPID_TAG, blood.getSelectedItemId() + "");
-        params.put(AMOUNT_TAG, (String) amount.getSelectedItem());
-        params.put(HOSPITALID_TAG, hospital.getSelectedItemId() + "");
-        params.put(EMERGENCY_TAG, emergencyCheck.isChecked() ? "1" : "0");
-        params.put(PASSWORD_TAG, userInfoItems.get(0).getKeyWord());
-        params.put(REQUESTTIME_TAG, reqTime);
-        Log.e("MSG", reqTime);
-        return params;
-    }
-
-    public void bloodRequest(HashMap<String, String> params) {
-
-        CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("TAG", response.toString());
-                        dialogBuilder.getProgressDialog().dismiss();
-                        try {
-                            if (response.getString("requestName").equals("addBloodRequest")) {
-                                dialogBuilder.createAlertDialog(response.getString("message"));
-                            } else if (response.getString("requestName").equals("donatorMobileNumber")) {
-                                if (response.getInt("done") == 1) {
-                                    getMobileNumber(response);
-                                    if (mobileNumber.size() == 0) {
-                                        dialogBuilder.createAlertDialog(getString(R.string.no_donor_availibility));
-                                    } else {
-                                        int bloodAmount = Integer.parseInt(((String) amount.getSelectedItem()));
-                                        String bloodGroup = ((BloodItem) blood.getSelectedItem()).getBloodName();
-                                        String hospitalName = ((HospitalItem) hospital.getSelectedItem()).getHospitalName();
-                                        final String smsBody = "Please Help Need "
-                                                + getResources().getQuantityString(R.plurals.bags, bloodAmount, bloodAmount) + " "
-                                                + bloodGroup + " in " + hospitalName + "\n-Donate Life";
-                                        String title = getResources().getQuantityString(R.plurals.donor_title, mobileNumber.size(), mobileNumber.size());
-                                        if (title.equals(getString(R.string.donor_zero_grammar_error))) {
-                                            title = getString(R.string.donor_zero_grammar_correct);
-                                        }
-                                        donorSmsBodyTextView.setText(smsBody);
-                                        donorFinderTextView.setText(title);
-                                        donorNumberEditText.setText(String.valueOf(mobileNumber.size()));
-                                        sendSmsDialog.show();
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.toString().contains("TimeoutError")) {
-                    dialogBuilder.createAlertDialog(getString(R.string.alert), getResources().getString(R.string.timeout_error));
-                } else if (error.toString().contains("UnknownHostException")) {
-                    dialogBuilder.createAlertDialog(getString(R.string.alert), getResources().getString(R.string.no_internet));
-                }
-            }
-        });
-        AppController.getInstance().addToRequestQueue(jsonReq);
-    }
-
-    private void getMobileNumber(JSONObject response) {
-
-        mobileNumber = new ArrayList<String>();
-        try {
-            JSONArray numbers = response.getJSONArray("number");
-            for (int i = 0; i < numbers.length(); i++) {
-                JSONObject number = numbers.getJSONObject(i);
-                mobileNumber.add(number.getString("mobileNumber"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        dialogViewHolder.donorSmsBodyTextView.setText(smsBody);
+        dialogViewHolder.donorFinderTextView.setText(title);
+        dialogViewHolder.donorNumberEditText.setText(String.valueOf(mobileNumber.size()));
+        dialogViewHolder.sendSmsDialog.show();
     }
 
     private void createHospitalList(int distId) {
+        hospitalItems.clear();
         try {
             hospitalDatabase = new HospitalDataSource(getActivity());
             hospitalDatabase.open();
             hospitalItems = hospitalDatabase.getAllHospitalItem(distId);
             hospitalDatabase.close();
         } catch (Exception e) {
-            hospitalItems = new ArrayList<Item>();
             HospitalItem item = new HospitalItem();
             item.setHospitalName(getString(R.string.no_hospital_tag));
             item.setHospitalId(-1);
             hospitalItems.add(item);
-            hospitalAdapter = new SpinnerAdapter(getActivity(),
-                    hospitalItems);
-            hospital.setAdapter(hospitalAdapter);
+
         }
-        if (hospitalItems != null) {
-            hospitalAdapter = new SpinnerAdapter(getActivity(),
-                    hospitalItems);
-            hospital.setAdapter(hospitalAdapter);
-        }
+        hospitalAdapter.setItems(hospitalItems);
+        hospitalAdapter.notifyDataSetChanged();
     }
 
 
     private boolean isSmsRequest() {
         if (Utils.hasICS()) {
-            return emergencySmsSwitch.isChecked();
+            return mainViewHolder.emergencySmsSwitch.isChecked();
         } else {
-            return emergencySmsCheckBox.isChecked();
+            return mainViewHolder.emergencySmsCheckBox.isChecked();
         }
     }
 
@@ -509,6 +504,57 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         if (mActionBarBackgroundDrawable != null && mTitle != null) {
             mActionBarBackgroundDrawable.setAlpha(newAlpha);
             mTitle.setTextColor(Color.argb(newAlphaText, 0xff, 0xff, 0xff));
+        }
+    }
+
+    private static class MainViewHolder {
+        CustomScrollView scrollView;
+        private Spinner districtSpinner;
+        private Spinner bloodSpinner;
+        private Spinner hospitalSpinner;
+        private Spinner amountSpinner;
+        private CustomButton doneButton;
+        private CustomCheckBox emergencyCheck;
+        private CustomCheckBox emergencySmsCheckBox;
+        private CustomSwitch emergencySmsSwitch;
+    }
+
+
+    private static class DialogViewHolder {
+        private ProgressDialog.Builder sendSmsDialogBuilder;
+        private Dialog sendSmsDialog;
+        private CustomTextView donorFinderTextView;
+        private CustomEditText donorNumberEditText;
+        private CustomTextView donorSmsBodyTextView;
+        private CustomButton confirmSmsButton;
+    }
+
+    private class ButtonOnClickListener implements OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            if (getViewEquals(view, mainViewHolder.doneButton)) {
+                if (mainViewHolder.hospitalSpinner.getSelectedItemId() == -1) {
+                    dialogBuilder.createProgressDialog(getString(R.string.request_not_possible));
+                } else {
+                    if (isSmsRequest()) {
+                        dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.sms_alert),
+                                smsPositiveClickListener, null);
+                    } else {
+                        dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.request_alert),
+                                serverPositiveClickListener, null);
+                    }
+                }
+            } else if (getViewEquals(view, dialogViewHolder.confirmSmsButton)) {
+                if (dialogViewHolder.donorNumberEditText.length() == 0) {
+                    dialogBuilder.createAlertDialog(getString(R.string.one_donor_must));
+                } else {
+                    for (int i = 0; i < Integer.parseInt(dialogViewHolder.donorNumberEditText.getText().toString()); i++) {
+                        SmsManager.getDefault().sendTextMessage(mobileNumber.get(i),
+                                null, dialogViewHolder.donorSmsBodyTextView.getText().toString().trim(), null, null);
+                    }
+                }
+            }
         }
     }
 }

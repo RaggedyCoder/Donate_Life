@@ -1,10 +1,98 @@
 <resources>
 
+    <!--common id-->
+    <item name="district_spinner" type="id" />
+    <item name="blood_group_spinner" type="id" />
+    <item name="hospital_spinner" type="id" />
+    <item name="amount_spinner" type="id" />
+    <item name="country_spinner" type="id" />
+    <item name="plus" type="id" />
+    <item name="first_name_edit_text" type="id" />
+    <item name="last_name_edit_text" type="id" />
+    <item name="confirm_button" type="id" />
+    <item name="mobile_number_edit_text" type="id" />
+    <item name="country_code_text_view" type="id" />
+
+
+    <!--activity container-->
+    <item name="container" type="id" />
+
+    <!--about_list.xml-->
+    <item name="about_list_view" type="id" />
+    <item name="license_view" type="id" />
+
+    <!--about_list_item.xml-->
+    <item name="about_container" type="id" />
+    <item name="about_header" type="id" />
+    <item name="about_body" type="id" />
+
+    <!--activity_about.xml-->
+
+    <!--activity_feedback.xml-->
+
+    <!--activity_main.xml-->
+    <item name="drawer_layout" type="id" />
+    <item name="frame_container" type="id" />
+
+    <!--activity_settings.xml-->
+
+    <!--activity_settings_legacy.xml-->
+    <item name="actionbar" type="id" />
+
+    <!--card_feed_view.xml-->
+    <item name="timestamp_text_view" type="id" />
+    <item name="feed_item_holder" type="id" />
+    <item name="feed_item_holder_background" type="id" />
+    <item name="blood_group_holder" type="id" />
+    <item name="blood_group_text_view" type="id" />
+    <item name="blood_amount_text_view" type="id" />
+    <item name="details_holder_linear_layout" type="id" />
+    <item name="info_holder_linear_layout" type="id" />
+    <item name="info_holder_relative_layout" type="id" />
+    <item name="emergency_text_view" type="id" />
+    <item name="popup_menu_button" type="id" />
+    <item name="area_contact_info_holder" type="id" />
+    <item name="hospital_name_holder" type="id" />
+    <item name="hospital_name_text_view" type="id" />
+    <item name="mobile_number_holder" type="id" />
+    <item name="contact_text_view" type="id" />
+    <item name="area_name_text_view" type="id" />
+
+    <!--developer_info.xml-->
+    <item name="the_doctor_facebook" type="id" />
+    <item name="the_doctor_email" type="id" />
+    <item name="coder_bd_facebook" type="id" />
+    <item name="coder_bd_email" type="id" />
+
+    <!--donation_record.xml-->
+    <item name="donation_date_picker" type="id" />
+    <item name="donation_details" type="id" />
+    <item name="donation_add_button" type="id" />
+
+    <!--edit_profile.xml-->
+
+    <!--fragment_feed.xml-->
+    <item name="progress_bar" type="id" />
+    <item name="swipe_refresh_layout" type="id" />
+    <item name="feed_list_view" type="id" />
+    <item name="action_button" type="id" />
+
+    <!--fragment_feedback.xml-->
+    <item name="from_text_view" type="id" />
+    <item name="mobile_number_text_view" type="id" />
+    <item name="text_counter_text_view" type="id" />
+
+    <!--fragment_mobile_verification.xml-->
+    <item name="mobile_verification_button" type="id" />
+
+    <!--fragment_name_verification.xml-->
+    <item name="name_verification_button" type="id" />
+    <item name="registration_fields" type="id" />
+
+
     <item name="action_refresh" type="id"></item>
     <item name="selected_view" type="id" />
-    <item name="container" type="id"></item>
-    <item name="list" type="id"></item>
-    <item name="swiperefresh" type="id"></item>
+
     <item name="profile_container" type="id"></item>
     <item name="header_picture" type="id"></item>
     <item name="header_logo" type="id"></item>
@@ -33,36 +121,19 @@
     <item name="profile_blood_group_divider" type="id"></item>
     <item name="profile_blood_group_show" type="id"></item>
     <item name="profile_blood_group" type="id"></item>
-    <item name="feed_item_holder_background" type="id"></item>
-    <item name="emergency_text_view" type="id"></item>
-    <item name="option_button_1" type="id"></item>
+
+
     <item name="layout_divider" type="id"></item>
-    <item name="timeStamp_text_view" type="id"></item>
+
     <item name="area_name_holder" type="id"></item>
-    <item name="info_holder" type="id"></item>
     <item name="info" type="id"></item>
-    <item name="bloodGroup_amount_holder" type="id"></item>
-    <item name="bloodGroup_holder" type="id"></item>
-    <item name="bloodGroup_text_view" type="id"></item>
-    <item name="bloodGroupID_text_view" type="id"></item>
-    <item name="bloodAmount_holder" type="id"></item>
-    <item name="hospital_name_holder" type="id"></item>
-    <item name="bloodAmountID_text_view" type="id"></item>
-    <item name="hospitalNameID_text_view" type="id"></item>
-    <item name="areaNameID_text_view" type="id"></item>
-    <item name="mobile_number_holder" type="id"></item>
-    <item name="mobileNumberID_text_view" type="id"></item>
-    <item name="feed_item_holder" type="id"></item>
+
     <item name="feed_item_background_holder" type="id"></item>
     <item name="registration_step_scroll_view" type="id"></item>
     <item name="registration_step_holder" type="id"></item>
     <item name="registration_step_details_1_holder" type="id"></item>
     <item name="dummy_view" type="id"></item>
     <item name="blood_request_district_container" type="id"></item>
-    <item name="district_spinner" type="id"></item>
-    <item name="blood_group_spinner" type="id"></item>
-    <item name="hospital_spinner" type="id"></item>
-    <item name="amount_spinner" type="id"></item>
     <item name="emergency_checkBox" type="id"></item>
     <item name="done_button" type="id"></item>
     <item name="progress_view" type="id"></item>

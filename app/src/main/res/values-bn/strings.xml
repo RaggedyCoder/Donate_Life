@@ -115,17 +115,17 @@
     <string name="one_bag_request">(এক ব্যাগ)</string>
     <string name="other_bag_request">(%d ব্যাগ)</string>
     <string name="zero_donor_title">এই মুহুর্তে কোনো রক্তদাতা নেই</string>
-    <string name="one_donor_title">একজন রকতদাতা পাওয়া গেছে</string>
+    <string name="one_donor_title">একজন রক্তদাতা পাওয়া গেছে</string>
     <string name="other_donor_title">মোট %dজন রক্তদাতা পাওয়া গেছে</string>
     <string name="donor_zero_grammar_correct">এই মুহুর্তে কোনো রক্তদাতা নেই</string>
-    <string name="donor_zero_grammar_error">মোট ০জন রকতদাতা পাওয়া গেছে</string>
+    <string name="donor_zero_grammar_error">মোট ০জন রক্তদাতা পাওয়া গেছে</string>
     <string name="zero_grammar_error">০ বার</string>
     <string name="about_version_build_code">ভার্সন ১.১.১ | নির্মান ২০১৪১১২৮</string>
     <string name="about_usage_policy">ডোনেট লাইফ কেবল পার্সোনাল এবং নন-কমার্সিয়াল ব্যবহারের জন্যে।</string>
     <string name="about_legal_license">লাইসেন্সের লিগ্যাল তথ্য</string>
     <string name="name_and_contact">নাম এবং যোগাযোগ</string>
     <string name="feedback_thank_you">আপনার ফিডব্যাকটির জন্যে ধন্যবাদ</string>
-    <string name="already_registered">নাম্বারটি নিবন্ধিত।</string>
+    <string name="already_registered">আইডিটি নিবন্ধিত।দয়া করে সঠিক গোপন সংকেতটি প্রবেশ করে সাইন ইন করুন।</string>
     <string name="title_activity_main">পুশ নোটিফিকেশন</string>
     <string name="send_feedback">পাঠান</string>
     <string name="edit_password">এডিট নিশ্চিত এর জন্যে পাসওয়ার্ড </string>
@@ -166,4 +166,6 @@
     <string name="mobile_number_must">আপনার মোবাইল নম্বর লিখুন</string>
     <string name="password_must">গোপন সংকেত তৈরি করুন</string>
     <string name="password_combination">ইংরেজি বর্ণের ছোট অক্ষর,বড় অক্ষর এবং নম্বরের সমন্বয়ে কমপক্ষে ৬ ডিজিটের গোপন সংকেতটি বানান</string>
+    <string name="invalid_username_password">অসঙ্গতিপুর্ণ আইডি অথবা গোপন সংকেত।আপনি গোপন সংকেতটি মুছে পুনরায় সাইন ইন চাপলে আইডিটি নিবন্ধিত কিনা জানতে পারবেন। </string>
+    <string name="not_registered">আইডিটি নিবন্ধিত নয়।দয়া করে সাইন আপ চাপুন এবং নিবন্ধন এর ধাপগুলো সম্পন্ন করুন।</string>
 </resources>

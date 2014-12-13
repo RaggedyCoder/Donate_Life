@@ -214,7 +214,7 @@ public class FeedBackFragment extends Fragment implements URL {
         mainViewHolder.subjectSpinner.setOnItemSelectedListener(mSubjectSelectedListener);
         mainViewHolder.feedbackEditText.addTextChangedListener(feedbackTextWatcher);
         mainViewHolder.sendFeedbackButton.setOnClickListener(mSendFeedbackClickListener);
-        sendFeedbackRequest = new CustomRequest(Request.Method.POST, URL, params, mJsonObjectListener, mErrorListener);
+        sendFeedbackRequest = new CustomRequest(Request.Method.POST, URL, mJsonObjectListener, mErrorListener);
     }
 
     @Override

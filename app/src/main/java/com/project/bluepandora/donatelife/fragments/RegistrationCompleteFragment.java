@@ -96,7 +96,7 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
     /**
      * An item selection listener for the bloodGroupSpinner.
      */
-    private OnItemSelectedListener mbloodGroupSpinnerItemSelectedListener;
+    private OnItemSelectedListener mBloodGroupSpinnerItemSelectedListener;
     /**
      * An item selection listener for the districtSpinner.
      */
@@ -183,17 +183,17 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
         Log.i(TAG, "onActivityCreated method called.");
         mainViewHolder.bloodGroupSpinner.setAdapter(bloodAdapter);
         mainViewHolder.districtSpinner.setAdapter(districtAdapter);
-        mainViewHolder.bloodGroupSpinner.setOnItemSelectedListener(mbloodGroupSpinnerItemSelectedListener);
+        mainViewHolder.bloodGroupSpinner.setOnItemSelectedListener(mBloodGroupSpinnerItemSelectedListener);
         mainViewHolder.districtSpinner.setOnItemSelectedListener(mDistrictItemSelectedListener);
         mainViewHolder.registrationButton.setOnClickListener(mRegistrationListener);
-        regCompleteRequest = new CustomRequest(Request.Method.POST, URL, params, mJsonObjectListener, mErrorListener);
+        regCompleteRequest = new CustomRequest(Request.Method.POST, URL, mJsonObjectListener, mErrorListener);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.i(TAG, "onAttach method called.");
-        mbloodGroupSpinnerItemSelectedListener = new OnItemSelectedListener() {
+        mBloodGroupSpinnerItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 BloodItem item = (BloodItem) bloodItems.get(mainViewHolder.bloodGroupSpinner.getSelectedItemPosition());

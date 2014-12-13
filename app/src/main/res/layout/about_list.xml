@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/about_list_view"
+        android:id="@id/about_list_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:divider="@drawable/about_list_divider"
@@ -14,7 +14,7 @@
         android:scrollbars="none" />
 
     <WebView
-        android:id="@+id/license_view"
+        android:id="@id/license_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

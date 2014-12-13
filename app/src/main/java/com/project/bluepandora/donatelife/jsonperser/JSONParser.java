@@ -18,8 +18,10 @@ package com.project.bluepandora.donatelife.jsonperser;
 import android.content.Context;
 import android.util.Log;
 
+import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
+import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.HospitalDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
@@ -31,13 +33,36 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class JSONParser {
 
+    private static final int DONE = 1;
+    private static final int ERROR = 0;
+    private static final String NO_DONATION_RECORD = "DONATION RECORD NOT FOUND";
     private Context context;
+    private String TAG;
 
-    public JSONParser(Context context) {
+    public JSONParser(Context context, String TAG) {
         this.context = context;
+        this.TAG = TAG;
+    }
+
+    public ArrayList<String> getMobileNumber(JSONObject response) {
+        ArrayList<String> mobileNumber = new ArrayList<String>();
+        try {
+            JSONArray numbers = response.getJSONArray("number");
+            Log.i(TAG, "Total mobile numbers-" + numbers.length());
+            for (int i = 0; i < numbers.length(); i++) {
+                JSONObject number = numbers.getJSONObject(i);
+                mobileNumber.add(number.getString("mobileNumber"));
+                Log.i(TAG, i + ". mobile number-" + numbers.get(i));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return mobileNumber;
     }
 
     public void parseJsonBlood(JSONObject response) {
@@ -47,10 +72,8 @@ public class JSONParser {
 
             JSONArray feedArray = response.getJSONArray("bloodGroup");
             for (int i = 0; i < feedArray.length(); i++) {
-
                 JSONObject temp = (JSONObject) feedArray.get(i);
                 int groupId = Integer.parseInt(temp.getString("groupId"));
-
                 String groupName = temp.getString("groupName");
                 String banglaGroupName = temp.getString("groupBName");
                 try {
@@ -121,50 +144,76 @@ public class JSONParser {
         hospitalDatabase.close();
     }
 
-    public void parseUserInfo(JSONObject response, String mobileNumber,
-                              String password) {
-        UserDataSource userDataBase = new UserDataSource(context);
-        userDataBase.open();
-        UserInfoItem item = new UserInfoItem();
-        JSONArray feedArray = null;
+    public boolean parseRegistrationCheck(JSONObject response) {
         try {
-            feedArray = response.getJSONArray("profile");
+            int done = response.getInt("done");
+            switch (done) {
+                case DONE:
+                    return true;
+                case ERROR:
+                    return false;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (feedArray != null) {
-            for (int i = 0; i < feedArray.length(); i++) {
-                JSONObject temp = null;
-                try {
-                    temp = (JSONObject) feedArray.get(i);
-                } catch (JSONException e) {
+        return false;
+    }
 
-                    e.printStackTrace();
-                }
-                if (temp != null) {
-                    try {
+    public boolean parseDonationInfo(JSONObject response) {
+        DRDataSource drDataSource = new DRDataSource(context);
+        drDataSource.open();
+        try {
+            int done = response.getInt("done");
+            switch (done) {
+                case DONE:
+                    JSONArray array = response.getJSONArray("donationRecord");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject obj = array.getJSONObject(i);
+                        DRItem item = new DRItem();
+                        item.setDonationTime(obj.getString("donationDate"));
+                        item.setDonationDetails(obj.getString("donationRecord"));
+                        drDataSource.createDRItem(item);
+                    }
+                    drDataSource.close();
+                    return true;
+                case ERROR:
+                    final String message = response.getString("message");
+                    return message.equals(NO_DONATION_RECORD);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean parseUserInfo(JSONObject response, String mobileNumber, String keyWord) {
+        UserDataSource userDataBase = new UserDataSource(context);
+        userDataBase.open();
+        UserInfoItem item = new UserInfoItem();
+
+        try {
+            int done = response.getInt("done");
+            switch (done) {
+                case DONE:
+                    JSONArray feedArray = response.getJSONArray("profile");
+                    for (int i = 0; i < feedArray.length(); i++) {
+                        JSONObject temp = feedArray.getJSONObject(i);
                         item.setFirstName(temp.getString("firstName"));
                         item.setLastName(temp.getString("lastName"));
-                        item.setKeyWord(password);
+                        item.setGroupId(temp.getInt("groupId"));
+                        item.setDistId(temp.getInt("distId"));
                         item.setMobileNumber(mobileNumber);
-                        item.setGroupId(Integer.parseInt(temp
-                                .getString("groupId")));
-                        item.setDistId(Integer.parseInt(temp
-                                .getString("distId")));
-                        try {
-                            userDataBase.createUserInfoItem(item);
-                            userDataBase.close();
-
-                        } catch (Exception e) {
-                            // Toast.makeText(getActivity(), e.getMessage(),
-                            // Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-
-                        e.printStackTrace();
+                        item.setKeyWord(keyWord);
+                        userDataBase.createUserInfoItem(item);
+                        userDataBase.close();
                     }
-                }
+                    return true;
+                case ERROR:
+                    return false;
             }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
         }
+        return false;
     }
 }

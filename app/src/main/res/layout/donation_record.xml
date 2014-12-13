@@ -28,7 +28,7 @@
                 android:text="Donation Date:" />
 
             <DatePicker
-                android:id="@+id/donation_date_picker"
+                android:id="@id/donation_date_picker"
                 android:layout_marginTop="5dip"
                 android:datePickerMode="spinner"
                 android:calendarViewShown="false"
@@ -46,7 +46,7 @@
                 android:text="Donation Details:" />
 
             <com.widget.CustomEditText
-                android:id="@+id/donation_details"
+                android:id="@id/donation_details"
                 android:layout_marginTop="5dip"
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_marginBottom="5dip"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content" />
 
             <com.widget.CustomButton
-                android:id="@+id/donation_add_button"
+                android:id="@id/donation_add_button"
                 android:layout_width="fill_parent"
                 android:background="@drawable/white_holo_button"
                 android:layout_margin="15dip"

@@ -27,43 +27,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="@string/register_name_confirm"
                 android:textColor="@color/holo_red_light"
-                android:text="@string/mobile_number_must"
                 android:textSize="25sp" />
 
-            <com.widget.CustomTextView
-                style="@style/MuseoSansRounded_300_text"
-                android:layout_width="fill_parent"
-                android:layout_margin="10dip"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="#111111"
-                android:text="@string/register_phone_number_code_confirm"
-                android:textSize="16sp" />
-
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dip"
-                android:layout_marginTop="10dip"
-                android:background="#55000000"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Spinner
-                    android:id="@+id/country_spinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:focusableInTouchMode="false"
-                    android:gravity="center"
-                    android:inputType="none"
-                    android:prompt="@string/spinner_prompt"
-                    android:singleLine="true" />
-            </LinearLayout>
-
-            <RelativeLayout
                 android:id="@+id/registration_fields"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -74,51 +42,47 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.widget.CustomTextView
-                    android:id="@+id/plus"
-                    style="@style/MuseoSansRounded_300_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dip"
-                    android:text="@string/plus"
-                    android:textColor="#ff000000"
-                    android:textSize="20.0sp" />
-
-                <com.widget.CustomTextView
-                    android:id="@+id/country_code"
-                    style="@style/MuseoSansRounded_300_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginTop="4dip"
-                    android:layout_toRightOf="@+id/plus"
-                    android:clickable="true"
-                    android:singleLine="true"
-                    android:textColor="#ff000000"
-                    android:textSize="20sp" />
-
                 <com.widget.CustomEditText
-                    android:id="@+id/signup_phone"
+                    android:id="@id/first_name_edit_text"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:ellipsize="end"
-                    android:hint="@string/dummy_mobile_number_ID"
+                    android:hint="@string/register_name_first"
                     android:imeOptions="actionDone"
-                    android:inputType="phone"
                     android:paddingEnd="0.0sp"
-                    android:paddingLeft="60.0sp"
+                    android:paddingLeft="10.0sp"
                     android:paddingRight="0.0sp"
-                    android:paddingStart="60.0sp"
+                    android:paddingStart="10.0sp"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
                     android:textColor="#ff000000"
                     android:textColorHint="#dd333333"
                     android:textSize="20.0sp"
                     app:font="MuseoSansRounded-300.otf" />
-            </RelativeLayout>
+
+                <com.widget.CustomEditText
+                    android:id="@id/last_name_edit_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:hint="@string/register_name_last"
+                    android:imeOptions="actionDone"
+                    android:paddingEnd="0.0sp"
+                    android:paddingLeft="10.0sp"
+                    android:paddingRight="0.0sp"
+                    android:paddingStart="10.0sp"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#dd333333"
+                    android:textSize="20.0sp"
+                    app:font="MuseoSansRounded-300.otf" />
+            </LinearLayout>
 
             <com.widget.CustomButton
-                android:id="@+id/mobile_verification"
+                android:id="@id/name_verification_button"
                 style="@style/MuseoSansRounded_700_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,8 +92,8 @@
                 android:layout_marginTop="20dip"
                 android:background="@drawable/white_holo_button"
                 android:minHeight="0.0dip"
-                android:text="@string/Ok"
                 android:padding="5dip"
+                android:text="@string/confirm"
                 android:textSize="20.0sp" />
         </LinearLayout>
     </LinearLayout>

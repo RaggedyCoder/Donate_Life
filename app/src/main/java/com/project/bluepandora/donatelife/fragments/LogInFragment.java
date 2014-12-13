@@ -32,7 +32,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.Request.Method;
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
@@ -42,10 +43,6 @@ import com.project.bluepandora.donatelife.activities.MainActivity;
 import com.project.bluepandora.donatelife.activities.SignUpActivity;
 import com.project.bluepandora.donatelife.adapter.CountryListAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
-import com.project.bluepandora.donatelife.data.DRItem;
-import com.project.bluepandora.donatelife.data.UserInfoItem;
-import com.project.bluepandora.donatelife.datasource.DRDataSource;
-import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
@@ -55,7 +52,6 @@ import com.widget.CustomButton;
 import com.widget.CustomEditText;
 import com.widget.CustomTextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,30 +71,13 @@ public class LogInFragment extends Fragment implements URL {
     /**
      * A {@link View} for the whole fragment view.
      */
-    protected View rootView;
-    /**
-     * A TextField{@link CustomTextView} for showing the country code of the user
-     */
-    private CustomTextView countryCode;
-    /**
-     * A {@link Spinner} for showing the country's list
-     */
-    private Spinner countryNameSpinner;
+    private View rootView;
 
     /**
      * A Custom BaseAdapter{@link com.project.bluepandora.donatelife.adapter.CountryListAdapter}
      * for the countryNameSpinner
      */
     private CountryListAdapter countryListAdapter;
-    /**
-     * A Button{@link CustomButton} for sending the username and password to the server
-     * to check the user is valid or not.
-     */
-    private CustomButton signInButton;
-    /**
-     * A Button {@link CustomButton} for the un registered user to sign up.
-     */
-    private CustomButton signUpButton;
     /**
      * An {@link ArrayList} for storing the country codes only for this Fragment.
      */
@@ -108,14 +87,6 @@ public class LogInFragment extends Fragment implements URL {
      * An {@link ArrayList} for storing the Name of the Country only for this Fragment.
      */
     private ArrayList<String> categories;
-    /**
-     * A EditTextField{@link CustomEditText} for the registered user to enter their mobile number.
-     */
-    private CustomEditText mobileNumber;
-    /**
-     * A EditTextField{@link CustomEditText} for the registered user to enter their password.
-     */
-    private CustomEditText password;
     /**
      * A {@link HashMap} for the post request parameter.
      */
@@ -149,6 +120,28 @@ public class LogInFragment extends Fragment implements URL {
 
     private DialogBuilder dialogBuilder;
 
+    private MainViewHolder mainViewHolder;
+
+    /**
+     * A CustomRequest{@link CustomRequest} for the server.This is for sending the user log in or the
+     * sign up request to the server.If the server receive the request.It will send a JSONObject.
+     */
+    private CustomRequest serverRequest;
+    /**
+     * An ErrorListener{@link com.android.volley.Response.ErrorListener} for the serverRequest.
+     * If there is any problem making a request to the server or during of it, mErrorListener
+     * will receive the error message.
+     */
+    private Response.ErrorListener mErrorListener;
+
+    /**
+     * A Listener{@link Response.Listener<JSONObject>} for the serverRequest.
+     * After making a successful request to the server,server will send a {@link JSONObject}.
+     * mJsonObjectListener will receive that JSONObject.
+     */
+    private Response.Listener<JSONObject> mJsonObjectListener;
+
+
     /**
      * Fragments require an empty constructor.
      */
@@ -159,11 +152,10 @@ public class LogInFragment extends Fragment implements URL {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parse = new JSONParser(getActivity());
+        parse = new JSONParser(getActivity(), TAG);
         countryCodes = new ArrayList<String>();
         categories = new ArrayList<String>();
-        countryListAdapter = new CountryListAdapter(getActivity(),
-                categories);
+        countryListAdapter = new CountryListAdapter(getActivity(), categories);
 
     }
 
@@ -172,13 +164,19 @@ public class LogInFragment extends Fragment implements URL {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        rootView = inflater.inflate(R.layout.fragment_signin, container, false);
-        mobileNumber = (CustomEditText) rootView.findViewById(R.id.registration_phone);
-        password = (CustomEditText) rootView.findViewById(R.id.check_reg_pass);
-        signInButton = (CustomButton) rootView.findViewById(R.id.registration_submit);
-        signUpButton = (CustomButton) rootView.findViewById(R.id.signup);
-        countryNameSpinner = (Spinner) rootView.findViewById(R.id.registration_country);
-        countryCode = (CustomTextView) rootView.findViewById(R.id.registration_cc);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_signin, container, false);
+            mainViewHolder = new MainViewHolder();
+            mainViewHolder.mobileNumberEditText = (CustomEditText) rootView.findViewById(R.id.mobile_number_edit_text);
+            mainViewHolder.passwordEditText = (CustomEditText) rootView.findViewById(R.id.password_edit_text);
+            mainViewHolder.logInButton = (CustomButton) rootView.findViewById(R.id.log_in_button);
+            mainViewHolder.signUpButton = (CustomButton) rootView.findViewById(R.id.sign_up_button);
+            mainViewHolder.countryNameSpinner = (Spinner) rootView.findViewById(R.id.country_spinner);
+            mainViewHolder.countryCodeTextView = (CustomTextView) rootView.findViewById(R.id.country_code_text_view);
+            rootView.setTag(mainViewHolder);
+        } else {
+            mainViewHolder = (MainViewHolder) rootView.getTag();
+        }
         return rootView;
     }
 
@@ -187,27 +185,101 @@ public class LogInFragment extends Fragment implements URL {
         super.onActivityCreated(savedInstanceState);
         categories.add("Select a Country");
         categories.add("Bangladesh");
-
         countryCodes.add("");
         countryCodes.add("880");
-
-        countryNameSpinner.setAdapter(countryListAdapter);
+        mainViewHolder.countryNameSpinner.setAdapter(countryListAdapter);
         countryListAdapter.notifyDataSetChanged();
-
         dialogBuilder = new DialogBuilder(getActivity(), TAG);
-        ((ActionBarActivity) getActivity()).getSupportActionBar()
-                .hide();
-
-        mobileNumber.addTextChangedListener(mobileTextWatcher);
-        countryNameSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
-
-        signInButton.setOnClickListener(mSignInListener);
-        signUpButton.setOnClickListener(mSignUpListener);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+        mainViewHolder.mobileNumberEditText.addTextChangedListener(mobileTextWatcher);
+        mainViewHolder.countryNameSpinner.setOnItemSelectedListener(mOnItemSelectedListener);
+        mainViewHolder.logInButton.setOnClickListener(mSignInListener);
+        mainViewHolder.signUpButton.setOnClickListener(mSignUpListener);
+        serverRequest = new CustomRequest(Request.Method.POST, URL, mJsonObjectListener, mErrorListener);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mJsonObjectListener = new Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i(TAG, "Response: " + response.toString());
+                String requestName;
+                try {
+                    requestName = response.getString("requestName");
+                } catch (JSONException e) {
+                    requestName = "";
+                    e.printStackTrace();
+                }
+                if (requestName.equals(BLOODLIST_PARAM)) {
+                    parse.parseJsonBlood(response);
+                    params = ParamsBuilder.districtList();
+                    serverRequest.setParams(params);
+                    AppController.getInstance().addToRequestQueue(serverRequest);
+                } else if (requestName.equals(DISTRICTLIST_PARAM)) {
+                    parse.parseJsonDistrict(response);
+                    params = ParamsBuilder.hospitalList();
+                    serverRequest.setParams(params);
+                    AppController.getInstance().addToRequestQueue(serverRequest);
+                } else if (requestName.equals(HOSPITALLIST_PARAM)) {
+                    parse.parseJsonHospital(response);
+                    if (signUp) {
+                        dialogBuilder.getProgressDialog().dismiss();
+                        Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
+                        startActivity(signUpIntent);
+                        signUp = false;
+                    } else {
+                        params = ParamsBuilder.donationRecord(
+                                "0" + mainViewHolder.mobileNumberEditText.getText().toString());
+                        serverRequest.setParams(params);
+                        AppController.getInstance().addToRequestQueue(serverRequest);
+                    }
+                } else if (requestName.equals(GET_DONATION_RECORD_PARAM)) {
+                    dialogBuilder.getProgressDialog().dismiss();
+                    if (parse.parseDonationInfo(response)) {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        getActivity().startActivity(intent);
+                        getActivity().finish();
+                    } else {
+                        dialogBuilder.createProgressDialog(getString(R.string.unknown_server_error));
+                    }
+                } else if (requestName.equals(USER_INFO)) {
+                    if (parse.parseUserInfo(response,
+                            "0" + mainViewHolder.mobileNumberEditText.getText().toString(),
+                            mainViewHolder.passwordEditText.getText().toString())) {
+                        params = ParamsBuilder.bloodGroupList();
+                        serverRequest.setParams(params);
+                        AppController.getInstance().addToRequestQueue(serverRequest);
+                    } else {
+                        dialogBuilder.getProgressDialog().dismiss();
+                        dialogBuilder.createAlertDialog(getString(R.string.invalid_username_password));
+                    }
+                } else if (requestName.equals(REGISTER_CHECK)) {
+                    dialogBuilder.getProgressDialog().dismiss();
+                    if (parse.parseRegistrationCheck(response)) {
+                        dialogBuilder.createAlertDialog(getString(R.string.already_registered));
+                    } else {
+                        dialogBuilder.createAlertDialog(getString(R.string.not_registered));
+                    }
+                } else {
+                    dialogBuilder.getProgressDialog().dismiss();
+                    dialogBuilder.createProgressDialog(getString(R.string.unknown_server_error));
+                }
+            }
+        };
+        mErrorListener = new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                dialogBuilder.getProgressDialog().dismiss();
+                Toast.makeText(
+                        LogInFragment.this.getActivity(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        };
         mobileTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -216,9 +288,8 @@ public class LogInFragment extends Fragment implements URL {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count > 0 && (s.charAt(0) != '1')) {
-                    mobileNumber.setText("");
+                    mainViewHolder.mobileNumberEditText.setText("");
                 }
-
             }
 
             @Override
@@ -230,8 +301,8 @@ public class LogInFragment extends Fragment implements URL {
         mOnItemSelectedListener = new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                countryCode.setText(countryCodes.get(position));
-                countryCode.setError(null);
+                mainViewHolder.countryCodeTextView.setText(countryCodes.get(position));
+                mainViewHolder.countryCodeTextView.setError(null);
             }
 
             @Override
@@ -243,28 +314,30 @@ public class LogInFragment extends Fragment implements URL {
 
             @Override
             public void onClick(View v) {
-                mobileNumber.clearFocus();
-                password.clearFocus();
-                if (mobileNumber.getText().length() == 0) {
+                mainViewHolder.mobileNumberEditText.clearFocus();
+                mainViewHolder.passwordEditText.clearFocus();
+                if (mainViewHolder.mobileNumberEditText.getText().length() == 0) {
                     dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
                     return;
-                } else if (mobileNumber.getText().length() < 10) {
+                } else if (mainViewHolder.mobileNumberEditText.getText().length() < 10) {
                     dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
                     return;
-                }
-                if (countryCode.getText().length() == 0) {
+                } else if (mainViewHolder.countryCodeTextView.getText().length() == 0) {
                     dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_select_a_country));
                     return;
                 }
                 dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
-                params = ParamsBuilder.bloodGroupList();
-                getJsonData(params);
-                params = ParamsBuilder.districtList();
-                getJsonData(params);
-                params = ParamsBuilder.hospitalList();
-                getJsonData(params);
-                params = ParamsBuilder.registerCheckRequest("0" + mobileNumber.getText());
-                getJsonData(params);
+                if (mainViewHolder.mobileNumberEditText.getText().length() != 0 &&
+                        mainViewHolder.passwordEditText.getText().length() == 0) {
+                    params = ParamsBuilder.registerCheckRequest(
+                            "0" + mainViewHolder.mobileNumberEditText.getText().toString());
+                } else {
+                    params = ParamsBuilder.userInfoRequest(
+                            "0" + mainViewHolder.mobileNumberEditText.getText().toString(),
+                            mainViewHolder.passwordEditText.getText().toString());
+                }
+                serverRequest.setParams(params);
+                AppController.getInstance().addToRequestQueue(serverRequest);
             }
         };
         mSignUpListener = new OnClickListener() {
@@ -273,190 +346,37 @@ public class LogInFragment extends Fragment implements URL {
                 dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
                 signUp = true;
                 params = ParamsBuilder.bloodGroupList();
-                getJsonData(params);
-                params = ParamsBuilder.districtList();
-                getJsonData(params);
-                params = ParamsBuilder.hospitalList();
-                getJsonData(params);
+                serverRequest.setParams(params);
+                AppController.getInstance().addToRequestQueue(serverRequest);
             }
         };
     }
 
-    private void parseJsonregdata(JSONObject response) {
-        try {
-            int data = response.getInt("reg");
-            if (data == 1) {
-                if (password.getText().length() == 0) {
-                    password.setError(getActivity().getResources().getString(
-                            R.string.Warning_enter_a_password));
-                    dialogBuilder.getProgressDialog().dismiss();
-                    return;
-                }
-                params = new HashMap<String, String>();
-                params.put(REQUEST_NAME, USER_INFO);
-                params.put(MOBILE_TAG, "" + 0 + mobileNumber.getText());
-                params.put(PASSWORD_TAG, "" + password.getText());
-                getJsonData(params);
-
-            } else {
-                if (password.getText().length() != 0) {
-                    password.setError(getActivity().getResources().getString(
-                            R.string.Warning_remove_the_password));
-                    dialogBuilder.getProgressDialog().dismiss();
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private static class MainViewHolder {
+        /**
+         * A TextField{@link CustomTextView} for showing the country code of the user
+         */
+        private CustomTextView countryCodeTextView;
+        /**
+         * A {@link Spinner} for showing the country's list
+         */
+        private Spinner countryNameSpinner;
+        /**
+         * A Button{@link CustomButton} for sending the username and password to the server
+         * to check the user is valid or not.
+         */
+        private CustomButton logInButton;
+        /**
+         * A Button {@link CustomButton} for the un registered user to sign up.
+         */
+        private CustomButton signUpButton;
+        /**
+         * A EditTextField{@link CustomEditText} for the registered user to enter their mobile number.
+         */
+        private CustomEditText mobileNumberEditText;
+        /**
+         * A EditTextField{@link CustomEditText} for the registered user to enter their password.
+         */
+        private CustomEditText passwordEditText;
     }
-
-    private void parseJsonUserInfo(JSONObject response) {
-
-        int data;
-        try {
-            data = response.getInt("done");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        if (data == 0) {
-            dialogBuilder.getProgressDialog().dismiss();
-        } else if (data == 1) {
-            UserDataSource userDataBase = new UserDataSource(getActivity());
-            userDataBase.open();
-            UserInfoItem item = new UserInfoItem();
-            JSONArray feedArray = null;
-            try {
-                feedArray = response.getJSONArray("profile");
-            } catch (JSONException e) {
-
-                e.printStackTrace();
-            }
-            if (feedArray != null) {
-                for (int i = 0; i < feedArray.length(); i++) {
-                    JSONObject temp = null;
-                    try {
-                        temp = (JSONObject) feedArray.get(i);
-                    } catch (JSONException e) {
-
-                        e.printStackTrace();
-                    }
-                    if (temp != null) {
-                        try {
-                            item.setFirstName(temp.getString("firstName"));
-                            item.setLastName(temp.getString("lastName"));
-                            item.setKeyWord("" + password.getText());
-                            item.setMobileNumber("" + 0
-                                    + mobileNumber.getText());
-                            item.setGroupId(Integer.parseInt(temp
-                                    .getString("groupId")));
-                            item.setDistId(Integer.parseInt(temp
-                                    .getString("distId")));
-                            try {
-                                userDataBase.createUserInfoItem(item);
-                                userDataBase.close();
-                                HashMap<String, String> params = ParamsBuilder.donationRecord(item.getMobileNumber());
-                                getJsonData(params);
-                            } catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
-                            }
-                        } catch (JSONException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-                    }
-                }
-            }
-
-        }
-    }
-
-    private void parseDonationInfo(JSONObject response) {
-        DRDataSource drDataSource = new DRDataSource(getActivity());
-        drDataSource.open();
-        try {
-            JSONArray array = response.getJSONArray("donationRecord");
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
-                DRItem item = new DRItem();
-                item.setDonationTime(obj.getString("donationDate"));
-                item.setDonationDetails(obj.getString("donationRecord"));
-                drDataSource.createDRItem(item);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            drDataSource.close();
-        }
-    }
-
-    private void getJsonData(final HashMap<String, String> params) {
-
-        CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
-                new Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        VolleyLog.d(TAG, "Response: " + response.toString());
-
-                        if (params.containsValue(BLOODLIST_PARAM)) {
-                            parse.parseJsonBlood(response);
-                        } else if (params
-                                .containsValue(DISTRICTLIST_PARAM)) {
-                            parse.parseJsonDistrict(response);
-                        } else if (params
-                                .containsValue(HOSPITALLIST_PARAM)) {
-                            parse.parseJsonHospital(response);
-                            if (signUp) {
-                                dialogBuilder.getProgressDialog().dismiss();
-                                Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
-                                startActivity(signUpIntent);
-                                signUp = false;
-                            }
-                        } else if (params.containsValue(GET_DONATION_RECORD_PARAM)) {
-                            try {
-                                Log.e("TAG", response.toString(1));
-                                if (response.getInt("done") == 1) {
-                                    parseDonationInfo(response);
-                                    Intent intent = new Intent(getActivity(),
-                                            MainActivity.class);
-                                    getActivity().startActivity(intent);
-                                    getActivity().finish();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Intent intent = new Intent(getActivity(),
-                                    MainActivity.class);
-                            getActivity().startActivity(intent);
-                            getActivity().finish();
-                        } else if (params.containsValue(""
-                                + password.getText())
-                                && params.containsValue("" + 0
-                                + mobileNumber.getText())) {
-                            Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
-                            parseJsonUserInfo(response);
-                        } else if (params.containsValue("" + 0
-                                + mobileNumber.getText())) {
-                            parseJsonregdata(response);
-                        }
-                    }
-
-                }, new ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                dialogBuilder.getProgressDialog().dismiss();
-                Toast.makeText(
-                        LogInFragment.this.getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        AppController.getInstance().addToRequestQueue(jsonReq);
-    }
-
 }

@@ -40,15 +40,15 @@ public class NameVerificationFragment extends Fragment {
     /**
      * A EditTextField{@link CustomEditText} for the First Name.
      */
-    private CustomEditText firstNameField;
+    private CustomEditText firstNameEditText;
     /**
      * A EditTextField confirming the Last Name.
      */
-    private CustomEditText lastNameField;
+    private CustomEditText lastNameEditText;
     /**
      * A Button {@link CustomButton} for the un registered user to verify the name.
      */
-    private CustomButton verificationButton;
+    private CustomButton nameVerificationButton;
     /**
      * A click detection listener for the SignUp Button.
      */
@@ -68,17 +68,17 @@ public class NameVerificationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_nameverification, container, false);
-        verificationButton = (CustomButton) rootView.findViewById(R.id.name_verification);
-        firstNameField = (CustomEditText) rootView.findViewById(R.id.registration_first_name);
-        lastNameField = (CustomEditText) rootView.findViewById(R.id.registration_last_name);
+        rootView = inflater.inflate(R.layout.fragment_name_verification, container, false);
+        nameVerificationButton = (CustomButton) rootView.findViewById(R.id.name_verification_button);
+        firstNameEditText = (CustomEditText) rootView.findViewById(R.id.first_name_edit_text);
+        lastNameEditText = (CustomEditText) rootView.findViewById(R.id.last_name_edit_text);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        verificationButton.setOnClickListener(mVerificationListener);
+        nameVerificationButton.setOnClickListener(mVerificationListener);
     }
 
     @Override
@@ -87,14 +87,14 @@ public class NameVerificationFragment extends Fragment {
         mVerificationListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (firstNameField.getText().toString().length() == 0) {
+                if (firstNameEditText.getText().toString().length() == 0) {
                     createAlertDialog(getString(R.string.first_name_rule));
-                } else if (lastNameField.getText().toString().length() == 0) {
+                } else if (lastNameEditText.getText().toString().length() == 0) {
                     createAlertDialog(getString(R.string.last_name_rule));
                 } else {
                     Bundle bundle = NameVerificationFragment.this.getArguments();
-                    bundle.putString("firstName", firstNameField.getText().toString());
-                    bundle.putString("lastName", lastNameField.getText().toString());
+                    bundle.putString("firstName", firstNameEditText.getText().toString());
+                    bundle.putString("lastName", lastNameEditText.getText().toString());
                     SignUpActivity signUpActivity = (SignUpActivity) getActivity();
                     signUpActivity.changeFragment(bundle, 3);
                 }

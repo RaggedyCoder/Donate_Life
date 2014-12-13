@@ -62,6 +62,9 @@ public class SpinnerAdapter extends BaseAdapter {
         return items.get(position);
     }
 
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
 
     @Override
     public long getItemId(int position) {

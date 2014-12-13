@@ -160,8 +160,8 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             editProfileHolder = new DialogViewHolder();
             editProfileHolder.districtSpinner = (Spinner) editProfile.findViewById(R.id.district_spinner);
             editProfileHolder.districtSpinner.setAdapter(districtSpinnerAdapter);
-            editProfileHolder.firstName = (CustomEditText) editProfile.findViewById(R.id.first_name);
-            editProfileHolder.lastName = (CustomEditText) editProfile.findViewById(R.id.last_name);
+            editProfileHolder.firstNameEditText = (CustomEditText) editProfile.findViewById(R.id.first_name_edit_text);
+            editProfileHolder.lastNameEditText = (CustomEditText) editProfile.findViewById(R.id.last_name_edit_text);
             editProfileHolder.confirmButton = (CustomButton) editProfile.findViewById(R.id.confirm_button);
             editProfileDialogBuilder.setView(editProfile);
             editProfileHolder.confirmPassword = (CustomEditText) editProfile.findViewById(R.id.confirm_password);
@@ -183,8 +183,8 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             holder.profileEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    editProfileHolder.firstName.setText(infoItem.getFirstName());
-                    editProfileHolder.lastName.setText(infoItem.getLastName());
+                    editProfileHolder.firstNameEditText.setText(infoItem.getFirstName());
+                    editProfileHolder.lastNameEditText.setText(infoItem.getLastName());
                     editProfileHolder.confirmButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -192,8 +192,8 @@ public class ProfileDetailsAdapter extends BaseAdapter {
                                 dialogBuilder.createAlertDialog("Wrong Password!");
                             } else {
                                 HashMap<String, String> params = ParamsBuilder.updateUserRequest(
-                                        editProfileHolder.firstName.getText().toString(),
-                                        editProfileHolder.lastName.getText().toString(),
+                                        editProfileHolder.firstNameEditText.getText().toString(),
+                                        editProfileHolder.lastNameEditText.getText().toString(),
                                         Integer.toString(((DistrictItem) editProfileHolder.districtSpinner.getSelectedItem()).getDistId()),
                                         Integer.toString(infoItem.getGroupId()),
                                         infoItem.getMobileNumber(),
@@ -324,8 +324,8 @@ public class ProfileDetailsAdapter extends BaseAdapter {
     static class DialogViewHolder {
         private Spinner districtSpinner;
         private CustomButton confirmButton;
-        private CustomEditText firstName;
-        private CustomEditText lastName;
+        private CustomEditText firstNameEditText;
+        private CustomEditText lastNameEditText;
         private CustomEditText confirmPassword;
     }
 

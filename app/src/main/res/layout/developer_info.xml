@@ -9,9 +9,9 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_gravity="center"
         android:layout_margin="15dip"
-        android:layout_gravity="center">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -22,12 +22,12 @@
             <com.makeramen.RoundedImageView
                 android:layout_width="70dip"
                 android:layout_height="70dip"
-                android:layout_marginTop="15dip"
-                android:layout_marginRight="15dip"
                 android:layout_marginBottom="15dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginTop="15dip"
+                android:src="@drawable/the_doctor"
                 android:tint="#44123456"
-                app:oval="true"
-                android:src="@drawable/the_doctor" />
+                app:oval="true" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -37,25 +37,25 @@
                 android:orientation="vertical">
 
                 <com.widget.CustomButton
-                    android:id="@+id/the_doctor_facebook"
-                    android:clickable="true"
+                    android:id="@id/the_doctor_facebook"
                     android:layout_width="wrap_content"
-                    android:background="@android:color/transparent"
                     android:layout_height="wrap_content"
-                    app:font="MuseoSansRounded-300.otf"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
                     android:text="@string/the_doctor"
-                    android:textSize="26sp" />
+                    android:textSize="26sp"
+                    app:font="MuseoSansRounded-300.otf" />
 
                 <com.widget.CustomButton
-                    android:id="@+id/the_doctor_email"
-                    android:clickable="true"
+                    android:id="@id/the_doctor_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:layout_marginBottom="15dip"
-                    app:font="MuseoSansRounded-300.otf"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
                     android:text="@string/the_doctor_email"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:font="MuseoSansRounded-300.otf" />
             </LinearLayout>
 
         </LinearLayout>
@@ -71,12 +71,12 @@
             <com.makeramen.RoundedImageView
                 android:layout_width="70dip"
                 android:layout_height="70dip"
-                android:layout_marginTop="15dip"
-                android:layout_marginRight="15dip"
                 android:layout_marginBottom="15dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginTop="15dip"
+                android:src="@drawable/coder_bd"
                 android:tint="#44654321"
-                app:oval="true"
-                android:src="@drawable/coder_bd" />
+                app:oval="true" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -86,26 +86,26 @@
                 android:orientation="vertical">
 
                 <com.widget.CustomButton
-                    android:id="@+id/coder_bd_facebook"
-                    android:clickable="true"
+                    android:id="@id/coder_bd_facebook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:font="MuseoSansRounded-300.otf"
                     android:background="@android:color/transparent"
-
+                    android:clickable="true"
                     android:text="@string/coder_bd"
-                    android:textSize="26sp" />
+
+                    android:textSize="26sp"
+                    app:font="MuseoSansRounded-300.otf" />
 
                 <com.widget.CustomButton
-                    android:id="@+id/coder_bd_email"
-                    android:clickable="true"
+                    android:id="@id/coder_bd_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dip"
                     android:background="@android:color/transparent"
-                    app:font="MuseoSansRounded-300.otf"
+                    android:clickable="true"
                     android:text="@string/coder_bd_email"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:font="MuseoSansRounded-300.otf" />
             </LinearLayout>
 
         </LinearLayout>

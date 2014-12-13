@@ -142,17 +142,17 @@ public class FeedListAdapter extends BaseAdapter {
         }
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
                 date.getTime(), dateNow.getTime(), DateUtils.SECOND_IN_MILLIS);
-        holder.timestamp.setText(timeAgo);
+        holder.timestampTextView.setText(timeAgo);
 
         if (!TextUtils.isEmpty(item.getEmergency())) {
-            holder.emergency.setText(R.string.emergency_text);
+            holder.emergencyTextView.setText(R.string.emergency_text);
 
         } else {
-            holder.emergency.setText(R.string.non_emergency_text);
+            holder.emergencyTextView.setText(R.string.non_emergency_text);
         }
         final View view = convertView;
         final FeedItem list = item;
-        holder.button1.setOnClickListener(new OnClickListener() {
+        holder.popupMenuButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 createPopupMenu(item.getContact(), holder);
@@ -196,36 +196,36 @@ public class FeedListAdapter extends BaseAdapter {
                         return false;
                     }
                 });
-        holder.bloodGroup.setText(item.getBloodGroup());
+        holder.bloodGroupTextView.setText(item.getBloodGroup());
         String blood = activity.getResources().getQuantityString(
                 R.plurals.bags, item.getBloodAmount(), item.getBloodAmount());
-        holder.bloodAmount.setText(blood);
-        holder.hospital.setSelected(true);
-        holder.hospital.setText(item.getHospital());
-        holder.area.setText(item.getArea());
-        holder.contact.setText(item.getContact());
-        holder.contact.setSelected(true);
+        holder.bloodAmountTextView.setText(blood);
+        holder.hospitalTextView.setSelected(true);
+        holder.hospitalTextView.setText(item.getHospital());
+        holder.areaTextView.setText(item.getArea());
+        holder.contactTextView.setText(item.getContact());
+        holder.contactTextView.setSelected(true);
         return convertView;
     }
 
     private void setholder(View convertView, ViewHolder holder) {
-        holder.timestamp = (CustomTextView) convertView
-                .findViewById(R.id.timeStamp_text_view);
-        holder.emergency = (CustomTextView) convertView
+        holder.timestampTextView = (CustomTextView) convertView
+                .findViewById(R.id.timestamp_text_view);
+        holder.emergencyTextView = (CustomTextView) convertView
                 .findViewById(R.id.emergency_text_view);
-        holder.button1 = (ImageButton) convertView
-                .findViewById(R.id.option_button_1);
-        holder.bloodGroup = (CustomTextView) convertView
-                .findViewById(R.id.bloodGroupID_text_view);
-        holder.bloodAmount = (CustomTextView) convertView
-                .findViewById(R.id.bloodAmountID_text_view);
-        holder.hospital = (CustomTextView) convertView
-                .findViewById(R.id.hospitalNameID_text_view);
-        holder.area = (CustomTextView) convertView
-                .findViewById(R.id.areaNameID_text_view);
-        holder.contact = (CustomTextView) convertView
-                .findViewById(R.id.mobileNumberID_text_view);
-        holder.popupMenu = new PopupMenu(activity, holder.button1);
+        holder.popupMenuButton = (ImageButton) convertView
+                .findViewById(R.id.popup_menu_button);
+        holder.bloodGroupTextView = (CustomTextView) convertView
+                .findViewById(R.id.blood_group_text_view);
+        holder.bloodAmountTextView = (CustomTextView) convertView
+                .findViewById(R.id.blood_amount_text_view);
+        holder.hospitalTextView = (CustomTextView) convertView
+                .findViewById(R.id.hospital_name_text_view);
+        holder.areaTextView = (CustomTextView) convertView
+                .findViewById(R.id.area_name_text_view);
+        holder.contactTextView = (CustomTextView) convertView
+                .findViewById(R.id.contact_text_view);
+        holder.popupMenu = new PopupMenu(activity, holder.popupMenuButton);
         holder.needInflate = false;
     }
 
@@ -297,14 +297,14 @@ public class FeedListAdapter extends BaseAdapter {
 
     public static class ViewHolder {
         public boolean needInflate;
-        CustomTextView timestamp;
-        CustomTextView emergency;
-        CustomTextView bloodGroup;
-        CustomTextView bloodAmount;
-        CustomTextView hospital;
-        CustomTextView contact;
-        CustomTextView area;
-        ImageButton button1;
+        CustomTextView timestampTextView;
+        CustomTextView emergencyTextView;
+        CustomTextView bloodGroupTextView;
+        CustomTextView bloodAmountTextView;
+        CustomTextView hospitalTextView;
+        CustomTextView contactTextView;
+        CustomTextView areaTextView;
+        ImageButton popupMenuButton;
         PopupMenu popupMenu;
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/about_container"
+    android:id="@id/about_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <com.widget.CustomTextView
-        android:id="@+id/about_header"
+        android:id="@id/about_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
@@ -19,7 +19,7 @@
         android:textSize="18sp" />
 
     <com.widget.CustomTextView
-        android:id="@+id/about_body"
+        android:id="@id/about_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"

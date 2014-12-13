@@ -33,6 +33,12 @@ public class CustomRequest extends Request<JSONObject> {
         this.params = params;
     }
 
+    public CustomRequest(int method, String url,
+                         Listener<JSONObject> responseListener, ErrorListener errorListener) {
+        super(method, url, errorListener);
+        this.listener = responseListener;
+    }
+
     @Override
     protected void deliverResponse(JSONObject response) {
 
@@ -54,13 +60,13 @@ public class CustomRequest extends Request<JSONObject> {
         }
     }
 
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
 
         return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 }

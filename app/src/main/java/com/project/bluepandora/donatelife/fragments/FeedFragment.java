@@ -101,14 +101,14 @@ public class FeedFragment extends Fragment implements URL {
     public static boolean firstTime = true;
     public static boolean slideChange = false;
     public JSONObject json;
-    public SwipeRefreshLayout mSwipeRefreshLayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
     public UserInfoItem userInfo;
-    private ListView listView;
+    private ListView feedListView;
     private FeedListAdapter listAdapter;
     private List<Item> feedItems;
     private ImageButton actionButton;
     private Drawable mActionBarBackgroundDrawable;
-    private ProgressBar progress;
+    private ProgressBar progressBar;
     private CustomTextView mTitle;
     private View mCustomView;
     private OnRefreshListener mOnFeedRefresh;
@@ -135,11 +135,11 @@ public class FeedFragment extends Fragment implements URL {
         View rootView = inflater.inflate(R.layout.fragment_feed, container,
                 false);
         setHasOptionsMenu(true);
-        listView = (ListView) rootView.findViewById(R.id.list);
+        feedListView = (ListView) rootView.findViewById(R.id.feed_list_view);
         listAdapter = new FeedListAdapter(getActivity(), feedItems);
         actionButton = (ImageButton) rootView.findViewById(R.id.action_button);
-        progress = (ProgressBar) rootView.findViewById(R.id.progress);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar_background);
         mActionBarBackgroundDrawable.setAlpha(255);
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
@@ -174,13 +174,13 @@ public class FeedFragment extends Fragment implements URL {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listView.setAdapter(listAdapter);
-        mSwipeRefreshLayout.setColorSchemeResources(
+        feedListView.setAdapter(listAdapter);
+        swipeRefreshLayout.setColorSchemeResources(
                 R.color.holo_blue_dark,
                 R.color.holo_green_dark,
                 R.color.holo_purple,
                 R.color.holo_red_dark);
-        mSwipeRefreshLayout.setOnRefreshListener(mOnFeedRefresh);
+        swipeRefreshLayout.setOnRefreshListener(mOnFeedRefresh);
 
         mTitle.setText(R.string.blood_feed);
         customizeActionbar();
@@ -199,9 +199,9 @@ public class FeedFragment extends Fragment implements URL {
             public void onAnimationEnd(Animation animation) {
                 int[] origin = new int[2];
                 actionButton.getLocationOnScreen(origin);
-                int xDest = listView.getMeasuredWidth() / 2;
+                int xDest = feedListView.getMeasuredWidth() / 2;
                 xDest -= (actionButton.getMeasuredWidth() / 2);
-                int yDest = listView.getMeasuredHeight() / 2;
+                int yDest = feedListView.getMeasuredHeight() / 2;
                 yDest -= (actionButton.getMeasuredHeight() / 2)
                         - getActivity().getResources().getDimensionPixelSize(
                         R.dimen.abc_action_bar_default_height_material);
@@ -228,9 +228,9 @@ public class FeedFragment extends Fragment implements URL {
                         .getMetrics(dm);
                 int[] origin = new int[2];
                 actionButton.getLocationOnScreen(origin);
-                int xDest = listView.getMeasuredWidth() / 2;
+                int xDest = feedListView.getMeasuredWidth() / 2;
                 xDest -= (actionButton.getMeasuredWidth() / 2);
-                int yDest = listView.getMeasuredHeight() / 2;
+                int yDest = feedListView.getMeasuredHeight() / 2;
                 yDest -= (actionButton.getMeasuredHeight() / 2)
                         - getActivity().getResources().getDimensionPixelSize(
                         R.dimen.abc_action_bar_default_height_material);
@@ -254,12 +254,12 @@ public class FeedFragment extends Fragment implements URL {
         mOnFeedRefresh = new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                progress.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 Handler h = new Handler();
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }, 2000);
 
@@ -272,14 +272,14 @@ public class FeedFragment extends Fragment implements URL {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_refresh) {
-            progress.setVisibility(View.VISIBLE);
-            mSwipeRefreshLayout.setRefreshing(true);
+            progressBar.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setRefreshing(true);
             jsonObjectRequest();
             new Handler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }, 4000);
             return true;
@@ -350,7 +350,7 @@ public class FeedFragment extends Fragment implements URL {
                                 Toast.makeText(getActivity(),
                                         "Not Found Any Blood Request",
                                         Toast.LENGTH_LONG).show();
-                                progress.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
                                 return;
                             }
                         } catch (JSONException e) {
@@ -520,7 +520,7 @@ public class FeedFragment extends Fragment implements URL {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
                     .show();
         }
-        progress.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void customizeActionbar() {
