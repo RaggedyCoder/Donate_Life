@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import static com.project.bluepandora.util.CommonUtilities.displayMessage;
-
 
 public final class ServerUtilities {
     private static final int MAX_ATTEMPTS = 5;
@@ -60,12 +58,12 @@ public final class ServerUtilities {
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             Log.d(CommonUtilities.TAG, "Attempt #" + i + " to register");
             try {
-                displayMessage(context, context.getString(
-                        R.string.server_registering, i, MAX_ATTEMPTS));
+                //displayMessage(context, context.getString(
+                //   R.string.server_registering, i, MAX_ATTEMPTS));
                 post(serverUrl, params);
                 GCMRegistrar.setRegisteredOnServer(context, true);
                 String message = context.getString(R.string.server_registered);
-                CommonUtilities.displayMessage(context, message);
+                //  CommonUtilities.displayMessage(context, message);
                 return;
             } catch (IOException e) {
                 // Here we are simplifying and retrying on any error; in a real
@@ -90,7 +88,7 @@ public final class ServerUtilities {
         }
         String message = context.getString(R.string.server_register_error,
                 MAX_ATTEMPTS);
-        CommonUtilities.displayMessage(context, message);
+        //CommonUtilities.displayMessage(context, message);
     }
 
     /**
@@ -107,7 +105,7 @@ public final class ServerUtilities {
             post(serverUrl, params);
             GCMRegistrar.setRegisteredOnServer(context, false);
             String message = context.getString(R.string.server_unregistered);
-            CommonUtilities.displayMessage(context, message);
+            // CommonUtilities.displayMessage(context, message);
             return true;
         } catch (IOException e) {
             // At this point the device is unregistered from GCM, but still
@@ -117,7 +115,7 @@ public final class ServerUtilities {
             // a "NotRegistered" error message and should unregister the device.
             String message = context.getString(R.string.server_unregister_error,
                     e.getMessage());
-            CommonUtilities.displayMessage(context, message);
+            // CommonUtilities.displayMessage(context, message);
             return false;
         }
     }

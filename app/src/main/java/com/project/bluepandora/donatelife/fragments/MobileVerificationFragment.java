@@ -248,7 +248,7 @@ public class MobileVerificationFragment extends Fragment implements URL {
                                 createAlertDialog(getString(R.string.already_registered));
                             } else {
                                 Bundle bundle = new Bundle();
-                                bundle.putString("mobileNumberEditText", 0 + mobileNumberEditText.getText().toString());
+                                bundle.putString("mobileNumber", 0 + mobileNumberEditText.getText().toString());
                                 SignUpActivity signUpActivity = (SignUpActivity) getActivity();
                                 signUpActivity.changeFragment(bundle, 1);
                             }

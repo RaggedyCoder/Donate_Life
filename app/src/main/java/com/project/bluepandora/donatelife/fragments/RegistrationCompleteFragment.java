@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -269,13 +268,8 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 VolleyLog.e(TAG, "Error: " + error.getMessage());
-
                 dialogBuilder.getProgressDialog().dismiss();
-                Toast.makeText(
-                        RegistrationCompleteFragment.this.getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         };
