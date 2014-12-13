@@ -262,13 +262,14 @@ public class MainActivity extends ActionBarActivity {
             deleteFile("feed.json");
             final ConnectionManager con = new ConnectionManager(this);
             final UserDataSource userDatabase = new UserDataSource(this);
+
             userDatabase.open();
             final ArrayList<UserInfoItem> items = userDatabase.getAllUserItem();
             mRegisterTask = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     if (con.isConnectingToInternet()) {
-                        ServerUtilities.unregister(MainActivity.this, items.get(0).getMobileNumber());
+                        logout = ServerUtilities.unregister(MainActivity.this, items.get(0).getMobileNumber());
                     } else {
                         return null;
                     }
@@ -278,11 +279,15 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     if (!con.isConnectingToInternet()) {
+                        pd.dismiss();
                         Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
                         return;
                     }
                     for (UserInfoItem i : items) {
                         userDatabase.deleteUserInfoitem(i);
+                    }
+                    if (!logout) {
+                        return;
                     }
                     userDatabase.close();
                     DRDataSource dataSource = new DRDataSource(MainActivity.this);
@@ -305,6 +310,7 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    boolean logout = false;
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
