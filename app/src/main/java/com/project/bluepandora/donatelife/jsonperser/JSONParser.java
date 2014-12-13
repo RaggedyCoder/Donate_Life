@@ -40,7 +40,7 @@ public class JSONParser {
 
     private static final int DONE = 1;
     private static final int ERROR = 0;
-    private static final String NO_DONATION_RECORD = "DONATION RECORD NOT FOUND";
+    private static final String NO_DONATION_RECORD = "DONATION RECORD NOT FOUND!";
     private Context context;
     private String TAG;
 

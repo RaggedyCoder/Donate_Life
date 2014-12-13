@@ -46,11 +46,9 @@ import com.google.android.gcm.GCMRegistrar;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.adapter.SlideMenuAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
-import com.project.bluepandora.donatelife.data.DRItem;
 import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.data.SlideItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
-import com.project.bluepandora.donatelife.datasource.DRDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.fragments.FeedFragment;
 import com.project.bluepandora.donatelife.fragments.ProfileDetailsFragment;
@@ -282,15 +280,14 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     try {
+                        Log.e(TAG, jsonObject.toString(1));
                         if (jsonObject.getInt("done") == 1) {
-                            userDatabase.close();
-                            DRDataSource dataSource = new DRDataSource(MainActivity.this);
-                            dataSource.open();
-                            ArrayList<DRItem> items = dataSource.getAllDRItem();
-                            for (DRItem item : items) {
-                                dataSource.deleteDistrictitem(item);
+                            userDatabase.open();
+                            ArrayList<UserInfoItem> userInfoItems = userDatabase.getAllUserItem();
+                            for (UserInfoItem userInfoItem : userInfoItems) {
+                                userDatabase.deleteUserInfoitem(userInfoItem);
                             }
-                            dataSource.close();
+                            userDatabase.close();
                             pd.dismiss();
                             Intent intent = new Intent(MainActivity.this, LogInActivity.class);
                             startActivity(intent);
