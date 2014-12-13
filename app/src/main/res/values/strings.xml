@@ -150,7 +150,7 @@
     <string name="donor_zero_grammar_correct">No donor available</string>
     <string name="donor_zero_grammar_error">Total 0 donors available</string>
     <string name="zero_grammar_error">0 Times</string>
-    <string name="about_version_build_code">Version 1.1.1 | build 20141128</string>
+    <string name="about_version_build_code">Version 1.1.1 | build 20141213</string>
     <string name="about_usage_policy">Donate Life is for personal and non-commercial use only.</string>
     <string name="about_legal_license">legal information about licenses</string>
     <string name="name_and_contact">Name and contact</string>
