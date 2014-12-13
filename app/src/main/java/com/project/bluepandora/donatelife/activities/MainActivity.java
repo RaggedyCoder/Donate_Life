@@ -39,6 +39,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gcm.GCMRegistrar;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.adapter.SlideMenuAdapter;
@@ -54,12 +57,18 @@ import com.project.bluepandora.donatelife.fragments.ProfileDetailsFragment;
 import com.project.bluepandora.donatelife.fragments.RequestFragment;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.services.ServerUtilities;
+import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.project.bluepandora.util.CommonUtilities;
 import com.project.bluepandora.util.ConnectionManager;
 import com.project.bluepandora.util.WakeLocker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.project.bluepandora.util.CommonUtilities.EXTRA_MESSAGE;
 import static com.project.bluepandora.util.CommonUtilities.SENDER_ID;
@@ -265,52 +274,50 @@ public class MainActivity extends ActionBarActivity {
 
             userDatabase.open();
             final ArrayList<UserInfoItem> items = userDatabase.getAllUserItem();
-            mRegisterTask = new AsyncTask<Void, Void, Void>() {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put(URL.REQUEST_NAME, URL.GCMREGISTER_PARAM);
+            params.put(URL.MOBILE_TAG, items.get(0).getMobileNumber());
+            params.put(URL.GCM_TAG, " ");
+            CustomRequest customRequest = new CustomRequest(Request.Method.POST, URL.URL, params, new Response.Listener<JSONObject>() {
                 @Override
-                protected Void doInBackground(Void... params) {
-                    if (con.isConnectingToInternet()) {
-                        logout = ServerUtilities.unregister(MainActivity.this, items.get(0).getMobileNumber());
-                    } else {
-                        return null;
+                public void onResponse(JSONObject jsonObject) {
+                    try {
+                        if (jsonObject.getInt("done") == 1) {
+                            userDatabase.close();
+                            DRDataSource dataSource = new DRDataSource(MainActivity.this);
+                            dataSource.open();
+                            ArrayList<DRItem> items = dataSource.getAllDRItem();
+                            for (DRItem item : items) {
+                                dataSource.deleteDistrictitem(item);
+                            }
+                            dataSource.close();
+                            pd.dismiss();
+                            Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            pd.dismiss();
+                            Toast.makeText(MainActivity.this, R.string.unknown_server_error, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    return null;
                 }
-
+            }, new Response.ErrorListener() {
                 @Override
-                protected void onPostExecute(Void aVoid) {
-                    if (!con.isConnectingToInternet()) {
-                        pd.dismiss();
-                        Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    for (UserInfoItem i : items) {
-                        userDatabase.deleteUserInfoitem(i);
-                    }
-                    if (!logout) {
-                        return;
-                    }
-                    userDatabase.close();
-                    DRDataSource dataSource = new DRDataSource(MainActivity.this);
-                    dataSource.open();
-                    ArrayList<DRItem> items = dataSource.getAllDRItem();
-                    for (DRItem item : items) {
-                        dataSource.deleteDistrictitem(item);
-                    }
-                    dataSource.close();
+                public void onErrorResponse(VolleyError volleyError) {
                     pd.dismiss();
-                    Intent intent = new Intent(MainActivity.this, LogInActivity.class);
-                    startActivity(intent);
-                    finish();
-                    mRegisterTask = null;
+                    Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
                 }
-
-            };
-            mRegisterTask.execute(null, null, null);
+            });
+            AppController.getInstance().addToRequestQueue(customRequest);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     boolean logout = false;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

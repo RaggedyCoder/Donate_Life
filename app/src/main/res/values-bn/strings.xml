@@ -142,7 +142,7 @@
     <string name="unknown_server_error">কিছু একটা সমস্যা দেখা দিয়েছে&#8230;   কিছুক্ষন পর আবার চেস্টা করুন।</string>
     <string name="no_update">ফিড আপ টু ডেট</string>
     <string name="own_request_delete">আপনার নিজস্ব অনুরোধটি মুছে ফেলা হয়েছে।</string>
-    <string name="no_donor_availibility">দুঃক্ষিত এই মুহুর্থে কোনো রক্তদাতা নেই।</string>
+    <string name="no_donor_availibility">দুঃক্ষিত এই মুহুর্তে কোনো রক্তদাতা নেই।</string>
     <string name="donation_record_delete">রক্তদানের তথ্যটি মুছে ফেলা হয়েছে</string>
     <string name="no_hospital_tag">দুঃক্ষিত! এই শহরের জন্যে কোনো হাসপাতাল রেকর্ডে নেই।</string>
     <string name="sms_alert">আপনিকি এসএমএস অনুরোধটির ব্যাপারে নিশ্চিত?</string>
@@ -153,7 +153,7 @@
     <string name="donation_rule">নতুন ডোনেশন এর তথ্যটি পুর্বের কোনো তথ্যের সাথে সাংঘর্ষিক</string>
     <string name="first_name_rule">নামের প্রথম অংশের ঘরটি খালি অবশ্যই পূরন করতে হবে।</string>
     <string name="last_name_rule">নামের শেষ অংশের ঘরটি অবশ্যই পূরণ করতে হবে।</string>
-    <string name="ok">ওকে।</string>
+    <string name="ok">ওকে</string>
     <string name="yes">হ্যা</string>
     <string name="no">না</string>
     <string name="about">অ্যাপটির সম্পর্কে</string>

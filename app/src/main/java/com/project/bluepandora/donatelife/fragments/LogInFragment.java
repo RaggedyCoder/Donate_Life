@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -277,9 +276,6 @@ public class LogInFragment extends Fragment implements URL {
 
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 dialogBuilder.getProgressDialog().dismiss();
-                Toast.makeText(
-                        LogInFragment.this.getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
             }
         };
         mobileTextWatcher = new TextWatcher() {
