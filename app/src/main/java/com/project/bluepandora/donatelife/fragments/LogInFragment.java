@@ -265,7 +265,7 @@ public class LogInFragment extends Fragment implements URL {
                     }
                 } else {
                     dialogBuilder.getProgressDialog().dismiss();
-                    dialogBuilder.createProgressDialog(getString(R.string.unknown_server_error));
+                    dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
                 }
             }
         };

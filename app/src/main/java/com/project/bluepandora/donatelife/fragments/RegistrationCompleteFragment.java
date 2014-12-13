@@ -253,10 +253,17 @@ public class RegistrationCompleteFragment extends Fragment implements URL {
                 dialogBuilder.getProgressDialog().dismiss();
                 try {
                     if (response.getInt("done") == 1) {
-                        dialogBuilder.createAlertDialog(null, getString(R.string.done), mOnClickListener);
-
+                        dialogBuilder.createAlertDialog("Notice", getString(R.string.done), mOnClickListener);
                     } else {
-                        dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
+                        if (response.has("reg")) {
+                            if (response.getInt("reg") == 1) {
+                                dialogBuilder.createAlertDialog("Notice", getString(R.string.done), mOnClickListener);
+                            } else {
+                                dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
+                            }
+                        } else {
+                            dialogBuilder.createAlertDialog(getString(R.string.unknown_server_error));
+                        }
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, e.getMessage());
