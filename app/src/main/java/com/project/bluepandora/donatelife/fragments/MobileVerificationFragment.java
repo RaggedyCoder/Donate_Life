@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -261,14 +260,9 @@ public class MobileVerificationFragment extends Fragment implements URL {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                createAlertDialog(getString(R.string.unknown_server_error));
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-
                 pd.dismiss();
-                Toast.makeText(
-                        MobileVerificationFragment.this.getActivity(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
         AppController.getInstance().addToRequestQueue(jsonReq);
