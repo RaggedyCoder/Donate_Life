@@ -334,7 +334,23 @@ public class FeedFragment extends Fragment implements URL {
 
     private void jsonObjectRequest() {
 
-        HashMap<String, String> params = ParamsBuilder.bloodRequestFeed();
+        HashMap<String, String> params = null;
+
+        boolean distFilter = PreferenceManager.getDefaultSharedPreferences(
+                getActivity()).getBoolean(SettingsActivity.DISTRICT_FILTER_TAG, false);
+        boolean groupFilter = PreferenceManager.getDefaultSharedPreferences(
+                getActivity()).getBoolean(SettingsActivity.GROUP_FILTER_TAG, false);
+        String distId = Integer.toString(userInfo.getDistId());
+        String groupId = Integer.toString(userInfo.getGroupId());
+        if (distFilter && groupFilter) {
+            params = ParamsBuilder.bloodRequestFeed(distId, groupId);
+        } else if (distFilter) {
+            params = ParamsBuilder.bloodRequestFeed(Integer.parseInt(distId));
+        } else if (groupFilter) {
+            params = ParamsBuilder.bloodRequestFeed(groupId);
+        } else {
+            params = ParamsBuilder.bloodRequestFeed();
+        }
 
         CustomRequest jsonReq = new CustomRequest(Method.POST, URL, params,
                 new Listener<JSONObject>() {

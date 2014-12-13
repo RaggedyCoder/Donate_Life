@@ -29,7 +29,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="15dip"
                     android:layout_marginTop="15dip"
-                    android:text="From:"
+                    android:text="@string/from"
                     android:textSize="20sp"
                     app:font="MuseoSansRounded-700.otf" />
 
@@ -70,7 +70,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="15dip"
                     android:gravity="center"
-                    android:text="Subject:"
+                    android:text="@string/subject"
                     android:textSize="20sp"
                     app:font="MuseoSansRounded-700.otf" />
 
@@ -94,7 +94,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="15dip"
                     android:gravity="center"
-                    android:text="District:"
+                    android:text="@string/district"
                     android:textSize="20sp"
                     app:font="MuseoSansRounded-700.otf" />
 

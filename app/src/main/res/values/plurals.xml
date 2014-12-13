@@ -12,6 +12,11 @@
         <item quantity="other">@string/other_donation_record</item>
     </plurals>
 
+    <plurals name="changing">
+        <item quantity="one">%d</item>
+        <item quantity="other">%d</item>
+    </plurals>
+
     <plurals name="numbers">
         <item quantity="other">@string/pref_key_feed_show_limit</item>
     </plurals>

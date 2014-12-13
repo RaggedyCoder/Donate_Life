@@ -162,8 +162,8 @@ public class FeedBackFragment extends Fragment implements URL {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         subject = new ArrayList<String>();
-        subject.add("App feedback");
-        subject.add("Hospital Suggestion");
+        subject.add(getString(R.string.app_feedback));
+        subject.add(getString(R.string.hospital_feedback));
 
         districtDataSource = new DistrictDataSource(getActivity());
         districtDataSource.open();
@@ -220,6 +220,7 @@ public class FeedBackFragment extends Fragment implements URL {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mainViewHolder.textCounterTextView.setText(getResources().getQuantityString(R.plurals.changing, 400, 400));
     }
 
     @Override
@@ -234,7 +235,7 @@ public class FeedBackFragment extends Fragment implements URL {
         mSendFeedbackClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mainViewHolder.subjectSpinner.getSelectedItem().equals("Hospital Suggestion")) {
+                if (mainViewHolder.subjectSpinner.getSelectedItem().equals(getString(R.string.hospital_feedback))) {
                     DistrictItem item = (DistrictItem) districtSpinnerAdapter.getItem(
                             mainViewHolder.districtSpinner.getSelectedItemPosition());
                     params = ParamsBuilder.feedbackRequest(
@@ -243,7 +244,7 @@ public class FeedBackFragment extends Fragment implements URL {
                             "District: " + item.getDistName() +
                                     " Hospital: " + mainViewHolder.feedbackEditText.getText().toString().trim());
 
-                } else if (mainViewHolder.subjectSpinner.getSelectedItem().equals("App feedback")) {
+                } else if (mainViewHolder.subjectSpinner.getSelectedItem().equals(getString(R.string.app_feedback))) {
                     params = ParamsBuilder.feedbackRequest(
                             mainViewHolder.mobileNumberTextView.getText().toString(),
                             "App feedback",
@@ -264,7 +265,7 @@ public class FeedBackFragment extends Fragment implements URL {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 final int feedBackTextSize = mainViewHolder.feedbackEditText.getText().toString().trim().length();
-                final String feedBackTextCounter = Integer.toString((400 - feedBackTextSize));
+                final String feedBackTextCounter = getResources().getQuantityString(R.plurals.changing, (400 - feedBackTextSize), (400 - feedBackTextSize));
                 mainViewHolder.textCounterTextView.setText(feedBackTextCounter);
                 if (mainViewHolder.feedbackEditText.getText().toString().trim().length() == 0) {
                     mainViewHolder.sendFeedbackButton.setEnabled(false);
@@ -312,12 +313,12 @@ public class FeedBackFragment extends Fragment implements URL {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String string = subjectSpinnerAdapter.getItem(position);
-                if (string.equals("App feedback")) {
+                if (string.equals(getString(R.string.app_feedback))) {
                     mainViewHolder.districtHolderLayout.setVisibility(View.GONE);
-                    mainViewHolder.feedbackEditText.setHint("Write your feedback...");
+                    mainViewHolder.feedbackEditText.setHint(getString(R.string.write_feedback));
                 } else {
                     mainViewHolder.districtHolderLayout.setVisibility(View.VISIBLE);
-                    mainViewHolder.feedbackEditText.setHint("Suggest Hospital...");
+                    mainViewHolder.feedbackEditText.setHint(getString(R.string.hospital_suggestion));
                 }
             }
 

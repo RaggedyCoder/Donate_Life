@@ -93,6 +93,14 @@ public class PasswordVerificationFragment extends Fragment {
                     createAlertDialog(getString(R.string.Warning_enter_a_password));
                 } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())) {
                     createAlertDialog(getString(R.string.Warning_password_not_matched));
+                } else if (passwordField.getText().toString().length() < 6) {
+                    createAlertDialog(getString(R.string.Warning_password_not_matched));
+                } else if (!hasUpperCase(passwordField.getText().toString())) {
+                    createAlertDialog(getString(R.string.warning_no_uppercase));
+                } else if (!hasLowerCase(passwordField.getText().toString())) {
+                    createAlertDialog(getString(R.string.warning_no_lowercase));
+                } else if (!hasNumber(passwordField.getText().toString())) {
+                    createAlertDialog(getString(R.string.warning_no_number));
                 } else {
                     Bundle bundle = PasswordVerificationFragment.this.getArguments();
                     bundle.putString("password", passwordField.getText().toString());
@@ -103,6 +111,37 @@ public class PasswordVerificationFragment extends Fragment {
             }
         };
     }
+
+    private boolean hasUpperCase(String keyWord) {
+        boolean flag = false;
+        for (char k : keyWord.toCharArray()) {
+            if ((k >= 'A' && k <= 'Z')) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    private boolean hasLowerCase(String keyWord) {
+        boolean flag = false;
+        for (char k : keyWord.toCharArray()) {
+            if ((k >= 'a' && k <= 'z')) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    private boolean hasNumber(String keyWord) {
+        boolean flag = false;
+        for (char k : keyWord.toCharArray()) {
+            if ((k >= '0' && k <= '9')) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
 
     private void createAlertDialog(String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());

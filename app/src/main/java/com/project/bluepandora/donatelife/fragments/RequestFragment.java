@@ -457,7 +457,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         int bloodAmount = Integer.parseInt(((String) mainViewHolder.amountSpinner.getSelectedItem()));
         String bloodGroup = ((BloodItem) mainViewHolder.bloodSpinner.getSelectedItem()).getBloodName();
         String hospitalName = ((HospitalItem) mainViewHolder.hospitalSpinner.getSelectedItem()).getHospitalName();
-        final String smsBody = "Please Help Need "
+        final String smsBody = "!!Please Help Need!!\n"
                 + ((bloodAmount == 1) ? "" : "(one Bag)" + "(" + bloodAmount + " Bags)")
                 + bloodGroup + " in " + hospitalName + "\n-Donate Life";
         String title = getResources().getQuantityString(R.plurals.donor_title, mobileNumber.size(), mobileNumber.size());

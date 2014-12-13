@@ -43,6 +43,8 @@ import com.project.bluepandora.donatelife.activities.MainActivity;
 import com.project.bluepandora.donatelife.activities.SignUpActivity;
 import com.project.bluepandora.donatelife.adapter.CountryListAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
+import com.project.bluepandora.donatelife.data.Item;
+import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
@@ -345,9 +347,24 @@ public class LogInFragment extends Fragment implements URL {
             public void onClick(View v) {
                 dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));
                 signUp = true;
-                params = ParamsBuilder.bloodGroupList();
-                serverRequest.setParams(params);
-                AppController.getInstance().addToRequestQueue(serverRequest);
+                ArrayList<Item> items = new ArrayList<Item>();
+                BloodDataSource bloodDataSource = new BloodDataSource(getActivity());
+                bloodDataSource.open();
+                try {
+                    items = bloodDataSource.getAllBloodItem();
+                } catch (Exception e) {
+                    Log.e(TAG, "Empty database");
+                }
+                if (items.size() == 0) {
+                    params = ParamsBuilder.bloodGroupList();
+                    serverRequest.setParams(params);
+                    AppController.getInstance().addToRequestQueue(serverRequest);
+                } else {
+                    dialogBuilder.getProgressDialog().dismiss();
+                    Intent signUpIntent = new Intent(getActivity(), SignUpActivity.class);
+                    startActivity(signUpIntent);
+                    signUp = false;
+                }
             }
         };
     }

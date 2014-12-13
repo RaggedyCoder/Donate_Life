@@ -343,6 +343,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void switchContent() {
+        AppController.getInstance().cancelPendingRequests();
         prevPos = 1;
         listAdapter.setSelected(1);
         mContent = new RequestFragment();

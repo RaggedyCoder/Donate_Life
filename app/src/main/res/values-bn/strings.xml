@@ -168,4 +168,15 @@
     <string name="password_combination">ইংরেজি বর্ণের ছোট অক্ষর,বড় অক্ষর এবং নম্বরের সমন্বয়ে কমপক্ষে ৬ ডিজিটের গোপন সংকেতটি বানান</string>
     <string name="invalid_username_password">অসঙ্গতিপুর্ণ আইডি অথবা গোপন সংকেত।আপনি গোপন সংকেতটি মুছে পুনরায় সাইন ইন চাপলে আইডিটি নিবন্ধিত কিনা জানতে পারবেন। </string>
     <string name="not_registered">আইডিটি নিবন্ধিত নয়।দয়া করে সাইন আপ চাপুন এবং নিবন্ধন এর ধাপগুলো সম্পন্ন করুন।</string>
+    <string name="subject">বিষয়:</string>
+    <string name="write_feedback">আপনার মতামতটি লিখুন&#8230;</string>
+    <string name="district">শহরঃ</string>
+    <string name="hospital_suggestion">হাসপাতাল এর সাজেশন&#8230;</string>
+    <string name="warning_short_password">গোপন সংকেতটি ছোট।ইহা কমপক্ষে ৬ অক্ষর এর হতে হবে।</string>
+    <string name="warning_no_lowercase">আপনার গোপন সংকেতটিতে অবশ্যই একটি ইংরেজি ছোট অক্ষরের বর্ণ থাকতে হবে</string>
+    <string name="warning_no_uppercase">আপনার গোপন সংকেতটিতে অবশ্যই একটি ইংরেজি বড় অক্ষরের বর্ণ থাকতে হবে</string>
+    <string name="warning_no_number">আপনার গোপন সংকেতটিতে অবশ্যই একটি ইংরেজি অংক থাকতে হবে</string>
+    <string name="app_feedback">অ্যাপটির সম্পর্কে মতামত</string>
+    <string name="hospital_feedback">হাসপাতাল সাজেশন</string>
+    <string name="from">হইতেঃ</string>
 </resources>

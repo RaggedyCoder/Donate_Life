@@ -146,7 +146,7 @@
     <string name="zero_donor_title">No donor available</string>
     <string name="one_donor_title">one donor available</string>
     <string name="other_donor_title">Total %d donors available</string>
-    <string name="sms_body" translatable="false">\"Please Help Need (one Bag) A+ in AD-DIN WOMEN\'S MEDICAL COLLEGE. \n -Donate Life\"</string>
+    <string name="sms_body" translatable="false">\"!!Please Help!!\n Need (one Bag) A+ in AD-DIN WOMEN\'S MEDICAL COLLEGE. \n -Donate Life\"</string>
     <string name="donor_zero_grammar_correct">No donor available</string>
     <string name="donor_zero_grammar_error">Total 0 donors available</string>
     <string name="zero_grammar_error">0 Times</string>
@@ -173,7 +173,7 @@
     <string name="donation_rule">New Donation Record conflict with previous Record.</string>
     <string name="first_name_rule">First Name can\'t be empty</string>
     <string name="last_name_rule">First Name can\'t be empty</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="about">About</string>
@@ -188,4 +188,15 @@
     <string name="password_must">Create a Password</string>
     <string name="invalid_username_password">Invalid ID or Password.You can remove the password and press SIGN IN to check whether the ID is registered or not.</string>
     <string name="not_registered">ID is not registered yet.Please press SIGN UP and complete the registration</string>
+    <string name="subject">Subject:</string>
+    <string name="app_feedback">App Feedback</string>
+    <string name="hospital_feedback">Hospital Suggestion</string>
+    <string name="write_feedback">Write your feedback&#8230;</string>
+    <string name="district">District:</string>
+    <string name="hospital_suggestion">Suggest Hospital&#8230;</string>
+    <string name="warning_short_password">Too short Password.It have to  beminimum 6 digits length</string>
+    <string name="warning_no_uppercase">Your password must contain 1 uppercase letter</string>
+    <string name="warning_no_lowercase">Your password must contain 1 lowercase letter</string>
+    <string name="warning_no_number">Your password must contain 1 number</string>
+    <string name="from">From:</string>
 </resources>

@@ -214,6 +214,58 @@ public final class ParamsBuilder implements URL {
     }
 
     /**
+     * Get the parameter of blood feed list request for the server.
+     *
+     * @return The params which is hash mapped.
+     */
+    public static HashMap<String, String> bloodRequestFeed(String groupId) {
+        /*
+        * Tags and Values for Blood Request Feed
+        *
+        * static final TAG->requestName.  static final Value->getBloodRequest
+        */
+        params = new HashMap<String, String>();
+        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
+        params.put(GROUPID_TAG, groupId);
+        return params;
+    }
+
+    /**
+     * Get the parameter of blood feed list request for the server.
+     *
+     * @return The params which is hash mapped.
+     */
+    public static HashMap<String, String> bloodRequestFeed(int distId) {
+        /*
+        * Tags and Values for Blood Request Feed
+        *
+        * static final TAG->requestName.  static final Value->getBloodRequest
+        */
+        params = new HashMap<String, String>();
+        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
+        params.put(DISTRICTID_TAG, Integer.toString(distId));
+        return params;
+    }
+
+    /**
+     * Get the parameter of blood feed list request for the server.
+     *
+     * @return The params which is hash mapped.
+     */
+    public static HashMap<String, String> bloodRequestFeed(String groupId, String distId) {
+        /*
+        * Tags and Values for Blood Request Feed
+        *
+        * static final TAG->requestName.  static final Value->getBloodRequest
+        */
+        params = new HashMap<String, String>();
+        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
+        params.put(GROUPID_TAG, groupId);
+        params.put(DISTRICTID_TAG, distId);
+        return params;
+    }
+
+    /**
      * Get the parameter of update user info request for the server.
      * <p/>
      * <pre class="prettyprint">
