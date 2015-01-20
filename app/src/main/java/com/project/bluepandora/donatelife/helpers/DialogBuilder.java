@@ -6,22 +6,33 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.project.bluepandora.donatelife.R;
+import com.widget.CustomTextView;
 
 
 public class DialogBuilder {
 
+    View progressView;
+    LayoutInflater inflater;
+    ProgressDialog.Builder progressDialogBuilder;
     private String TAG;
     private Activity activity;
     private Dialog alertDialog;
+    private CustomTextView progressMessageTextView;
     private AlertDialog.Builder alertDialogBuilder;
-
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
 
     public DialogBuilder(Activity activity, String TAG) {
         this.activity = activity;
-        progressDialog = new ProgressDialog(getActivity());
+        progressDialogBuilder = new ProgressDialog.Builder(getActivity());
+        inflater = LayoutInflater.from(activity);
+        progressView = inflater.inflate(R.layout.progress_view, null);
+        progressMessageTextView = (CustomTextView) progressView.findViewById(R.id.progress_message);
+        progressDialogBuilder.setView(progressView);
+        progressDialog = progressDialogBuilder.create();
         alertDialogBuilder = new AlertDialog.Builder(getActivity());
         this.TAG = TAG;
     }
@@ -51,6 +62,7 @@ public class DialogBuilder {
                                   DialogInterface.OnClickListener neutralClickListener,
                                   String yesTitle, String noTitle, String neutralTitle) {
         alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setIcon(R.drawable.ic_error_red_36dp);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setNeutralButton(neutralTitle, neutralClickListener);
         alertDialogBuilder.setPositiveButton(yesTitle, yesClickListener);
@@ -71,9 +83,8 @@ public class DialogBuilder {
 
     public void createProgressDialog(String title, String message) {
         progressDialog.setTitle(title);
-        progressDialog.setMessage(message);
+        progressMessageTextView.setText(message);
         progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(false);
         progressDialog.show();
         Log.i(TAG, "Progress Dialog Created. Title:" + title + ". Message:" + message);
     }

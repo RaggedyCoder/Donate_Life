@@ -17,32 +17,138 @@ package com.project.bluepandora.donatelife.helpers;
 
 import android.util.Log;
 
+import com.project.bluepandora.donatelife.data.BloodItem;
+import com.project.bluepandora.donatelife.data.DistrictItem;
+import com.project.bluepandora.donatelife.data.Item;
+
 import java.util.HashMap;
+
 
 /**
  * A class for creating the {@link HashMap} for the different request to the server.
  * This class has a implementation of {@link URL} interface to use the pre defined
  * Tags and Values.
+ * <p/>
+ * <table border="2" width="85%" align="center" frame="hsides" rules="rows">
+ * <colgroup align="left" span="3" />
+ * <colgroup align="left" />
+ * <colgroup align="center" />
+ * <colgroup align="center" />
+ * <p/>
+ * <thead>
+ * <tr><th colspan="3">Method</th> <th colspan="25">Description</th></tr>
+ * </thead>
+ * <p/>
+ * <tbody>
+ * <tr><th colspan="3" align="left" border="1">{@link #registerRequest(String, String, String, String, String, String)}</th>
+ * <td colspan="25"align="right" border="1" >This method is called when the user registration parameter is required.</td>
+ * </tr>
+ * <p/>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #bloodGroupList()}</th>
+ * <td colspan="25"align="right" border="1">This method is called when blood group list parameter is required.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #districtList()}</th>
+ * <td colspan="25"align="right" border="1">This method is called when district list parameter is required.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #hospitalList()}</th>
+ * <td colspan="25"align="right" border="1">This method is called when hospital list parameter is required.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #registerCheckRequest(String)}</th>
+ * <td colspan="25"align="right" border="1">This method is called when is the mobile number already registered
+ * in server check parameter is required.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #userInfoRequest(String, String)}</th>
+ * <td colspan="25"align="right" border="1">When a registered user is trying to log in his/her user profile is needed.
+ * To get that from the server the parameter which is needed acquired by
+ * calling this method.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #donationRecord(String)}</th>
+ * <td colspan="25"align="right" border="1">When a user profile is acquired successfully from the server the user blood donation
+ * record is need.This method is called is needed to to call at that time to get
+ * parameter for the donation record..</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #bloodRequestFeed(com.project.bluepandora.donatelife.data.Item...)}</th>
+ * <td colspan="25"align="right" border="1">This method is called to get the parameter of the blood feed.This method works three different way.
+ * If The user choose to filter his/her blood feed then his/her group id or the district id will also
+ * be send to this method.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #updateUserRequest(String, String, String, String, String, String)}</th>
+ * <td colspan="25"align="right" border="1">This method is called to get the parameter to update user profile.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #feedbackRequest(String, String, String)}</th>
+ * <td colspan="25"align="right" border="1">This method is called to get the parameter when user is trying to send a feedback.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #donatorMobileNumber(String, String, String, String)}</th>
+ * <td colspan="25"align="right" border="1">This method is called to get the parameter when user is trying to get available donor to
+ * send him/her sms.</td>
+ * </tr>
+ * <p/>
+ * <tr><th colspan="3" align="left" border="1">{@link #bloodRequest(String, String, String, String, String, String, String)}</th>
+ * <td colspan="25"align="right" border="1">This method is called when the blood request parameter is required.</td>
+ * </tr>
+ * </tbody>
+ * </table>
+ * <p/>
+ * For example a user is requesting for register for the code snippet will look like this.
+ * <pre class="prettyprint">
+ * public class RegisterUser{
+ * <p/>
+ * public sendServerUserInfo(){
+ * HashMap  params=
+ * ParamsBuilder.registerRequest(
+ * "firstName",
+ * "lastName",
+ * Integer.toString(1),
+ * Integer.toString(1),
+ * "01*********",
+ * "ABab12");
+ * CustomRequest registerRequest=
+ * new CustomRequest(
+ * Method.POST,
+ * URL.URL,
+ * params,
+ * jsonListeners,
+ * ErrorListeners);
+ * }
+ * }
+ * </pre>
  */
 public final class ParamsBuilder implements URL {
 
-    //Local static parameter for the server request.
+    /**
+     * Local static parameter for the server request.
+     */
     private static HashMap<String, String> params;
 
     /**
      * Get the parameter of register request for the server.
+     * <p/>
+     * <pre class="prettyprint">
+     * HashMap<String,String> params= ParamsBuilder.registerRequest("firstName","lastName",
+     * Integer.toString(1),Integer.toString(1),"01*********","ABab12");
+     * </pre>
      *
      * @param firstName    The First Name of the user.
      * @param lastName     The Last Name of the user.
      * @param distId       The District ID of the user where live.
      * @param groupId      The Blood Group ID of the user.
      * @param mobileNumber The Mobile Number of the user.
-     * @param password     The Password of the user.
-     * @return The params which is hash mapped.
+     * @param keyWord      The Password of the user.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> registerRequest(String firstName, String lastName,
                                                           String distId, String groupId,
-                                                          String mobileNumber, String password) {
+                                                          String mobileNumber, String keyWord) {
         /*
         * Tags and Values for Registration Request
         *
@@ -67,15 +173,15 @@ public final class ParamsBuilder implements URL {
         params.put(DISTRICTID_TAG, distId);
         params.put(GROUPID_TAG, groupId);
         params.put(MOBILE_TAG, mobileNumber);
-        params.put(PASSWORD_TAG, password);
-        Log.i("ParamBuilder", params.toString());
+        params.put(PASSWORD_TAG, keyWord);
+        Log.i("ParamBuilder", "register:" + params.toString());
         return params;
     }
 
     /**
      * Get the parameter of blood group list request for the server.
      *
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> bloodGroupList() {
         /*
@@ -85,14 +191,14 @@ public final class ParamsBuilder implements URL {
         */
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, BLOODLIST_PARAM);
-        Log.i("ParamBuilder", params.toString());
+        Log.i("ParamBuilder", "bloodGroupList:" + params.toString());
         return params;
     }
 
     /**
      * Get the parameter of district list request for the server.
      *
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> districtList() {
         /*
@@ -102,14 +208,14 @@ public final class ParamsBuilder implements URL {
         */
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, DISTRICTLIST_PARAM);
-        Log.i("ParamBuilder", params.toString());
+        Log.i("ParamBuilder", "districtList:" + params.toString());
         return params;
     }
 
     /**
      * Get the parameter of hospital list request for the server.
      *
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> hospitalList() {
         /*
@@ -119,6 +225,7 @@ public final class ParamsBuilder implements URL {
         */
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, HOSPITALLIST_PARAM);
+        Log.i("ParamBuilder", "hospitalList:" + params.toString());
         return params;
     }
 
@@ -127,7 +234,7 @@ public final class ParamsBuilder implements URL {
      * The parameter will be send to the server.
      *
      * @param mobileNumber The Mobile Number of the user.
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> registerCheckRequest(String mobileNumber) {
         /*
@@ -140,7 +247,7 @@ public final class ParamsBuilder implements URL {
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, REGISTER_CHECK);
         params.put(MOBILE_TAG, mobileNumber);
-        Log.i("ParamBuilder", params.toString());
+        Log.i("ParamBuilder", "isRegistered:" + params.toString());
         return params;
     }
 
@@ -155,7 +262,7 @@ public final class ParamsBuilder implements URL {
      *                     from the LogInFragment MainViewHolder.
      * @param keyWord      The Password of the user profile.this will be taken from the passwordEditText
      *                     from the LogInFragment MainViewHolder.
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> userInfoRequest(String mobileNumber, String keyWord) {
         /*
@@ -171,7 +278,7 @@ public final class ParamsBuilder implements URL {
         params.put(REQUEST_NAME, USER_INFO);
         params.put(MOBILE_TAG, mobileNumber);
         params.put(PASSWORD_TAG, keyWord);
-        Log.i("ParamBuilder", params.toString());
+        Log.i("ParamBuilder", "isRegistered:" + params.toString());
         return params;
     }
 
@@ -180,7 +287,7 @@ public final class ParamsBuilder implements URL {
      * The parameter will be send to the server.
      *
      * @param mobileNumber The Mobile Number of the user.
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> donationRecord(String mobileNumber) {
         /*
@@ -193,75 +300,39 @@ public final class ParamsBuilder implements URL {
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, GET_DONATION_RECORD_PARAM);
         params.put(MOBILE_TAG, mobileNumber);
-        Log.i("ParamBuilder", params.toString());
+        Log.i("ParamBuilder", "getDonationRecord:" + params.toString());
         return params;
     }
 
     /**
      * Get the parameter of blood feed list request for the server.
      *
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
-    public static HashMap<String, String> bloodRequestFeed() {
+    public static HashMap<String, String> bloodRequestFeed(Item... items) {
         /*
         * Tags and Values for Blood Request Feed
         *
         * static final TAG->requestName.  static final Value->getBloodRequest
-        */
-        params = new HashMap<String, String>();
-        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
-        return params;
-    }
-
-    /**
-     * Get the parameter of blood feed list request for the server.
-     *
-     * @return The params which is hash mapped.
-     */
-    public static HashMap<String, String> bloodRequestFeed(String groupId) {
-        /*
-        * Tags and Values for Blood Request Feed
         *
-        * static final TAG->requestName.  static final Value->getBloodRequest
-        */
-        params = new HashMap<String, String>();
-        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
-        params.put(GROUPID_TAG, groupId);
-        return params;
-    }
-
-    /**
-     * Get the parameter of blood feed list request for the server.
-     *
-     * @return The params which is hash mapped.
-     */
-    public static HashMap<String, String> bloodRequestFeed(int distId) {
-        /*
-        * Tags and Values for Blood Request Feed
+        * static final TAG->groupId.      If the blood group filter is open.User groupId
+        *                                 will be send.
         *
-        * static final TAG->requestName.  static final Value->getBloodRequest
+        * static final TAG->distId.       If the district filter is open.User distId
+        *                                 will be send.
         */
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
-        params.put(DISTRICTID_TAG, Integer.toString(distId));
-        return params;
-    }
-
-    /**
-     * Get the parameter of blood feed list request for the server.
-     *
-     * @return The params which is hash mapped.
-     */
-    public static HashMap<String, String> bloodRequestFeed(String groupId, String distId) {
-        /*
-        * Tags and Values for Blood Request Feed
-        *
-        * static final TAG->requestName.  static final Value->getBloodRequest
-        */
-        params = new HashMap<String, String>();
-        params.put(REQUEST_NAME, BLOODREQUEST_PARAM);
-        params.put(GROUPID_TAG, groupId);
-        params.put(DISTRICTID_TAG, distId);
+        for (Item item : items) {
+            if (item instanceof BloodItem) {
+                String groupId = Integer.toString(((BloodItem) item).getBloodId());
+                params.put(GROUPID_TAG, groupId);
+            } else if (item instanceof DistrictItem) {
+                String distId = Integer.toString(((DistrictItem) item).getDistId());
+                params.put(DISTRICTID_TAG, distId);
+            }
+        }
+        Log.i("ParamBuilder", "getBloodRequest:" + params.toString());
         return params;
     }
 
@@ -269,7 +340,7 @@ public final class ParamsBuilder implements URL {
      * Get the parameter of update user info request for the server.
      * <p/>
      * <pre class="prettyprint">
-     * HashMap<String,String> params= updateUserRequest("firstName","lastName",
+     * HashMap<String,String> params= ParamsBuilder.updateUserRequest("firstName","lastName",
      * Integer.parseInt(1),Integer.parseInt(1),
      * "01*********","ABab12");
      * </pre>
@@ -280,7 +351,7 @@ public final class ParamsBuilder implements URL {
      * @param groupId      The Blood Group ID of the user.
      * @param mobileNumber The Mobile Number of the user.
      * @param password     The Password of the user.
-     * @return The params which is hash mapped.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> updateUserRequest(String firstName, String lastName,
                                                             String distId, String groupId,
@@ -319,14 +390,14 @@ public final class ParamsBuilder implements URL {
      * Get the parameter of feedback request from the user.This parameter will be send to the server.
      * <p/>
      * <pre class="prettyprint">
-     * HashMap<String,String> params= feedbackRequest("01*********","Subject","Comment");
+     * HashMap<String,String> params= ParamsBuilder.feedbackRequest("01*********","Subject","Comment");
      * </pre>
      *
      * @param mobileNumber The Mobile Number of the user.
      * @param subject      The Subject of the feedback.This subject is needed for filtering all the
      *                     feedback request.
      * @param comment      The comment from the user.This part contains the main feedback.
-     * @return The parameter for the server request.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> feedbackRequest(String mobileNumber, String subject, String comment) {
 
@@ -345,16 +416,16 @@ public final class ParamsBuilder implements URL {
         params.put(FEEDBACK_USERNAME_PARAM, mobileNumber);
         params.put(FEEDBACK_SUBJECT_PARAM, subject);
         params.put(FEEDBACK_COMMENT_PARAM, comment);
-        Log.i("ParamBuilder", "donatorMobileNumber:" + params.toString());
+        Log.i("ParamBuilder", "feedbackRequest:" + params.toString());
         return params;
     }
 
     /**
-     * Get the parameter of donner mobile number request for the server.
-     * Server will send the donner number to the user.
+     * Get the parameter of donor mobile number request for the server.
+     * Server will send the donor number to the user.
      * <p/>
      * <pre class="prettyprint">
-     * HashMap<String,String> params= donatorMobileNumber(Integer.parseInt(1),Integer.parseInt(1),
+     * HashMap<String,String> params= ParamsBuilder.donatorMobileNumber(Integer.toString(1),Integer.toString(1),
      * "01*********","ABab12");
      * </pre>
      *
@@ -363,38 +434,92 @@ public final class ParamsBuilder implements URL {
      * @param groupId      The Blood Group ID of the user.Each group ID is an integer type.
      *                     It must have to parsed to String.
      * @param mobileNumber The Mobile Number of the user.
-     * @param password     The Password of the user.
-     * @return The parameter for the server request.
+     * @param keyWord      The Password of the user.
+     * @return {@link #params} The parameter for the server request.
      */
     public static HashMap<String, String> donatorMobileNumber(String hospitalId, String groupId,
-                                                              String mobileNumber, String password) {
+                                                              String mobileNumber, String keyWord) {
 
+        /*
+        * Tags and Values for Donor Mobile Number Request
+        *
+        * static final TAG->requestName.  static final Value->donatorMobileNumber
+        *
+        * static final TAG->hospitalId    The id of the hospital where the blood is needed.
+        *
+        * static final TAG->groupId       The id of the blood group which blood is needed.
+        *
+        * static final TAG->mobileNumber. The mobile number of the requested user.
+        *                                 determined by the user.
+        * static final TAG->keyWord.      The keyWord of the request user.
+        */
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, EMERGENCY_SMS_REQUEST);
         params.put(MOBILE_TAG, mobileNumber);
         params.put(HOSPITALID_TAG, hospitalId);
         params.put(GROUPID_TAG, groupId);
-        params.put(PASSWORD_TAG, password);
+        params.put(PASSWORD_TAG, keyWord);
         Log.i("ParamBuilder", "feedbackRequest:" + params.toString());
         return params;
     }
 
+    /**
+     * Get the parameter of needed blood request.
+     * Server will send is the request valid or not.
+     * <p/>
+     * <pre class="prettyprint">
+     * HashMap<String,String> params= ParamsBuilder.bloodRequest("01*********",Integer.toString(1),
+     * Integer.toString(1),Integer.toString(1),Integer.toString(1),"ABab12","1971:12:16 05:00:00");
+     * </pre>
+     *
+     * @param mobileNumber The Mobile Number of the user.
+     * @param groupId      The Blood Group ID of the user.Each group ID is an integer type.
+     *                     It must have to parsed to String.
+     * @param amount       The amount of the bag of of blood needed.Amount is used as Integer.
+     *                     So It must have to be parsed to String.
+     * @param hospitalId   The Hospital ID of the user where the blood is needed.Each
+     *                     hospital ID is an integer type.It must have to parsed to String.
+     * @param emergency    The 0 or 1 binary emergency value.Emergency value is for the emergency
+     *                     request to set is the request emergency or not.As it is an integer it must
+     *                     have to be parsed to String.
+     * @param keyWord      The Password of the user.
+     * @param reqTime      The request time when the request was made.
+     * @return {@link #params} The parameter for the server request.
+     */
     public static HashMap<String, String> bloodRequest(String mobileNumber,
                                                        String groupId,
                                                        String amount,
-                                                       String hospitalID,
+                                                       String hospitalId,
                                                        String emergency,
                                                        String keyWord,
                                                        String reqTime) {
+        /*
+        * Tags and Values for Donor Mobile Number Request
+        *
+        * static final TAG->requestName.  static final Value->addBloodRequest
+        *
+        * static final TAG->mobileNumber. The mobile number of the requested user.
+        *                                 determined by the user.
+        * static final TAG->groupId       The id of the blood group which blood is needed.
+        *
+        * static final TAG->amount.       The number of blood bags needed. determined by the user.
+        *
+        * static final TAG->hospitalId    The id of the hospital where the blood is needed.
+        *
+        * static final TAG->keyWord.      The keyWord of the request user.
+        *
+        * static final TAG->reqTime.      The time when the blood request made.
+        */
         params = new HashMap<String, String>();
         params.put(REQUEST_NAME, ADD_BLOODREQUEST_PARAM);
         params.put(MOBILE_TAG, mobileNumber);
         params.put(GROUPID_TAG, groupId);
         params.put(AMOUNT_TAG, amount);
-        params.put(HOSPITALID_TAG, hospitalID);
+        params.put(HOSPITALID_TAG, hospitalId);
         params.put(EMERGENCY_TAG, emergency);
         params.put(PASSWORD_TAG, keyWord);
         params.put(REQUESTTIME_TAG, reqTime);
+        Log.i("ParamBuilder", "bloodRequest:" + params.toString());
         return params;
     }
 }

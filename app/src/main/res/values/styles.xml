@@ -40,14 +40,6 @@
 
     <style name="ThemeFeed" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/holo_red_light</item>
-        <item name="colorPrimaryDark">@null</item>
-        <item name="actionBarDivider">@null</item>
-        <item name="elevation">0dip</item>
-        <item name="backgroundStacked">@null</item>
-        <item name="backgroundSplit">@null</item>
-        <item name="colorAccent">@null</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBarOverlay">true</item>
     </style>
 
     <style name="ThemeReg" parent="@style/Theme.AppCompat.Light.DarkActionBar">

@@ -18,10 +18,12 @@ package com.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.widget.helper.CustomFontHelper;
 
+@RemoteViews.RemoteView
 public class CustomTextView extends TextView {
 
     public CustomTextView(Context context) {

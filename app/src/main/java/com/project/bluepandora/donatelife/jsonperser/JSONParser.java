@@ -16,9 +16,16 @@ package com.project.bluepandora.donatelife.jsonperser;
  */
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
+import com.project.bluepandora.donatelife.data.BloodItem;
 import com.project.bluepandora.donatelife.data.DRItem;
+import com.project.bluepandora.donatelife.data.DistrictItem;
+import com.project.bluepandora.donatelife.data.FeedItem;
+import com.project.bluepandora.donatelife.data.HospitalItem;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.BloodDataSource;
 import com.project.bluepandora.donatelife.datasource.DRDataSource;
@@ -43,11 +50,40 @@ public class JSONParser {
     private static final String NO_DONATION_RECORD = "DONATION RECORD NOT FOUND!";
     private Context context;
     private String TAG;
+    private BloodDataSource bloodDatabase;
+    private DistrictDataSource districtDatabase;
+    private HospitalDataSource hospitalDatabase;
+    private UserInfoItem userInfoItem;
+    private boolean distFilter;
+    private boolean groupFilter;
+    private boolean banglaFilter;
+
+    public JSONParser(Context context, String TAG, boolean filter) {
+        this.context = context;
+        this.TAG = TAG;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (filter) {
+            distFilter = preferences.getBoolean(SettingsActivity.DISTRICT_FILTER_TAG, false);
+            groupFilter = preferences.getBoolean(SettingsActivity.GROUP_FILTER_TAG, false);
+            banglaFilter = preferences.getBoolean(SettingsActivity.LANGUAGE_TAG, false);
+            bloodDatabase = new BloodDataSource(context);
+            bloodDatabase.open();
+            districtDatabase = new DistrictDataSource(context);
+            districtDatabase.open();
+            hospitalDatabase = new HospitalDataSource(context);
+            hospitalDatabase.open();
+            UserDataSource userDataSource = new UserDataSource(context);
+            userDataSource.open();
+            userInfoItem = userDataSource.getAllUserItem().get(0);
+            userDataSource.close();
+        }
+    }
 
     public JSONParser(Context context, String TAG) {
         this.context = context;
         this.TAG = TAG;
     }
+
 
     public ArrayList<String> getMobileNumber(JSONObject response) {
         ArrayList<String> mobileNumber = new ArrayList<String>();
@@ -190,7 +226,6 @@ public class JSONParser {
         UserDataSource userDataBase = new UserDataSource(context);
         userDataBase.open();
         UserInfoItem item = new UserInfoItem();
-
         try {
             int done = response.getInt("done");
             switch (done) {
@@ -215,5 +250,49 @@ public class JSONParser {
             Log.e(TAG, e.getMessage());
         }
         return false;
+    }
+
+    public void closeAlldatabase() {
+        bloodDatabase.close();
+        districtDatabase.close();
+        hospitalDatabase.close();
+    }
+
+    public FeedItem parseJsonFeed(JSONObject jsonObject) throws JSONException {
+        FeedItem item = new FeedItem();
+        String mobile = jsonObject.getString("mobileNumber");
+        String timestamp = jsonObject.getString("reqTime");
+        String emergency = jsonObject.getString("emergency").compareTo("1") == 0 ? "yes" : null;
+        int amount = jsonObject.getInt("amount");
+        BloodItem bloodItem = new BloodItem();
+        bloodItem.setBloodId(Integer.parseInt(jsonObject.getString("groupId")));
+        if (groupFilter && userInfoItem.getGroupId() != bloodItem.getBloodId()) {
+            return null;
+        }
+        bloodItem = bloodDatabase.cursorToBloodItem(bloodDatabase.bloodItemToCursor(bloodItem));
+        HospitalItem hospitalItem = new HospitalItem();
+        hospitalItem.setHospitalId(Integer.parseInt(jsonObject.getString("hospitalId")));
+        hospitalItem = hospitalDatabase.cursorToHospitalItem(hospitalDatabase.hospitalItemToCursor(hospitalItem));
+
+        DistrictItem districtItem = new DistrictItem();
+        districtItem.setDistId(hospitalItem.getDistId());
+        districtItem = districtDatabase.cursorToDistrictItem(districtDatabase.districtItemToCursor(districtItem));
+        if (distFilter && userInfoItem.getDistId() != districtItem.getDistId()) {
+            return null;
+        }
+        item.setContact(mobile);
+        item.setTimeStamp(timestamp);
+        item.setEmergency(emergency);
+        item.setBloodAmount(amount);
+        if (banglaFilter) {
+            item.setBloodGroup(bloodItem.getBanglaBloodName());
+            item.setHospital(hospitalItem.getBanglaHospitalName());
+            item.setArea(districtItem.getBanglaDistName());
+        } else {
+            item.setBloodGroup(bloodItem.getBloodName());
+            item.setHospital(hospitalItem.getHospitalName());
+            item.setArea(districtItem.getDistName());
+        }
+        return item;
     }
 }

@@ -157,7 +157,6 @@ public class LogInFragment extends Fragment implements URL {
         countryCodes = new ArrayList<String>();
         categories = new ArrayList<String>();
         countryListAdapter = new CountryListAdapter(getActivity(), categories);
-
     }
 
     @Override
@@ -315,13 +314,13 @@ public class LogInFragment extends Fragment implements URL {
                 mainViewHolder.mobileNumberEditText.clearFocus();
                 mainViewHolder.passwordEditText.clearFocus();
                 if (mainViewHolder.mobileNumberEditText.getText().length() == 0) {
-                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
+                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.warning_no_mobile_number));
                     return;
                 } else if (mainViewHolder.mobileNumberEditText.getText().length() < 10) {
-                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
+                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.warning_number_short));
                     return;
                 } else if (mainViewHolder.countryCodeTextView.getText().length() == 0) {
-                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.Warning_select_a_country));
+                    dialogBuilder.createAlertDialog(getActivity().getResources().getString(R.string.warning_select_a_country));
                     return;
                 }
                 dialogBuilder.createProgressDialog(getActivity().getResources().getString(R.string.loading));

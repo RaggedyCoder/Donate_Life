@@ -197,10 +197,10 @@ public class MobileVerificationFragment extends Fragment implements URL {
             @Override
             public void onClick(View v) {
                 if (mobileNumberEditText.getText().length() == 0) {
-                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_no_number));
+                    createAlertDialog(getActivity().getResources().getString(R.string.warning_no_mobile_number));
                     return;
                 } else if (mobileNumberEditText.getText().length() < 10) {
-                    createAlertDialog(getActivity().getResources().getString(R.string.Warning_number_short));
+                    createAlertDialog(getActivity().getResources().getString(R.string.warning_number_short));
                     return;
                 }
                 createProgressDialog();

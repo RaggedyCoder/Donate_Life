@@ -15,8 +15,6 @@ package com.project.bluepandora.donatelife.fragments;
  * limitations under the License.
  */
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,9 +23,24 @@ import android.view.ViewGroup;
 
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.activities.SignUpActivity;
+import com.project.bluepandora.donatelife.helpers.DialogBuilder;
 import com.widget.CustomButton;
 import com.widget.CustomEditText;
 
+/**
+ * A Fragment for the {@link SignUpActivity}.The job in this fragment is to ask the user to create a
+ * password for his/her ID for donate life.the {@link #rootView} contains the UI for the fragment.All the
+ * child of the parent view contain in the {@link MainViewHolder}.
+ * For creating this fragment using the code snippet given bellow is totally forbidden.
+ * <pre class="prettyprint">
+ * PasswordVerificationFragment passwordVerificationFragment= new PasswordVerificationFragment();
+ * </pre>
+ * Instead of this the code snippet below must be followed.
+ * <pre class="prettyprint">
+ * Bundle bundle= getBundle();
+ * PasswordVerificationFragment passwordVerificationFragment= PasswordVerificationFragment.newInstance(bundle);
+ * </pre>
+ */
 public class PasswordVerificationFragment extends Fragment {
     /**
      * Defines a tag for identifying log entries
@@ -36,23 +49,11 @@ public class PasswordVerificationFragment extends Fragment {
     /**
      * A {@link View} for the whole fragment view.
      */
-    protected View rootView;
-    /**
-     * A EditTextField{@link CustomEditText} for the password.
-     */
-    private CustomEditText passwordField;
-    /**
-     * A EditTextField confirming the password.
-     */
-    private CustomEditText confirmPasswordField;
-    /**
-     * A Button {@link CustomButton} for the un registered user to verify the password.
-     */
-    private CustomButton verificationButton;
-    /**
-     * A click detection listener for the SignUp Button.
-     */
-    private View.OnClickListener mVerificationListener;
+    private View rootView;
+
+    private MainViewHolder mainViewHolder;
+
+    private DialogBuilder dialogBuilder;
 
     public static Fragment newInstance(Bundle bundle) {
         PasswordVerificationFragment fragment = new PasswordVerificationFragment();
@@ -63,55 +64,37 @@ public class PasswordVerificationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dialogBuilder = new DialogBuilder(getActivity(), TAG);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_passwordverification, container, false);
-        verificationButton = (CustomButton) rootView.findViewById(R.id.password_verification);
-        passwordField = (CustomEditText) rootView.findViewById(R.id.password);
-        confirmPasswordField = (CustomEditText) rootView.findViewById(R.id.password_confirm);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_password_verification, container, false);
+            mainViewHolder = new MainViewHolder();
+            mainViewHolder.passwordVerificationButton = (CustomButton) rootView.findViewById(R.id.password_verification_button);
+            mainViewHolder.passwordEditText = (CustomEditText) rootView.findViewById(R.id.password_edit_text);
+            mainViewHolder.confirmPasswordEditText = (CustomEditText) rootView.findViewById(R.id.confirm_password_edit_text);
+            rootView.setTag(mainViewHolder);
+        } else {
+            mainViewHolder = (MainViewHolder) rootView.getTag();
+        }
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        verificationButton.setOnClickListener(mVerificationListener);
+        mainViewHolder.passwordVerificationButton.setOnClickListener(new SignUpButtonListener());
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mVerificationListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (passwordField.getText().toString().length() == 0) {
-                    createAlertDialog("Please confirm your Password.");
-                } else if (confirmPasswordField.getText().toString().length() == 0) {
-                    createAlertDialog(getString(R.string.Warning_enter_a_password));
-                } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())) {
-                    createAlertDialog(getString(R.string.Warning_password_not_matched));
-                } else if (passwordField.getText().toString().length() < 6) {
-                    createAlertDialog(getString(R.string.Warning_password_not_matched));
-                } else if (!hasUpperCase(passwordField.getText().toString())) {
-                    createAlertDialog(getString(R.string.warning_no_uppercase));
-                } else if (!hasLowerCase(passwordField.getText().toString())) {
-                    createAlertDialog(getString(R.string.warning_no_lowercase));
-                } else if (!hasNumber(passwordField.getText().toString())) {
-                    createAlertDialog(getString(R.string.warning_no_number));
-                } else {
-                    Bundle bundle = PasswordVerificationFragment.this.getArguments();
-                    bundle.putString("password", passwordField.getText().toString());
-                    SignUpActivity signUpActivity = (SignUpActivity) getActivity();
-                    signUpActivity.changeFragment(bundle, 2);
-                }
-
-            }
-        };
-    }
-
+    /**
+     * This method is for checking the password whether it has an English Upper Case Alphabet.
+     *
+     * @param keyWord The password string.Which is created by the user.
+     * @return true the keyWord contains at least one upper case letter.
+     */
     private boolean hasUpperCase(String keyWord) {
         boolean flag = false;
         for (char k : keyWord.toCharArray()) {
@@ -122,6 +105,12 @@ public class PasswordVerificationFragment extends Fragment {
         return flag;
     }
 
+    /**
+     * This method is for checking the password whether it has an English Lower Case Alphabet.
+     *
+     * @param keyWord The password string.Which is created by the user.
+     * @return true the keyWord contains at least one lower case letter.
+     */
     private boolean hasLowerCase(String keyWord) {
         boolean flag = false;
         for (char k : keyWord.toCharArray()) {
@@ -132,6 +121,12 @@ public class PasswordVerificationFragment extends Fragment {
         return flag;
     }
 
+    /**
+     * This method is for checking the password whether it has an English Numerical digit.
+     *
+     * @param keyWord The password string.Which is created by the user.
+     * @return true the keyWord contains at least one numerical digit.
+     */
     private boolean hasNumber(String keyWord) {
         boolean flag = false;
         for (char k : keyWord.toCharArray()) {
@@ -142,12 +137,52 @@ public class PasswordVerificationFragment extends Fragment {
         return flag;
     }
 
+    /**
+     *
+     */
+    private void goToNextFragment() {
+        Bundle bundle = PasswordVerificationFragment.this.getArguments();
+        bundle.putString("password", mainViewHolder.passwordEditText.getText().toString());
+        SignUpActivity signUpActivity = (SignUpActivity) getActivity();
+        signUpActivity.changeFragment(bundle, 2);
+    }
 
-    private void createAlertDialog(String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle(getString(R.string.alert));
-        alertDialog.setMessage(message);
-        alertDialog.setNeutralButton("Ok", null);
-        alertDialog.show();
+    private static class MainViewHolder {
+        /**
+         * A EditTextField{@link CustomEditText} for the password.
+         */
+        private CustomEditText passwordEditText;
+        /**
+         * A EditTextField confirming the password.
+         */
+        private CustomEditText confirmPasswordEditText;
+        /**
+         * A Button {@link CustomButton} for the un registered user to verify the password.
+         */
+        private CustomButton passwordVerificationButton;
+    }
+
+    private class SignUpButtonListener implements View.OnClickListener {
+        public void onClick(View v) {
+            final String passwordString = mainViewHolder.passwordEditText.getText().toString();
+            final String confirmPasswordString = mainViewHolder.confirmPasswordEditText.getText().toString();
+            if (passwordString.length() == 0) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_confirm_password));
+            } else if (confirmPasswordString.length() == 0) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_enter_a_password));
+            } else if (!passwordString.equals(confirmPasswordString)) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_password_not_matched));
+            } else if (passwordString.length() < 6) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_password_not_matched));
+            } else if (!hasUpperCase(passwordString)) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_no_uppercase));
+            } else if (!hasLowerCase(passwordString)) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_no_lowercase));
+            } else if (!hasNumber(passwordString)) {
+                dialogBuilder.createAlertDialog(getString(R.string.warning_no_number_digit));
+            } else {
+                goToNextFragment();
+            }
+        }
     }
 }

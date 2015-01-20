@@ -17,20 +17,12 @@
             android:id="@id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <!-- ListView to display slider menu -->
-        <ListView
-            android:id="@+id/list_slidermenu"
+        <!-- FrameLayout to to display slider menu -->
+        <FrameLayout
+            android:id="@id/slide_menu_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
-            android:background="@drawable/list_view_back_selected"
-            android:choiceMode="singleChoice"
-            android:divider="@drawable/list_view_back_default"
-            android:dividerHeight="@null"
-            android:listSelector="@drawable/list_view_back" />
-
+            android:layout_marginTop="@dimen/abc_action_bar_default_height_material" />
     </android.support.v4.widget.DrawerLayout>
-
-
 </FrameLayout>

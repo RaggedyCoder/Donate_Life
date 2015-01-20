@@ -19,9 +19,11 @@ package com.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 
 import com.widget.helper.CustomFontHelper;
 
+@RemoteViews.RemoteView
 public class CustomEditText extends EditText {
 
     public CustomEditText(Context context) {

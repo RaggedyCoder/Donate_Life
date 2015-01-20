@@ -39,6 +39,12 @@
         <item>@drawable/ic_feedback_white_18dp</item>
         <item>@drawable/ic_about_white_18dp</item>
     </array>
+
+    <array name="small_menu_button_images">
+        <item>@drawable/small_menu_feed_default</item>
+        <item>@drawable/small_menu_request_default</item>
+        <item>@drawable/small_menu_profile_default</item>
+    </array>
     <array name="nav_drawer_backgrounds">
         <item>@drawable/list_view_back_default</item>
         <item>@drawable/list_view_back_default</item>

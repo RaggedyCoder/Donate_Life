@@ -17,9 +17,13 @@ package com.project.bluepandora.donatelife.data;
  */
 public class FeedItem implements Item {
     private int id, bloodAmount;
-    // private String name, status, image, profilePic, timeStamp, url;
-    private String name, timeStamp, emergency, bloodGroup, hospital, area,
-            contact;
+    private String name;
+    private String timeStamp;
+    private String emergency;
+    private String bloodGroup;
+    private String hospital;
+    private String area;
+    private String contact;
 
     public FeedItem() {
     }
@@ -27,7 +31,6 @@ public class FeedItem implements Item {
     public FeedItem(int id, int bloodAmount, String name, String timeStamp,
                     String emergency, String bloodGroup, String hospital, String area,
                     String contact) {
-        super();
         this.id = id;
         this.bloodAmount = bloodAmount;
         this.name = name;

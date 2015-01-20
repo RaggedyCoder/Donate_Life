@@ -11,5 +11,15 @@
     <dimen name="card_view_blood_width">105dip</dimen>
     <dimen name="card_view_blood_height">105dip</dimen>
     <dimen name="header_logo_size">120dp</dimen>
+    <dimen name="card_view_blood_group_text">50sp</dimen>
+    <dimen name="padding_5dip">5dip</dimen>
+    <dimen name="padding_10dip">10dip</dimen>
+    <dimen name="card_view_blood_amount_text_size">20sp</dimen>
+    <dimen name="margin_5dip">5dip</dimen>
+    <dimen name="margin_10dip">10dip</dimen>
+    <dimen name="margin_15dip">15dip</dimen>
+    <dimen name="card_view_emergency_text_size">16sp</dimen>
+    <dimen name="card_view_text_size">14sp</dimen>
+
 
 </resources>

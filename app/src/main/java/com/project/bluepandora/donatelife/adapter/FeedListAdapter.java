@@ -20,11 +20,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.PopupMenu.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,11 +43,13 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.FeedItem;
 import com.project.bluepandora.donatelife.data.Item;
 import com.project.bluepandora.donatelife.data.UserInfoItem;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
+import com.project.bluepandora.donatelife.helpers.NumericalExchange;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
 import com.project.bluepandora.util.ConnectionManager;
@@ -58,16 +64,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.TimeZone;
 
 @SuppressLint("NewApi")
 public class FeedListAdapter extends BaseAdapter {
+
+    private static final CharSequence yesterdaySequence = "yesterday";
+    private static final CharSequence secondAgoSequence = " seconds ago";
+    private static final CharSequence minutesAgoSequence = " minutes ago";
+    private static final CharSequence hoursAgoSequence = " hours ago";
+    private static final CharSequence daysAgoSequence = " days ago";
 
     private Activity activity;
     private LayoutInflater inflater;
     private List<Item> feedItems;
     private UserInfoItem userInfo;
     private ProgressDialog dialog;
+    private boolean banglaFilter;
+    private Resources resources;
+    private SharedPreferences preferences;
     private ConnectionManager connectionManager;
 
     public FeedListAdapter(Activity activity, List<Item> feedItems) {
@@ -77,6 +93,9 @@ public class FeedListAdapter extends BaseAdapter {
         UserDataSource database = new UserDataSource(activity);
         database.open();
         userInfo = database.getAllUserItem().get(0);
+        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        resources = activity.getResources();
+        banglaFilter = preferences.getBoolean(SettingsActivity.LANGUAGE_TAG, false);
         database.close();
     }
 
@@ -102,20 +121,19 @@ public class FeedListAdapter extends BaseAdapter {
         final int pos = position;
         final ViewHolder holder;
         if (inflater == null)
-            inflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.card_feed_view, parent,
                     false);
             holder = new ViewHolder();
             // setting the timestamp
-            setholder(convertView, holder);
+            setHolder(convertView, holder);
             convertView.setTag(holder);
         } else if (((ViewHolder) convertView.getTag()).needInflate) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.card_feed_view, parent,
                     false);
-            setholder(convertView, holder);
+            setHolder(convertView, holder);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -142,6 +160,10 @@ public class FeedListAdapter extends BaseAdapter {
         }
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
                 date.getTime(), dateNow.getTime(), DateUtils.SECOND_IN_MILLIS);
+        Log.i("TAG", timeAgo + " " + banglaFilter);
+        if (banglaFilter) {
+            timeAgo = getBanglaTime(timeAgo);
+        }
         holder.timestampTextView.setText(timeAgo);
 
         if (!TextUtils.isEmpty(item.getEmergency())) {
@@ -151,7 +173,6 @@ public class FeedListAdapter extends BaseAdapter {
             holder.emergencyTextView.setText(R.string.non_emergency_text);
         }
         final View view = convertView;
-        final FeedItem list = item;
         holder.popupMenuButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,14 +184,14 @@ public class FeedListAdapter extends BaseAdapter {
                 .setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+                    public boolean onMenuItemClick(MenuItem menuItem) {
 
-                        if (item.getItemId() == R.id.action_delete_own) {
+                        if (menuItem.getItemId() == R.id.action_delete_own) {
                             if (!connectionManager.isConnectingToInternet()) {
                                 Toast.makeText(activity, "No Internet Connection", Toast.LENGTH_SHORT);
                                 return false;
                             }
-                            deleteRequest(view, pos, list);
+                            deleteRequest(view, pos, item);
                             dialog = new ProgressDialog(activity);
                             dialog.setTitle(R.string.delete_request);
                             dialog.setMessage(activity.getResources()
@@ -179,17 +200,17 @@ public class FeedListAdapter extends BaseAdapter {
                             dialog.show();
                             return true;
                         }
-                        if (item.getItemId() == R.id.action_call) {
+                        if (menuItem.getItemId() == R.id.action_call) {
                             Intent call = new Intent(Intent.ACTION_DIAL, Uri
-                                    .parse("tel:" + list.getContact()));
+                                    .parse("tel:" + item.getContact()));
                             activity.startActivity(call);
-                        } else if (item.getItemId() == R.id.action_sms) {
+                        } else if (menuItem.getItemId() == R.id.action_sms) {
                             Intent sendIntent = new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("sms:" + list.getContact()));
+                                    Uri.parse("sms:" + item.getContact()));
                             sendIntent.putExtra("sms_body",
                                     "I'm available for giving blood.");
                             activity.startActivity(sendIntent);
-                        } else if (item.getItemId() == R.id.action_delete) {
+                        } else if (menuItem.getItemId() == R.id.action_delete) {
                             ListViewAnimator.deleteCell(view, pos, feedItems,
                                     FeedListAdapter.this, activity);
                         }
@@ -203,12 +224,40 @@ public class FeedListAdapter extends BaseAdapter {
         holder.hospitalTextView.setSelected(true);
         holder.hospitalTextView.setText(item.getHospital());
         holder.areaTextView.setText(item.getArea());
-        holder.contactTextView.setText(item.getContact());
+        if (banglaFilter) {
+            holder.contactTextView.setText(NumericalExchange.toBanglaNumerical(item.getContact()));
+        } else {
+            holder.contactTextView.setText(item.getContact());
+        }
         holder.contactTextView.setSelected(true);
         return convertView;
     }
 
-    private void setholder(View convertView, ViewHolder holder) {
+    private CharSequence getBanglaTime(CharSequence timeAgo) {
+        if (timeAgo.equals(yesterdaySequence) || (timeAgo.charAt(0) >= '0' && timeAgo.charAt(0) <= '9')) {
+            if (timeAgo.equals(yesterdaySequence)) {
+                return "গতকাল";
+            } else {
+                Scanner scanner = new Scanner(timeAgo.toString());
+                int time = scanner.nextInt();
+                String changedString = NumericalExchange.toBanglaNumerical(time);
+                if (timeAgo.equals((time + secondAgoSequence.toString()))) {
+                    return changedString + " সেকেন্ড পূর্বে";
+                } else if (timeAgo.equals((time + minutesAgoSequence.toString()))) {
+                    return changedString + " মিনিট পূর্বে";
+                } else if (timeAgo.equals((time + hoursAgoSequence.toString()))) {
+                    return changedString + " ঘন্টা পূর্বে";
+                } else if (timeAgo.equals((time + daysAgoSequence.toString()))) {
+                    return changedString + " দিন পূর্বে";
+                }
+            }
+        } else if (timeAgo.equals("গতকাল") || (timeAgo.charAt(0) >= '০' && timeAgo.charAt(0) <= '৯')) {
+            return timeAgo;
+        }
+        return timeAgo.toString();
+    }
+
+    private void setHolder(View convertView, ViewHolder holder) {
         holder.timestampTextView = (CustomTextView) convertView
                 .findViewById(R.id.timestamp_text_view);
         holder.emergencyTextView = (CustomTextView) convertView

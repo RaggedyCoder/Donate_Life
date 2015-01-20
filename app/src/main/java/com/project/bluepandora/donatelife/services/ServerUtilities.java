@@ -58,12 +58,12 @@ public final class ServerUtilities {
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             Log.d(CommonUtilities.TAG, "Attempt #" + i + " to register");
             try {
-                //displayMessage(context, context.getString(
-                //   R.string.server_registering, i, MAX_ATTEMPTS));
+                // CommonUtilities.displayMessage(context, context.getString(
+                //  R.string.server_registering, i, MAX_ATTEMPTS));
                 post(serverUrl, params);
                 GCMRegistrar.setRegisteredOnServer(context, true);
                 String message = context.getString(R.string.server_registered);
-                //  CommonUtilities.displayMessage(context, message);
+                // CommonUtilities.displayMessage(context, message);
                 return;
             } catch (IOException e) {
                 // Here we are simplifying and retrying on any error; in a real
@@ -100,7 +100,7 @@ public final class ServerUtilities {
         Map<String, String> params = new HashMap<String, String>();
         params.put(URL.REQUEST_NAME, URL.GCMREGISTER_PARAM);
         params.put(URL.MOBILE_TAG, mobileNumber);
-        params.put(URL.GCM_TAG, "");
+        params.put(URL.GCM_TAG, " ");
         try {
             post(serverUrl, params);
             GCMRegistrar.setRegisteredOnServer(context, false);

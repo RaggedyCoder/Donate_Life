@@ -40,19 +40,17 @@ public class SlideMenuAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private List<Item> feedItems;
-    private int selectedPositon;
-
+    private int selectedPosition;
     public SlideMenuAdapter(Activity activity, List<Item> feedItems) {
         this.activity = activity;
         this.feedItems = feedItems;
-        selectedPositon = 0;
+        selectedPosition = 0;
     }
 
     @Override
     public int getCount() {
         return feedItems.size();
     }
-
     @Override
     public Object getItem(int location) {
         return feedItems.get(location);
@@ -87,13 +85,13 @@ public class SlideMenuAdapter extends BaseAdapter {
         holder.text.setText(item.getSlideItem());
         holder.icon.setImageResource(item.getIcons());
         holder.background.setBackgroundResource(item.getBackground());
-        if (position == selectedPositon) {
-            holder.text.setTextColor(Color.argb(0xff, 0x00, 0xea, 0xff));
+        if (position == selectedPosition) {
+            holder.text.setTextColor(Color.argb(0xff, 0x0D, 0x47, 0xA1));
             if (Utils.hasEclair()) {
-                holder.icon.setColorFilter(Color.argb(0xff, 0x00, 0xea, 0xff));
+                holder.icon.setColorFilter(Color.argb(0xff, 0x0D, 0x47, 0xA1));
             }
         } else {
-            holder.text.setTextColor(Color.argb(0xff, 0xff, 0xff, 0xff));
+            holder.text.setTextColor(Color.argb(0xff, 0x28, 0x28, 0x28));
             if (Utils.hasEclair()) {
                 holder.icon.setColorFilter(null);
             }
@@ -101,14 +99,13 @@ public class SlideMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         CustomTextView text;
         ImageView icon;
         LinearLayout background;
     }
 
     public void setSelected(int position) {
-
-        selectedPositon = position;
+        selectedPosition = position;
     }
 }

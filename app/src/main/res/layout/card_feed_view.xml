@@ -2,17 +2,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#e5e5e5">
+    android:background="@color/gray_e5e5e5">
 
     <LinearLayout
         android:id="@id/feed_item_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#e5e5e5"
+        android:background="@color/gray_e5e5e5"
         android:orientation="vertical"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="5dip"
+        android:paddingLeft="@dimen/padding_5dip"
+        android:paddingRight="@dimen/padding_5dip"
+        android:paddingTop="@dimen/padding_5dip"
         android:tag="feed_item_holder">
 
         <LinearLayout
@@ -36,9 +36,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:maxLines="@integer/max_line"
+                    android:singleLine="true"
                     android:text="@string/dummy_blood_group_ID"
                     android:textColor="@color/holo_gray_dark"
-                    android:textSize="50sp" />
+                    android:textSize="@dimen/card_view_blood_group_text" />
 
                 <com.widget.CustomTextView
                     android:id="@id/blood_amount_text_view"
@@ -48,7 +50,7 @@
                     android:gravity="center"
                     android:text="@string/dummy_blood_amount_ID"
                     android:textColor="@color/holo_gray_dark"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/card_view_blood_amount_text_size" />
             </LinearLayout>
 
             <LinearLayout
@@ -62,8 +64,8 @@
                     android:id="@id/info_holder_linear_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:layout_marginStart="10dip"
+                    android:layout_marginLeft="@dimen/margin_10dip"
+                    android:layout_marginStart="@dimen/margin_10dip"
                     android:background="@android:color/transparent">
 
                     <RelativeLayout
@@ -81,20 +83,23 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:layout_marginTop="5dip"
+                            android:layout_marginTop="@dimen/margin_5dip"
                             android:gravity="center|start"
                             android:text="@string/emergency_text"
-                            android:textColor="#ff3333"
-                            android:textSize="16sp" />
+                            android:textColor="@color/holo_red_light"
+                            android:textSize="@dimen/card_view_emergency_text_size" />
 
                         <ImageButton
                             android:id="@id/popup_menu_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:background="#00000000"
+                            android:layout_alignParentBottom="@bool/false_bool"
+                            android:layout_alignParentEnd="@bool/true_bool"
+                            android:layout_alignParentLeft="@bool/false_bool"
+                            android:layout_alignParentRight="@bool/true_bool"
+                            android:layout_alignParentStart="@bool/false_bool"
+                            android:layout_alignParentTop="@bool/true_bool"
+                            android:background="@android:color/transparent"
                             android:contentDescription="@null"
                             android:src="@drawable/feed_item_popup" />
 
@@ -106,11 +111,11 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_below="@id/emergency_text_view"
-                            android:layout_marginTop="5dip"
+                            android:layout_marginTop="@dimen/margin_5dip"
                             android:gravity="center|start"
                             android:text="@string/dummy_time"
-                            android:textColor="#666666"
-                            android:textSize="14sp" />
+                            android:textColor="@color/card_view_time_text_color"
+                            android:textSize="@dimen/card_view_text_size" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -118,8 +123,8 @@
                     android:id="@id/area_contact_info_holder"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:layout_marginStart="10dip"
+                    android:layout_marginLeft="@dimen/margin_10dip"
+                    android:layout_marginStart="@dimen/margin_10dip"
                     android:background="@android:color/transparent"
                     android:orientation="vertical">
 
@@ -130,7 +135,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="center|start"
                         android:orientation="horizontal"
-                        android:paddingTop="5dip">
+                        android:paddingTop="@dimen/padding_5dip">
 
                         <com.widget.CustomTextView
                             android:id="@id/hospital_name_text_view"
@@ -139,21 +144,21 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="marquee"
                             android:fadingEdge="horizontal"
-                            android:lines="1"
+                            android:lines="@integer/max_line"
                             android:marqueeRepeatLimit="marquee_forever"
-                            android:scrollHorizontally="true"
-                            android:singleLine="true"
+                            android:scrollHorizontally="@bool/true_bool"
+                            android:singleLine="@bool/true_bool"
                             android:text="@string/dummy_hospital_name_ID"
-                            android:textColor="#222222"
-                            android:textSize="14sp" />
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/card_view_text_size" />
                     </LinearLayout>
 
                     <RelativeLayout
                         android:id="@id/mobile_number_holder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginTop="5dip"
+                        android:layout_marginBottom="@dimen/margin_5dip"
+                        android:layout_marginTop="@dimen/margin_5dip"
                         android:background="@android:color/transparent"
                         android:gravity="center|start"
                         android:orientation="horizontal">
@@ -170,34 +175,34 @@
                             android:ellipsize="marquee"
                             android:fadingEdge="horizontal"
                             android:gravity="center|start"
-                            android:lines="1"
+                            android:lines="@integer/max_line"
                             android:marqueeRepeatLimit="marquee_forever"
-                            android:paddingBottom="5dip"
-                            android:paddingTop="5dip"
-                            android:scrollHorizontally="true"
-                            android:singleLine="true"
+                            android:paddingBottom="@dimen/padding_5dip"
+                            android:paddingTop="@dimen/padding_5dip"
+                            android:scrollHorizontally="@bool/true_bool"
+                            android:singleLine="@bool/true_bool"
                             android:text="@string/dummy_mobile_number_ID"
-                            android:textColor="#222222"
-                            android:textSize="14sp" />
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/card_view_text_size" />
 
                         <com.widget.CustomTextView
                             android:id="@id/area_name_text_view"
                             style="@style/MuseoSansRounded_300_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="@bool/true_bool"
+                            android:layout_alignParentRight="@bool/true_bool"
                             android:background="@drawable/area_textview_background"
                             android:gravity="center"
-                            android:paddingBottom="5dip"
-                            android:paddingEnd="10dip"
-                            android:paddingLeft="10dip"
-                            android:paddingRight="10dip"
-                            android:paddingStart="10dip"
-                            android:paddingTop="5dip"
+                            android:paddingBottom="@dimen/padding_5dip"
+                            android:paddingEnd="@dimen/padding_10dip"
+                            android:paddingLeft="@dimen/padding_10dip"
+                            android:paddingRight="@dimen/padding_10dip"
+                            android:paddingStart="@dimen/padding_10dip"
+                            android:paddingTop="@dimen/padding_5dip"
                             android:text="@string/dummy_area_name_ID"
-                            android:textColor="#222222"
-                            android:textSize="14sp" />
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/card_view_text_size" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

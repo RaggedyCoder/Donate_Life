@@ -28,4 +28,7 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="holo_gray_dark">#CCCCCC</color>
     <color name="holo_gray_puredark">#AAAAAA</color>
+    <color name="gray_e5e5e5">#e5e5e5</color>
+    <color name="card_view_time_text_color">#666666</color>
+    <color name="light_black">#222222</color>
 </resources>

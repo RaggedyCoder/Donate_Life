@@ -2,5 +2,7 @@
 <resources>
 
     <item name="right_to_left_support" type="bool">false</item>
-
+    <item name="true_bool" type="bool">true</item>
+    <item name="false_bool" type="bool">false</item>
+    <item name="tab_screen" type="bool">false</item>
 </resources>

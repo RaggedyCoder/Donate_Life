@@ -25,6 +25,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Drawable.Callback;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
@@ -47,6 +48,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.project.bluepandora.donatelife.R;
 import com.project.bluepandora.donatelife.activities.MainActivity;
+import com.project.bluepandora.donatelife.activities.SettingsActivity;
 import com.project.bluepandora.donatelife.adapter.SpinnerAdapter;
 import com.project.bluepandora.donatelife.application.AppController;
 import com.project.bluepandora.donatelife.data.BloodItem;
@@ -59,6 +61,7 @@ import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.HospitalDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
+import com.project.bluepandora.donatelife.helpers.NumericalExchange;
 import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.jsonperser.JSONParser;
@@ -96,6 +99,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
     private SpinnerAdapter bloodAdapter;
     private SpinnerAdapter districtAdapter;
 
+    private boolean banglaFilter;
     private SpinnerAdapter hospitalAdapter;
     private ArrayList<String> mobileNumber;
     private View sendSmsDialogView;
@@ -159,10 +163,15 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         bloodItems = bloodDatabase.getAllBloodItem();
         bloodDatabase.close();
         bloodAdapter = new SpinnerAdapter(getActivity(), bloodItems);
+        banglaFilter = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(SettingsActivity.LANGUAGE_TAG, false);
 
         amounts = new ArrayList<String>();
         for (int i = 1; i <= 12; i++) {
-            amounts.add(Integer.toString(i));
+            if (banglaFilter) {
+                amounts.add(NumericalExchange.toBanglaNumerical(Integer.toString(i)));
+            } else {
+                amounts.add(NumericalExchange.toEnglishNumerical(Integer.toString(i)));
+            }
         }
         amountAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, amounts);
 
@@ -376,12 +385,18 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
                 SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 final String mobileNumber = userInfoItem.getMobileNumber();
                 final String bloodId = Long.toString(mainViewHolder.bloodSpinner.getSelectedItemId());
-                final String amount = (String) mainViewHolder.amountSpinner.getSelectedItem();
+                String amount = (String) mainViewHolder.amountSpinner.getSelectedItem();
+                if (banglaFilter) {
+                    amount = NumericalExchange.toEnglishNumerical(amount);
+                }
                 final String hospitalId = Long.toString(mainViewHolder.hospitalSpinner.getSelectedItemId());
                 final String emergency = mainViewHolder.emergencyCheck.isChecked() ? "1" : "0";
                 final String keyWord = userInfoItem.getKeyWord();
                 Date dateNow = new Date();
                 String reqTime = isoFormat.format(dateNow);
+                if (banglaFilter) {
+                    reqTime = NumericalExchange.toEnglishNumerical(reqTime);
+                }
                 HashMap<String, String> params = ParamsBuilder.bloodRequest(
                         mobileNumber,
                         bloodId,
@@ -535,7 +550,7 @@ public class RequestFragment extends Fragment implements MainActivity.DrawerSlid
         public void onClick(View view) {
             if (getViewEquals(view, mainViewHolder.doneButton)) {
                 if (mainViewHolder.hospitalSpinner.getSelectedItemId() == -1) {
-                    dialogBuilder.createProgressDialog(getString(R.string.request_not_possible));
+                    dialogBuilder.createAlertDialog(getString(R.string.request_not_possible));
                 } else {
                     if (isSmsRequest()) {
                         dialogBuilder.createAlertDialog(getString(R.string.alert), getString(R.string.sms_alert),

@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="pass_dimen">14sp</dimen>
+    <dimen name="card_view_blood_group_text">45sp</dimen>
 
 </resources>

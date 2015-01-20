@@ -46,6 +46,7 @@ import com.project.bluepandora.donatelife.datasource.DistrictDataSource;
 import com.project.bluepandora.donatelife.datasource.UserDataSource;
 import com.project.bluepandora.donatelife.fragments.ProfileDetailsFragment;
 import com.project.bluepandora.donatelife.helpers.DialogBuilder;
+import com.project.bluepandora.donatelife.helpers.NumericalExchange;
 import com.project.bluepandora.donatelife.helpers.ParamsBuilder;
 import com.project.bluepandora.donatelife.helpers.URL;
 import com.project.bluepandora.donatelife.volley.CustomRequest;
@@ -221,7 +222,11 @@ public class ProfileDetailsAdapter extends BaseAdapter {
             case NAME:
                 return infoItem.getFirstName() + " " + infoItem.getLastName();
             case MOBILE:
-                return infoItem.getMobileNumber();
+                if (banglaFilter) {
+                    return NumericalExchange.toBanglaNumerical(infoItem.getMobileNumber());
+                } else {
+                    return infoItem.getMobileNumber();
+                }
             case DISTRICT:
                 if (banglaFilter) {
                     return distItem.getBanglaDistName();

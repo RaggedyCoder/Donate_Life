@@ -428,8 +428,8 @@ public class ProfileDetailsFragment extends Fragment implements ScrollTabHolder,
                                 DRItem item = new DRItem();
                                 item.setDonationDetails(donationDetails.getText().toString());
                                 //yyyy-MM-dd HH:mm:ss
-                                String reqTime = "" + donationDate.getYear() + "-" + donationDate.getMonth() + "-"
-                                        + donationDate.getDayOfMonth() + " " + "00:00:00";
+                                String reqTime = "" + donationDate.getYear() + "-" + (donationDate.getMonth() + 1) + "-"
+                                        + donationDate.getDayOfMonth() + " " + "`00:00:00";
                                 item.setDonationTime(reqTime);
                                 donationDatabase.open();
                                 donationInfo.add(donationInfo.size() - 1, donationDatabase.createDRItem(reqTime, donationDetails.getText().toString()));

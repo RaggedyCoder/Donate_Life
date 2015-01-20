@@ -33,6 +33,7 @@
     <!--activity_main.xml-->
     <item name="drawer_layout" type="id" />
     <item name="frame_container" type="id" />
+    <item name="slide_menu_container" type="id" />
 
     <!--activity_settings.xml-->
 
@@ -89,6 +90,10 @@
     <item name="name_verification_button" type="id" />
     <item name="registration_fields" type="id" />
 
+    <!--fragment_password_verification.xml-->
+    <item name="password_verification_button" type="id" />
+    <item name="password_edit_text" type="id" />
+    <item name="confirm_password_edit_text" type="id" />
 
     <item name="action_refresh" type="id"></item>
     <item name="selected_view" type="id" />

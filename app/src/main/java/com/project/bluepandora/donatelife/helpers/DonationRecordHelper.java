@@ -15,6 +15,7 @@ import java.util.TimeZone;
 
 import nineoldandroids.view.ViewHelper;
 
+@SuppressWarnings("ALL")
 public class DonationRecordHelper {
     private static ArrayList<DRItem> itemSort;
     private static ArrayList<DRItem> divider;

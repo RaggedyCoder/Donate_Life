@@ -153,7 +153,7 @@
                 android:layout_margin="5dip"
                 android:background="@drawable/blood_avatar"
                 android:gravity="center"
-                android:text="AB+"
+                android:text="@string/dummy_blood_group_ID"
                 android:textColor="#f1f1f1"
                 android:textSize="42dip"
                 app:font="MuseoSansRounded-700.otf" />

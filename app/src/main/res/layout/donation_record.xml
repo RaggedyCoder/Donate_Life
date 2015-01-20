@@ -25,7 +25,7 @@
                 android:textSize="20sp"
                 app:font="MuseoSansRounded-700.otf"
                 android:textColor="#222222"
-                android:text="Donation Date:" />
+                android:text="@string/donation_date" />
 
             <DatePicker
                 android:id="@id/donation_date_picker"
@@ -43,7 +43,7 @@
                 android:textSize="20sp"
                 app:font="MuseoSansRounded-700.otf"
                 android:textColor="#222222"
-                android:text="Donation Details:" />
+                android:text="@string/donation_details" />
 
             <com.widget.CustomEditText
                 android:id="@id/donation_details"
@@ -51,7 +51,7 @@
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_marginBottom="5dip"
                 android:layout_width="fill_parent"
-                android:hint="Add your Experience"
+                android:hint="@string/donation_experience"
                 app:font="MuseoSansRounded-300.otf"
                 android:paddingLeft="10dip"
                 android:layout_height="wrap_content" />
@@ -61,7 +61,7 @@
                 android:layout_width="fill_parent"
                 android:background="@drawable/white_holo_button"
                 android:layout_margin="15dip"
-                android:text="Add Record"
+                android:text="@string/add_record"
                 android:textColor="@drawable/btn_holo_text"
                 app:font="MuseoSansRounded-700.otf"
                 android:layout_height="wrap_content" />
