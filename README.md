@@ -21,51 +21,51 @@ Every second there is someone who needs blood. It is an urgent need for any kind
 
 * Login
 
-![Login](Donate_Life/blob/master/feature-images/UI-01.jpg)
+![Login](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-01.jpg)
 
 * Registration
 
-![Registration](Donate_Life/blob/master/feature-images/UI-02.jpg)
+![Registration](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-02.jpg)
 
 * Blood Feed
 
-![Blood Feed](Donate_Life/blob/master/feature-images/UI-03.jpg)
+![Blood Feed](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-03.jpg)
 
 * Request For Blood
 
-![Request For Blood](Donate_Life/blob/master/feature-images/UI-04.jpg)
+![Request For Blood](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-04.jpg)
 
 * Donation Record
 
-![Donation Record](Donate_Life/blob/master/feature-images/UI-05.jpg)
+![Donation Record](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-05.jpg)
 
 * Donator Profile
 
-![Donator Profile](Donate_Life/blob/master/feature-images/UI-06.jpg)
+![Donator Profile](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-06.jpg)
 
 * App Setting
 
-![App Setting](Donate_Life/blob/master/feature-images/UI-07.jpg)
+![App Setting](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-07.jpg)
 
 * Feedback
 
-![Feedback](Donate_Life/blob/master/feature-images/UI-08.jpg)
+![Feedback](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/UI-08.jpg)
 
 ### Design and Planning Phase of Development
 
 * UI Sketch using Pencil & Paper
 
-![UI Scratch](Donate_Life/blob/master/feature-images/Design-UI-Sketch.png)
+![UI Scratch](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/Design-UI-Sketch.png)
 
 * Designing ERD
 
-![Desiging ERD - MySQL Workbench](Donate_Life/blob/master/feature-images/Design-ERD.jpg)
+![Desiging ERD - MySQL Workbench](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/Design-ERD.jpg)
 
 ## Achievements and Project Background
 This software was presented at Therap Java Fest 2014. It was a software competition organized by Therap Services in 2014 nationwide in Bangladesh. In this competition students can submit their idea and get several months for developing this idea as a full working product. We submitted our idea as a team named Blue Pandora and after accepting the idea we developed the product and presented it in the final round. Our team was first runner up in that competition.  
 
 * Prize Giving Ceremony
-![Prize Giving Ceremony](Donate_Life/blob/master/feature-images/Prize-Giving.jpg "Therap Java Fest 2014 Prize Giving Ceremony")
+![Prize Giving Ceremony](https://github.com/coderbdsust/Donate_Life/blob/master/feature-images/Prize-Giving.jpg "Therap Java Fest 2014 Prize Giving Ceremony")
 
 ## Technology Usages
 
