@@ -61,6 +61,10 @@ Every second there is someone who needs blood. It is an urgent need for any kind
 
 ![Desiging ERD - MySQL Workbench](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/Design-ERD.jpg)
 
+### DonateLife Server Code
+
+![Donate Life - Openshift Deployable Server Code Repository](https://github.com/coderbdsust/Donate_life_Server)
+
 ## Achievements and Project Background
 This software was presented at Therap Java Fest 2014. It was a software competition organized by Therap Services in 2014 nationwide in Bangladesh. In this competition students can submit their idea and get several months for developing this idea as a full working product. We submitted our idea as a team named Blue Pandora and after accepting the idea we developed the product and presented it in the final round. Our team was first runner up in that competition.  
 
