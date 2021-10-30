@@ -73,14 +73,14 @@ This software was presented at Therap Java Fest 2014. It was a software competit
 ## Technology Usages
 
 * [Android App](https://developer.android.com/ "Android Developer Page")
-* [Java Servlet](https://www.oracle.com/java/technologies/java-servlet-tec.html "Java Servlet")
+* [Java Servlet - Server](https://www.oracle.com/java/technologies/java-servlet-tec.html "Java Servlet")
 * [JDK 7](https://www.oracle.com/de/java/technologies/javase/javase7-archive-downloads.html "JDK 7 Homepage")
 * [MySQL](https://www.mysql.com/ "MySQL")
 * [MySQL Workbench](https://www.mysql.com/products/workbench/ "MySQL Workbench")
 * [Gradle](https://gradle.org/ "Gradle Homepage")
 * [Maven](https://maven.apache.org/ "Maven Homepage")
-* [Openshift Cloud Server](https://gradle.org/ "Openshift Cloud Server")
-* [Tomcat 7](https://gradle.org/ "Tomcat 7 Homepage")
+* [Openshift Cloud Server - Free Cartridges](https://docs.openshift.com/ "Openshift Cloud Server")
+* [Tomcat 7](http://tomcat.apache.org/tomcat-7.0-doc/ "Tomcat 7 Homepage")
 * [Google Cloud Messaging](https://developers.google.com/cloud-messaging "GCM Homepage")
 
 ## Versioning
