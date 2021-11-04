@@ -66,7 +66,7 @@ Every second there is someone who needs blood. It is an urgent need for any kind
 * [Donate Life - Openshift Deployable Codebase](https://github.com/coderbdsust/Donate_life_Server "Donate Life Openshift Deployable Codebase")
 
 ## Achievements and Project Background
-This software was presented at Therap Java Fest 2014. It was a software competition organized by Therap Services in 2014 nationwide in Bangladesh. In this competition students can submit their idea and get several months for developing this idea as a full working product. We submitted our idea as a team named Blue Pandora and after accepting the idea we developed the product and presented it in the final round. Our team was first runner up in that competition.  
+This software was presented at Therap Java Fest 2014. It was a software competition organized by Therap Services in 2014 nationwide in Bangladesh. In this competition, students can submit their idea and get several months for developing this idea as a fully working product. We submitted our idea as a team named Blue Pandora and after accepting the idea we developed the product and presented it in the final round. Our team was the first runner up in that competition.  
 
 * Team - Blue Pandora
 ![Team - Blue Pandora](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/Donate-Life-Developer-With-Designation.jpg "Blue Pandora")
