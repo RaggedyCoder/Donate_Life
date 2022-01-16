@@ -98,7 +98,7 @@ We used @Git for versioning.
 
 ## Special Acknowledgement
 
-* [Abu Shahriar Ratul](https://www.facebook.com/ratulcse" Abu Shahriar Ratul's Facebook Profile")
+* [Abu Shahriar Ratul](https://www.facebook.com/ratulcse "Abu Shahriar Ratul's Facebook Profile")
 
 ## License
 
