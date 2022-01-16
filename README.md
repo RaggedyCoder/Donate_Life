@@ -96,6 +96,9 @@ We used @Git for versioning.
 * [Sajid Shahriar](https://www.linkedin.com/in/raggedycoder-1993/ "Sajid Shahriar's LinkedIn Profile")
 * [Biswajit Debnath](https://www.linkedin.com/in/coderbd/ "Biswajit Debnath's LinkedIn Profile")
 
+## Special Acknowledgement
+
+* [Abu Shahriar Ratul](https://www.facebook.com/ratulcse" Abu Shahriar Ratul's Facebook Profile")
 
 ## License
 
