@@ -102,5 +102,5 @@ We used @Git for versioning.
 
 ## License
 
-This project is licensed under the [GPL-2.0](https://opensource.org/licenses/GPL-2.0 "GPL-2.0 License Desc")
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
