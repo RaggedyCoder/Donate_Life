@@ -21,45 +21,45 @@ Every second there is someone who needs blood. It is an urgent need for any kind
 
 * Login
 
-![Login](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-01.jpg)
+![Login](/features-images/UI-01.jpg)
 
 * Registration
 
-![Registration](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-02.jpg)
+![Registration](/features-images/UI-02.jpg)
 
 * Blood Feed
 
-![Blood Feed](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-03.jpg)
+![Blood Feed](/features-images/UI-03.jpg)
 
 * Request For Blood
 
-![Request For Blood](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-04.jpg)
+![Request For Blood](/features-images/UI-04.jpg)
 
 * Donation Record
 
-![Donation Record](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-05.jpg)
+![Donation Record](/features-images/UI-05.jpg)
 
 * Donator Profile
 
-![Donator Profile](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-06.jpg)
+![Donator Profile](/features-images/UI-06.jpg)
 
 * App Setting
 
-![App Setting](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-07.jpg)
+![App Setting](/features-images/UI-07.jpg)
 
 * Feedback
 
-![Feedback](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/UI-08.jpg)
+![Feedback](/features-images/UI-08.jpg)
 
 ### Design and Planning Phase of Development
 
 * UI Sketch using Pencil & Paper
 
-![UI Scratch](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/Design-UI-Sketch.png)
+![UI Scratch](/features-images/Design-UI-Sketch.png)
 
 * Designing ERD
 
-![Desiging ERD - MySQL Workbench](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/Design-ERD.jpg)
+![Desiging ERD - MySQL Workbench](/features-images/Design-ERD.jpg)
 
 ## DonateLife API Server Codebase
 
@@ -69,10 +69,10 @@ Every second there is someone who needs blood. It is an urgent need for any kind
 This software was presented at Therap Java Fest 2014. It was a software competition organized by Therap Services in 2014 nationwide in Bangladesh. In this competition, students can submit their idea and get several months for developing this idea as a fully working product. We submitted our idea as a team named Blue Pandora and after accepting the idea we developed the product and presented it in the final round. Our team was the first runner up in that competition.  
 
 * Team - Blue Pandora
-![Team - Blue Pandora](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/Donate-Life-Developer-With-Designation.jpg "Blue Pandora")
+![Team - Blue Pandora](/features-images/Donate-Life-Developer-With-Designation.jpg "Blue Pandora")
 
 * Prize Giving Ceremony
-![Prize Giving Ceremony](https://github.com/coderbdsust/Donate_Life/blob/master/features-images/Prize-Giving.jpg "Therap Java Fest 2014 Prize Giving Ceremony")
+![Prize Giving Ceremony](/features-images/Prize-Giving.jpg "Therap Java Fest 2014 Prize Giving Ceremony")
 
 ## Technology Usages
 
